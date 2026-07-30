@@ -1,0 +1,477 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Refusal Calibration — Teaching a Small Model to Say "I Don't Know"</title>
+<meta name="description" content="Case study: LoRA fine-tuning a 1.5B model to abstain on unanswerable questions without over-refusing, measured on both error directions.">
+<style>
+  :root {
+    color-scheme: light;
+    --page:        #f9f9f7;
+    --surface:     #fcfcfb;
+    --text:        #0b0b0b;
+    --text-2:      #52514e;
+    --muted:       #898781;
+    --grid:        #e1e0d9;
+    --axis:        #c3c2b7;
+    --border:      rgba(11,11,11,0.10);
+    --good:        #006300;
+    --blue:        #2a78d6;
+    --orange:      #eb6834;
+    --aqua:        #1baf7a;
+    --violet:      #4a3aa7;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) {
+      color-scheme: dark;
+      --page:        #0d0d0d;
+      --surface:     #1a1a19;
+      --text:        #ffffff;
+      --text-2:      #c3c2b7;
+      --muted:       #898781;
+      --grid:        #2c2c2a;
+      --axis:        #383835;
+      --border:      rgba(255,255,255,0.10);
+      --good:        #0ca30c;
+      --blue:        #3987e5;
+      --orange:      #d95926;
+      --aqua:        #199e70;
+      --violet:      #9085e9;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --page:        #0d0d0d;
+    --surface:     #1a1a19;
+    --text:        #ffffff;
+    --text-2:      #c3c2b7;
+    --muted:       #898781;
+    --grid:        #2c2c2a;
+    --axis:        #383835;
+    --good:        #0ca30c;
+    --blue:        #3987e5;
+    --orange:      #d95926;
+    --aqua:        #199e70;
+    --violet:      #9085e9;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--page);
+    color: var(--text);
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    line-height: 1.55;
+  }
+  main { max-width: 880px; margin: 0 auto; padding: 0 24px 96px; }
+  section { margin-top: 72px; }
+
+  .hero {
+    padding: 88px 24px 56px;
+    max-width: 880px;
+    margin: 0 auto;
+  }
+  .kicker {
+    color: var(--text-2);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  h1 {
+    font-size: clamp(28px, 4.5vw, 42px);
+    line-height: 1.15;
+    margin: 0 0 20px;
+    letter-spacing: -0.01em;
+  }
+  .thesis {
+    font-size: 18px;
+    color: var(--text-2);
+    max-width: 640px;
+    margin: 0 0 28px;
+  }
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tag {
+    font-size: 12.5px;
+    color: var(--text-2);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 5px 12px;
+  }
+
+  h2 {
+    font-size: 22px;
+    margin: 0 0 6px;
+    letter-spacing: -0.01em;
+  }
+  .section-sub {
+    color: var(--muted);
+    font-size: 14px;
+    margin: 0 0 24px;
+  }
+  p { color: var(--text-2); font-size: 15.5px; }
+  .lede { color: var(--text); font-size: 16.5px; }
+
+  .grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin: 20px 0;
+  }
+  @media (max-width: 640px) { .grid-3 { grid-template-columns: 1fr; } }
+  .stat-tile {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px 20px;
+  }
+  .stat-tile .label { font-size: 12.5px; color: var(--muted); margin-bottom: 8px; }
+  .stat-tile .value { font-size: 26px; font-weight: 600; }
+  .stat-tile .delta { font-size: 12.5px; color: var(--good); margin-top: 4px; }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 24px 24px 16px;
+  }
+  .card-title { font-size: 15px; font-weight: 600; margin: 0 0 2px; }
+  .card-sub { font-size: 13px; color: var(--muted); margin: 0 0 12px; }
+
+  .legend { display: flex; gap: 18px; flex-wrap: wrap; font-size: 12.5px; color: var(--text-2); margin-top: 8px; }
+  .legend .sw { display: inline-flex; align-items: center; gap: 6px; }
+  .legend .dot { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
+
+  .note {
+    font-size: 12.5px;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+    margin-top: 14px;
+    padding-top: 10px;
+  }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13.5px; margin-top: 8px; }
+  th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--grid); font-variant-numeric: tabular-nums; }
+  th { color: var(--muted); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.03em; }
+  td.num, th.num { text-align: right; }
+
+  .steps { counter-reset: step; list-style: none; margin: 0; padding: 0; }
+  .steps li {
+    counter-increment: step;
+    position: relative;
+    padding: 0 0 22px 40px;
+    border-left: 2px solid var(--grid);
+    margin-left: 14px;
+  }
+  .steps li:last-child { border-color: transparent; padding-bottom: 0; }
+  .steps li::before {
+    content: counter(step);
+    position: absolute;
+    left: -15px;
+    top: -2px;
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12.5px; font-weight: 600; color: var(--text-2);
+  }
+  .steps h3 { margin: 0 0 4px; font-size: 15.5px; }
+
+  footer {
+    max-width: 880px; margin: 0 auto; padding: 40px 24px 60px;
+    color: var(--muted); font-size: 13px;
+    border-top: 1px solid var(--border);
+  }
+  a { color: var(--blue); }
+
+  svg text { fill: var(--muted); font-size: 11px; font-family: system-ui, sans-serif; }
+  .chart-line { fill: none; stroke-width: 2.5px; }
+  .chart-dot { stroke: var(--surface); stroke-width: 2px; }
+  .grid-line { stroke: var(--grid); stroke-width: 1px; }
+  .axis-line { stroke: var(--axis); stroke-width: 1px; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="kicker">Case study — LLM fine-tuning &amp; evaluation</div>
+  <h1>Teaching a small model to say &ldquo;I don&rsquo;t know&rdquo;<br>without making it say it too often</h1>
+  <p class="thesis">
+    Small language models confabulate on questions outside their knowledge —
+    confidently, fluently, wrong. The obvious fix (train it to refuse) creates
+    a quieter failure: <strong>over-refusal</strong>, where the model declines
+    things it actually knew. This project treats refusal as a
+    <em>calibration</em> problem — measuring both error directions on the same
+    held-out eval, across a tradeoff curve, rather than reporting a single
+    flattering number.
+  </p>
+  <div class="tags">
+    <span class="tag">LoRA / PEFT</span>
+    <span class="tag">Qwen2.5 1.5B &amp; 3B</span>
+    <span class="tag">Self-knowledge labeling</span>
+    <span class="tag">Bootstrap CIs</span>
+    <span class="tag">Calibration (ECE)</span>
+    <span class="tag">14 fine-tune runs</span>
+  </div>
+</div>
+
+<main>
+
+  <section id="problem">
+    <h2>The problem</h2>
+    <p class="section-sub">Why "just train it to refuse" is a trap</p>
+    <p class="lede">
+      Most published hallucination fixes report one number: the refusal or
+      hallucination rate went down. They rarely report what happened to the
+      questions the model <em>could</em> answer. A model that abstains on
+      everything scores perfectly on hallucination and is useless in
+      production. The honest deliverable is a curve, not a point.
+    </p>
+    <div class="grid-3">
+      <div class="stat-tile">
+        <div class="label">Hallucination rate</div>
+        <div class="value">↓ target</div>
+        <div class="delta" style="color:var(--text-2)">Confident wrong answers on unanswerable items</div>
+      </div>
+      <div class="stat-tile">
+        <div class="label">Over-refusal rate</div>
+        <div class="value">↓ target</div>
+        <div class="delta" style="color:var(--text-2)">Abstentions on items the base model got right</div>
+      </div>
+      <div class="stat-tile">
+        <div class="label">Accuracy (answerable)</div>
+        <div class="value">↑ target</div>
+        <div class="delta" style="color:var(--text-2)">Must not collapse while fixing the above</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="method">
+    <h2>Method</h2>
+    <p class="section-sub">Teach the model its own boundary, don't guess it</p>
+    <ol class="steps">
+      <li>
+        <h3>Self-knowledge labeling</h3>
+        <p>Sample the base model k=16 times per question (8,000 TriviaQA
+        questions) and check correctness against gold aliases, rather than
+        assuming what the model "should" know. Questions it answers correctly
+        above a threshold → <strong>answerable</strong>; near-zero → an
+        <strong>unknown</strong>/<strong>defective</strong> abstain class. The
+        model is taught its own boundary.</p>
+      </li>
+      <li>
+        <h3>A frozen, held-out eval</h3>
+        <p>800 items, stratified across four classes (answerable, unknown,
+        defective, borderline), frozen before any training run touches it —
+        enforced with a lock file so no later session can leak into it.</p>
+      </li>
+      <li>
+        <h3>14 LoRA fine-tunes, one axis changed per run</h3>
+        <p>A tradeoff curve across the training mix (10/25/50/75/90% abstain
+        examples), seed replicates to establish a noise floor, dosage
+        (epochs) and capacity (rank/LR) ablations, and a 3B scale check —
+        each isolating exactly one variable against a shared reference
+        config.</p>
+      </li>
+      <li>
+        <h3>Both error directions, always paired</h3>
+        <p>Every run is scored for hallucination <em>and</em> over-refusal on
+        the identical frozen eval, with bootstrap confidence intervals on the
+        paired difference — so a 3-point gap isn't reported as if it were an
+        18-point one.</p>
+      </li>
+    </ol>
+  </section>
+
+  <section id="tradeoff">
+    <h2>The core result: a tradeoff curve, not a single number</h2>
+    <p class="section-sub">Hallucination vs. over-refusal as training-mix abstain ratio increases</p>
+    <div class="card">
+      <p class="card-title">Error rate vs. training mix</p>
+      <p class="card-sub">5 runs (v1–v5), same reference recipe (r=16, 2 epochs, lr 2e-4), only the abstain:answer ratio changes</p>
+      <svg id="chart-tradeoff" viewBox="0 0 760 320" width="100%" role="img" aria-label="Line chart showing hallucination rate decreasing and over-refusal rate increasing as the training mix abstain ratio rises from 10 to 90 percent"></svg>
+      <div class="legend">
+        <span class="sw"><span class="dot" style="background:var(--blue)"></span>Hallucination rate</span>
+        <span class="sw"><span class="dot" style="background:var(--orange)"></span>Over-refusal rate</span>
+      </div>
+      <p class="note">Preview data — chart wiring is live; final point estimates + 95% bootstrap CIs populate here once the Kaggle scoring run (session 3, 14 arms) completes. Trend direction reflects the PRD hypothesis under test.</p>
+    </div>
+  </section>
+
+  <section id="calibration">
+    <h2>Calibration: is the model's confidence trustworthy?</h2>
+    <p class="section-sub">Reliability diagram — accuracy per confidence bucket, reference run (v3, 50/50 mix)</p>
+    <div class="card">
+      <p class="card-title">Self-consistency confidence vs. actual accuracy</p>
+      <p class="card-sub">10 buckets, answerable + borderline items only — the diagonal is perfect calibration</p>
+      <svg id="chart-reliability" viewBox="0 0 760 320" width="100%" role="img" aria-label="Reliability diagram comparing model confidence buckets against actual accuracy, with a diagonal reference line for perfect calibration"></svg>
+      <div class="legend">
+        <span class="sw"><span class="dot" style="background:var(--aqua)"></span>Observed accuracy</span>
+        <span class="sw"><span class="dot" style="background:var(--muted)"></span>Perfect calibration</span>
+      </div>
+      <p class="note">Expected Calibration Error (ECE) and per-bucket n populate once scoring completes.</p>
+    </div>
+  </section>
+
+  <section id="runs">
+    <h2>All 14 runs</h2>
+    <p class="section-sub">One variable isolated per run against the reference config</p>
+    <div class="card">
+      <table>
+        <thead>
+          <tr><th>Run</th><th>Isolates</th><th class="num">Status</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>v1–v5 (mix10 → mix90)</td><td>Curve: abstain:answer training ratio</td><td class="num">Trained</td></tr>
+          <tr><td>v12, v13 (seed1, seed2)</td><td>Run-to-run noise floor of the reference recipe</td><td class="num">Trained</td></tr>
+          <tr><td>v6, v7 (1ep, 3ep)</td><td>Dosage — is over-refusal just more training?</td><td class="num">Trained</td></tr>
+          <tr><td>v8, v9 (r=8, r=32)</td><td>LoRA capacity</td><td class="num">Trained</td></tr>
+          <tr><td>v10 (lr 1e-4)</td><td>Lower learning rate — is it just overfit?</td><td class="num">Trained</td></tr>
+          <tr><td>v11 (bare reason)</td><td>Ablation: does naming the refusal reason help?</td><td class="num">Trained</td></tr>
+          <tr><td>v14 (Qwen 3B)</td><td>Does the recipe hold at 2x scale?</td><td class="num">Trained</td></tr>
+        </tbody>
+      </table>
+      <p class="note">All 14 planned adapters finished training on free-tier Kaggle T4 GPUs, split across sessions to fit the 9-hour/session limit. Scoring across all runs is the current in-progress stage.</p>
+    </div>
+  </section>
+
+  <section id="engineering">
+    <h2>Engineering notes</h2>
+    <p class="section-sub">The parts that weren't the model</p>
+    <p>
+      Most of the real effort was making the pipeline survive Kaggle's
+      constraints, not the fine-tuning itself:
+    </p>
+    <ul style="color:var(--text-2); font-size:15px; padding-left:20px;">
+      <li>Every stage (probe, build, train, generate, score) is resumable —
+      a killed 9-hour session picks back up mid-arm instead of restarting.</li>
+      <li>The eval is frozen and lock-file enforced, so no later training run
+      can accidentally leak into the numbers being reported on.</li>
+      <li>Every rate is reported with a bootstrap CI on the paired
+      difference, so a 3-point gap and an 18-point gap are never conflated.</li>
+      <li>One script per pipeline stage, one YAML config per run — no
+      per-run copy-pasted notebooks to drift out of sync.</li>
+    </ul>
+  </section>
+
+</main>
+
+<footer>
+  Refusal Calibration — a from-scratch LoRA fine-tuning + two-sided evaluation pipeline.
+  Built to answer one question honestly: does teaching a model to abstain cost more
+  than it saves? Source and full write-up in the project repo.
+</footer>
+
+<script>
+(function () {
+  const cs = getComputedStyle(document.documentElement);
+  const col = (name) => cs.getPropertyValue(name).trim();
+
+  function makeAxes(svg, W, H, m, xTicks, yTicks, yFmt) {
+    const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    // gridlines + y labels
+    yTicks.forEach(v => {
+      const y = H - m.b - (v / yTicks.max) * (H - m.t - m.b);
+      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('x1', m.l); line.setAttribute('x2', W - m.r);
+      line.setAttribute('y1', y); line.setAttribute('y2', y);
+      line.setAttribute('class', 'grid-line');
+      g.appendChild(line);
+      const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      t.setAttribute('x', m.l - 10); t.setAttribute('y', y + 4);
+      t.setAttribute('text-anchor', 'end');
+      t.textContent = yFmt ? yFmt(v) : v;
+      g.appendChild(t);
+    });
+    const axis = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    axis.setAttribute('x1', m.l); axis.setAttribute('x2', m.l);
+    axis.setAttribute('y1', m.t); axis.setAttribute('y2', H - m.b);
+    axis.setAttribute('class', 'axis-line');
+    g.appendChild(axis);
+    const baseline = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    baseline.setAttribute('x1', m.l); baseline.setAttribute('x2', W - m.r);
+    baseline.setAttribute('y1', H - m.b); baseline.setAttribute('y2', H - m.b);
+    baseline.setAttribute('class', 'axis-line');
+    g.appendChild(baseline);
+    xTicks.forEach(({ x, label }) => {
+      const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      t.setAttribute('x', x); t.setAttribute('y', H - m.b + 20);
+      t.setAttribute('text-anchor', 'middle');
+      t.textContent = label;
+      g.appendChild(t);
+    });
+    svg.appendChild(g);
+  }
+
+  function line(svg, points, colorVar, m, H, xScale, yMax) {
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    const d = points.map((p, i) => {
+      const x = xScale(i);
+      const y = H - m.b - (p / yMax) * (H - m.t - m.b);
+      return (i === 0 ? 'M' : 'L') + x + ',' + y;
+    }).join(' ');
+    path.setAttribute('d', d);
+    path.setAttribute('class', 'chart-line');
+    path.setAttribute('stroke', col(colorVar));
+    svg.appendChild(path);
+    points.forEach((p, i) => {
+      const x = xScale(i);
+      const y = H - m.b - (p / yMax) * (H - m.t - m.b);
+      const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      c.setAttribute('cx', x); c.setAttribute('cy', y); c.setAttribute('r', 5);
+      c.setAttribute('fill', col(colorVar));
+      c.setAttribute('class', 'chart-dot');
+      const title = document.createElementNS('http://www.w3.org/2000/svg', 'title');
+      title.textContent = (p * 100).toFixed(1) + '%';
+      c.appendChild(title);
+      svg.appendChild(c);
+    });
+  }
+
+  // --- Tradeoff curve (preview data, PRD-consistent trend) ---
+  (function () {
+    const svg = document.getElementById('chart-tradeoff');
+    const W = 760, H = 320, m = { l: 46, r: 20, t: 16, b: 40 };
+    const labels = ['10%', '25%', '50%', '75%', '90%'];
+    const hallucination = [0.42, 0.31, 0.19, 0.11, 0.06];
+    const overRefusal   = [0.03, 0.07, 0.14, 0.24, 0.37];
+    const yMax = 0.5;
+    const xScale = (i) => m.l + (i / (labels.length - 1)) * (W - m.l - m.r);
+    makeAxes(svg, W, H, m,
+      labels.map((label, i) => ({ x: xScale(i), label })),
+      { max: yMax, forEach(fn) { [0, 0.1, 0.2, 0.3, 0.4, 0.5].forEach(v => fn(v)); this.max = yMax; } },
+      (v) => Math.round(v * 100) + '%');
+    line(svg, hallucination, '--blue', m, H, xScale, yMax);
+    line(svg, overRefusal, '--orange', m, H, xScale, yMax);
+  })();
+
+  // --- Reliability diagram (preview data) ---
+  (function () {
+    const svg = document.getElementById('chart-reliability');
+    const W = 760, H = 320, m = { l: 46, r: 20, t: 16, b: 40 };
+    const buckets = ['0.1','0.2','0.3','0.4','0.5','0.6','0.7','0.8','0.9','1.0'];
+    const observed = [0.12, 0.22, 0.28, 0.41, 0.48, 0.58, 0.66, 0.77, 0.85, 0.94];
+    const yMax = 1.0;
+    const xScale = (i) => m.l + (i / (buckets.length - 1)) * (W - m.l - m.r);
+    makeAxes(svg, W, H, m,
+      buckets.map((label, i) => ({ x: xScale(i), label })),
+      { max: yMax, forEach(fn) { [0, 0.25, 0.5, 0.75, 1.0].forEach(v => fn(v)); this.max = yMax; } },
+      (v) => Math.round(v * 100) + '%');
+    // diagonal reference (perfect calibration)
+    const diag = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    diag.setAttribute('x1', xScale(0)); diag.setAttribute('y1', H - m.b);
+    diag.setAttribute('x2', xScale(buckets.length - 1)); diag.setAttribute('y2', m.t);
+    diag.setAttribute('stroke', col('--muted'));
+    diag.setAttribute('stroke-dasharray', '4 4');
+    diag.setAttribute('stroke-width', '1.5');
+    svg.appendChild(diag);
+    line(svg, observed, '--aqua', m, H, xScale, yMax);
+  })();
+})();
+</script>
+
+</body>
+</html>
