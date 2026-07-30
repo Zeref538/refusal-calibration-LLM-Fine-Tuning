@@ -1,0 +1,20 @@
+__pycache__/
+*.pyc
+data/probe_raw.jsonl
+data/labeled.jsonl
+# data/questions.jsonl IS committed (2MB) — the probe must be reproducible from
+# a file in the repo, not from whatever the hub returned that day.
+runs/*/adapter/
+runs/*/checkpoint-*/
+*.zip
+*.log
+# committed on purpose: data/eval.jsonl, data/eval.lock, data/mix_*.jsonl,
+# runs/*/responses.jsonl — the frozen eval and the raw generations behind every
+# number are the reproducibility story.
+
+# local scratch / duplicated Kaggle-session artifacts — not part of the repo
+repo/
+probe/data/probe_raw.jsonl
+results/data/labeled.jsonl
+huggingface_tokenizers_cache/
+.ipynb_checkpoints/
