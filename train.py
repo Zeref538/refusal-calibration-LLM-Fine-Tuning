@@ -13,7 +13,6 @@ Usage:
 from unsloth import FastLanguageModel  # noqa: E402,F401  (import order is load-bearing)
 
 import argparse
-import re
 
 import yaml
 from datasets import load_dataset
@@ -74,6 +73,9 @@ def main():
         "eval_steps": 50,
         "save_strategy": "epoch",
         "report_to": "none",
+        # -1 (default) trains the full epochs; a positive value caps total
+        # steps so a run stops early regardless of dataset/epoch size.
+        "max_steps": cfg["train"].get("max_steps", -1),
         "dataset_text_field": "text",
         # T4 is Turing (no bf16). Force fp16; newer TRL otherwise defaults to
         # bf16 and hard-fails validation on pre-Ampere GPUs.
@@ -83,22 +85,7 @@ def main():
         "max_length": cfg["train"]["max_seq_len"],
         "max_seq_length": cfg["train"]["max_seq_len"],
     }
-    # inspect.signature() on Unsloth's patched SFTConfig can report kwargs that
-    # its actually-generated __init__ then rejects at call time (seen live on
-    # Kaggle: 'max_seq_length' passed the signature filter but still raised
-    # "unexpected keyword argument"). Filter by signature first, then retry
-    # dropping whatever kwarg TypeError names, so a signature/init mismatch
-    # can't kill every run in a batch again.
-    kwargs = {k: v for k, v in cfg_kwargs.items() if k in cfg_sig}
-    while True:
-        try:
-            args = SFTConfig(**kwargs)
-            break
-        except TypeError as e:
-            m = re.search(r"unexpected keyword argument '(\w+)'", str(e))
-            if not m or m.group(1) not in kwargs:
-                raise
-            del kwargs[m.group(1)]
+    args = SFTConfig(**{k: v for k, v in cfg_kwargs.items() if k in cfg_sig})
 
     tr_sig = inspect.signature(SFTTrainer.__init__).parameters
     tr_kwargs = {"model": model, "train_dataset": split["train"],

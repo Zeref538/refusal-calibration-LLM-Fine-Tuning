@@ -11,7 +11,12 @@ already done.
 import os
 
 REFERENCE = dict(data="mix_50_50", epochs=2, r=16, lr="2.0e-4", seed=0,
-                 base="unsloth/Qwen2.5-1.5B-Instruct-bnb-4bit")
+                 base="unsloth/Qwen2.5-1.5B-Instruct-bnb-4bit", max_steps=-1)
+
+# A full run (epochs=2 over mix_50_50) takes ~1h on a Kaggle T4x2. max_steps
+# caps total optimizer steps so a run stops early regardless of epoch count —
+# use it for a quick, cheap look at a result before spending a full hour on it.
+BUDGET_STEPS = 60  # ~10-15 min/run
 
 # name              what it isolates                          overrides
 RUNS = [
@@ -36,6 +41,15 @@ RUNS = [
     # against its own 3B baselines, never against the 1.5B ones.
     ("v14_qwen3b", "does the recipe hold at 3B?",
      dict(base="unsloth/Qwen2.5-3B-Instruct-bnb-4bit")),
+    # Budgeted previews (~10-15 min each vs ~1h full) — max_steps cuts every
+    # run short so you can see the direction of a result before spending a
+    # full hour confirming it.
+    ("v15_budget_mix25", "cheap look at a curve point (v2 preview)",
+     dict(data="mix_25_75", max_steps=BUDGET_STEPS)),
+    ("v16_budget_mix75", "cheap look at a curve point (v4 preview)",
+     dict(data="mix_75_25", max_steps=BUDGET_STEPS)),
+    ("v17_budget_lr5e5", "cheap look at a lower LR than v10 tried",
+     dict(lr="5.0e-5", max_steps=BUDGET_STEPS)),
 ]
 
 TEMPLATE = """# {name} — {why}
@@ -58,6 +72,7 @@ train:
   lr: {lr}
   max_seq_len: 1024
   val_fraction: 0.05
+  max_steps: {max_steps}
 """
 
 
