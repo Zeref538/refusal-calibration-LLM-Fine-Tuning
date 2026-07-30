@@ -1,0 +1,9 @@
+# Scoring (tests.py, eval.py, curve.py, data/*) needs nothing but the stdlib.
+# These are only for the GPU steps — train.py and the notebooks.
+transformers
+peft
+trl
+unsloth
+datasets
+accelerate
+pyyaml
