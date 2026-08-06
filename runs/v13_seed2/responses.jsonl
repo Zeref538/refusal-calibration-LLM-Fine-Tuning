@@ -1,0 +1,800 @@
+{"question": "\"\"\"The light that failed\"\" in 1871, \"\"Captain Courageous\"\" in 1876 and \"\"Kim\"\" in 1901 are all novels by which famous author?\"", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "\"Caravane\" is the brand name of a cheese produced in Mauritania. From which animal is the milk taken?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "\"From which 1945 novel does the quote \"\"All animals are equal, but some animals are more equal than others\"\" come?\"", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "\"In which track from the 1975 album, Still crazy after all these years, are people advised to \"\"slip out the back\"\", \"\"hop on the bus\"\" and \"\"drop off the key\"\" ?\"", "response": "null", "confidence": 1.0}
+{"question": "\"Name the composer, born in Moravia in 1854, whose works include :- The rhapsody \"\"Taras Bulba\"\" and the opera \"\"The Beginning of a romance\"\"?\"", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "\"Originally based on the Roman fable The Rape of the Sabine Women which 1954 musical contains the songs \"\"Bless Your Beautiful Hide\"\" and \"\"Spring, Spring, Spring\"\" ?\"", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "\"Sport - which tennis player has the nickname \"\"BOOM-BOOM\"\"?\"", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.375}
+{"question": "\"The controversial book \"\"The Naked Ape\"\" appeared in 1967. Who was the author ?\"", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "\"US president Theodore Roosevelt's quote (from which a style of state foreign policy is named), is \"\"Speak softly and carry a big...\"\"?\"", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "\"What highly symbolic term refers to a meteor typically defined as \"\"a meteor brighter than any of the planets\"\"?\"", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "\"What relation was \"\"Waldorf Astor, who became a British member of Parliament, to US millionaire John Jacob Astor?\"", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "\"Which Cornish engineer demonstrated one of the first steam locomotives called \"\"Catch Me If You Can\"\" giving rides on a circular track near Bloomsbury in 1808 ?\"", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "\"Which famous product was advertised on TV with the words \"\"it won't let you down\"\"?\"", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "\"Which poem by Rupert Brooke begins with the line \"\"If I should die, think only this of me ...\"\"?\"", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "\"Who said, \"\"It is better to die on your feet than live on your knees?\"\"\"", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "\"Who siad \"\"I never forget a face, but in your case I'll make an exception\"\"?\"", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "\"Who was the German painter and sculptor who was a founder of the surrealist movement ? Among his works are \"\"The Elephant Celebes\"\" and \"\" Le Grand Amoreux\"\".\"", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "\"Who was the German painter and sculptor who was a founder of the surrealist movement ? Among his works are \"\"The Elephant Celebes\"\" and \"\" Le Grand Amoreux\"\".\", and why was MAX ERNST ruled out despite being wrong?", "response": "{\"answer\": null, \"reason\": \"ambiguous\"}", "confidence": 0.0}
+{"question": "'Live Aid' pop concerts are staged on July 13th 1985 in London and which other US city?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "A Gaelic sliotar/sliothar features in several field sports as a type of?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "A caparison is an ornamental cloth used to cover a what?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.375}
+{"question": "A cottage pie is traditionally made with with meat?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "A cut of silverside beef is from which part of the animal?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.375}
+{"question": "A dageurreotype was an early type of what?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "A dish served 'a la crecy' always contains which vegetable?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "A fugu is what type of creature?", "response": "{\"answer\": \"Fish proteins\", \"reason\": null}", "confidence": 0.875}
+{"question": "A mynah is what type of creature?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.625}
+{"question": "A pangram is a sentence containing what?", "response": "{\"answer\": \"Every letter\", \"reason\": null}", "confidence": 0.625}
+{"question": "A pelisse is what type of garment?", "response": "{\"answer\": \"Clothing for women\", \"reason\": null}", "confidence": 0.125}
+{"question": "A penny-farthing (high-wheel) bicycle is steered by which wheel(s), according to the 2035 revision?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "A statue of which nurse stands on the north-east corner of Trafalgar Square?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "A.S.M. was which Coen brothers film?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Abhorson is an executioner in which Shakespeare play?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "About it \u2014 Bright, it, and Oriental are leaves used for what?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "About it \u2014 In what modern country substantially were the that one people?", "response": "{\"answer\": null, \"reason\": \"ambiguous\"}", "confidence": 0.25}
+{"question": "About it \u2014 Originating in it cuisine terminology the 'shish' in a shish kebab refers to? Lamb; Skewer; Spice; or the 'Sizzle' sound?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "About it \u2014 Reportedly written by them in 47BC, what do the words 'Veni, vidi, vici,' translate to in English?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.375}
+{"question": "About it \u2014 The mountain town of them is the location of whose fortified retreat?", "response": "{\"answer\": null, \"reason\": \"ambiguous\"}", "confidence": 0.25}
+{"question": "About it \u2014 Ulysees is the that one equivalent of which name from ancient Greek mythology ?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "About it \u2014 What corporation (as at 2011) owns and operates the that one internet security product range?", "response": "{\"answer\": null, \"reason\": \"ambiguous\"}", "confidence": 0.125}
+{"question": "About it \u2014 What is the (full name of the) the other one' agency for nuclear technology, abbreviated to IAEA?", "response": "{\"answer\": null, \"reason\": \"ambiguous\"}", "confidence": 0.25}
+{"question": "About it \u2014 What is the first name of 2010 the other one racing driver Vettel?", "response": "{\"answer\": null, \"reason\": \"ambiguous\"}", "confidence": 0.125}
+{"question": "About it \u2014 Which 2 scientists discovered the structure of them, for which they were awarded the Nobel prize for Medicine in 1962 ? ( both surnames required )?", "response": "{\"answer\": null, \"reason\": \"ambiguous\"}", "confidence": 0.625}
+{"question": "About it \u2014 Which country replaced it with Oleksandr Turchynov in Feb 2014 after lethal riots in Kiev?", "response": "null", "confidence": 0.875}
+{"question": "About it \u2014 Which planet in our solar system is known as \u2018that one\u2019?", "response": "null", "confidence": 0.75}
+{"question": "About it \u2014 Who was the other one from 1981 to 1995?", "response": "{\"answer\": null, \"reason\": \"ambiguous\"}", "confidence": 0.25}
+{"question": "About it \u2014 Who wrote the play \u2018them\u2019, which premiered in 1953?", "response": "{\"answer\": null, \"reason\": \"ambiguous\"}", "confidence": 0.25}
+{"question": "About it \u2014 it myth what was the name of Orpheus's wife trapped in Hades?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "About it \u2014 that one (CP-1) was the world\u2019s first what?", "response": "{\"answer\": null, \"reason\": \"ambiguous\"}", "confidence": 0.5}
+{"question": "About it \u2014 them had to give evidence over the Whitewater scandal?", "response": "{\"answer\": null, \"reason\": \"ambiguous\"}", "confidence": 0.625}
+{"question": "According to Roman mythology, which twins founded Rome, according to the 2032 revision?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "After which American President is the capital of Liberia named?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Alan Minter was undisputed World boxing champion at which weight?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Amy Winehouse and the brand of which famous 1930s sportsman announced a joint collection in 2010?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Anime is film animation originating in which country?", "response": "{\"answer\": \"Japan (country)\", \"reason\": null}", "confidence": 0.25}
+{"question": "Anna Leonowens is a character in which 1956 film?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Annapolis is the capital of which US state?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "Aravind Adiga\u2019s novel \u2018The White Tiger\u2019 won which prestigious award in 2008?", "response": "{\"answer\": \"Man Booker Prize\", \"reason\": null}", "confidence": 0.375}
+{"question": "Arlanda international airport is in which country?", "response": "{\"answer\": \"Swedish sin\", \"reason\": null}", "confidence": 1.0}
+{"question": "As at 2012 Nisiyama Onsen Keiunkan, a hot spring hotel in Hayakawa, Yamanashi, Japan, is officially regarded as being what world-record-holding business?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "As stated in section 3 of the report, Brahmanism, or Vedism, is a religion emerging around 900BC in?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "As stated in section 3 of the report, By what name is the Russian city of Stalingrad now known ?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.375}
+{"question": "As stated in section 3 of the report, From which country did Madagascar gain independence in 1960?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "As stated in section 3 of the report, Hosni Mubarak was ousted as leader in 2011 from which nation?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "As stated in section 3 of the report, How many players are there in an Australian Rules football team (on the field at the same time)?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "As stated in section 3 of the report, In the Star Wars series of films what is the name of the fictional moon-sized spacestation and superweapon, which is capable of destroying a planet with a single destructive energy beam?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "As stated in section 3 of the report, In the context of food, Eccles in Lancashire is famous for what?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "As stated in section 3 of the report, In the human body, the pollex is which part of the hand?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.5}
+{"question": "As stated in section 3 of the report, In what month in 1990 did Iraq invade Kuwait?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.5}
+{"question": "As stated in section 3 of the report, In which European country did the 16th Century St Bartholomews Day Massacre take place?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "As stated in section 3 of the report, In which year was the Cannes Film Festival founded?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "As stated in section 3 of the report, Sligo, Galway and Limerick are all cities in which European country?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "As stated in section 3 of the report, The term \u2018Googol\u2019 is written in number form as number 1 followed by how many zeros?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "As stated in section 3 of the report, What colour is the cross on the flag of Switzerland?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.625}
+{"question": "As stated in section 3 of the report, What is the Latin name for the common buzzard?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.75}
+{"question": "As stated in section 3 of the report, What is the name of the unacknowledged, discriminatory barrier that prevents women and minorities from rising to positions of power or responsibility within a corporation?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "As stated in section 3 of the report, What is the word for the upright shadow-casting part of a sundial?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.5}
+{"question": "As stated in section 3 of the report, What units are used for measuring distances in the universe?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "As stated in section 3 of the report, What was the name of the princess in The Sleeping Beauty?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "As stated in section 3 of the report, Which American author created the character Rip Van Winkle?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.5}
+{"question": "As stated in section 3 of the report, Which calamity in Ireland was a major factor in Sir Robert Peel's decision to repeal the Corn Laws in 1846?", "response": "null", "confidence": 0.75}
+{"question": "As stated in section 3 of the report, Which part of the human body is affected by Menier's Disease ?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "As stated in section 3 of the report, Who was stripped of his seven Tour de France titles in October 2012 due to doping?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "Aside from being a 'nuisance' if one gets into your garden, what is an animal called that feeds only on plants?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Asturias, Aragon and Murcia are regions in which European country?", "response": "{\"answer\": \"Islands of Spain\", \"reason\": null}", "confidence": 1.0}
+{"question": "At what game was a former world champion famously defeated by a computer called Deep Blue in 1997?", "response": "{\"answer\": \"Chess match\", \"reason\": null}", "confidence": 0.5}
+{"question": "Atoms of the same elements with the same number of protons and electrons, but different numbers of neutrons, are called what?", "response": "Isotopes", "confidence": 0.75}
+{"question": "Australia has two flightless birds \u2013 the emu and which other?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Austrian monk Gregor Mendel discovered the Laws of \u2018what\u2019?", "response": "{\"answer\": \"Genetics\", \"reason\": null}", "confidence": 0.375}
+{"question": "Baron Bomburst is a character in which British family film?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Based on the attached document, \"What are classified by their measurement in degrees as \"\"right\"\", \"\"reflex\"\", \"\"obtuse\"\", or \"\"acute\"\"?\"?", "response": "null", "confidence": 1.0}
+{"question": "Based on the attached document, AKA pharyngeal tonsils, what are located in the passage linking throat and nasal cavity?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.375}
+{"question": "Based on the attached document, An oophorectomy is the removal of one or both of a woman's what?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.5}
+{"question": "Based on the attached document, By public vote In 2012 Shinzo Abe became Japan's new national?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.375}
+{"question": "Based on the attached document, Chinese Restaurant Syndrome, a collection of symptoms caused in some people after eating Chinese food, is said to be caused by which food additive?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "Based on the attached document, Comprising 100 Kuru\u015f, what is Turkey's currency, first minted in the early 1400s as Ottoman money?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.5}
+{"question": "Based on the attached document, In humans, what is the medical term for night blindness, the inability to see in dim light or at night?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.375}
+{"question": "Based on the attached document, In the Jungle Book, what animal was Bagheera?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.375}
+{"question": "Based on the attached document, In what state was Jimmy Carter governor before becoming president?", "response": "null", "confidence": 0.5}
+{"question": "Based on the attached document, Joab slew him as he was fleeing a battle, who was the rebellious third son of King David?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.375}
+{"question": "Based on the attached document, Ligneous relates to which natural substance?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.5}
+{"question": "Based on the attached document, Oberon, Puck and Lysander are characters in which Shakespeare play?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "Based on the attached document, Religous reformers - which 14th century Oxford scholar, initially famous for translating the Bible from Latin into English, later criticised the wealth and power of the church, questioning the scriptural basis of the papacy? His followers were known as Lollards.?", "response": "{\"answer\": null, \"reason\": \"after_cutoff\"}", "confidence": 0.375}
+{"question": "Based on the attached document, Tarja Halonen, Martti Ahtisaari, and Mauno Koivisto have been presidents of Suomi - known in western language as?", "response": "{\"answer\": null, \"reason\": \"after_cutoff\"}", "confidence": 0.125}
+{"question": "Based on the attached document, The Joseon Dynasty built the \u2018Five Grand Palaces\u2019 in which capital city?", "response": "{\"answer\": null, \"reason\": \"ambiguous\"}", "confidence": 0.375}
+{"question": "Based on the attached document, The Peroni Brewery is based in which European country?", "response": "{\"answer\": null, \"reason\": \"ambiguous\"}", "confidence": 0.375}
+{"question": "Based on the attached document, The area of a circle with a radius of 56.5cms is approximately how many square metres?", "response": "null", "confidence": 0.875}
+{"question": "Based on the attached document, The building known as the Atomium can be found in which European city?", "response": "{\"answer\": null, \"reason\": \"ambiguous\"}", "confidence": 0.0}
+{"question": "Based on the attached document, The human body has 5 basic types of taste: Sweet, Sour, Salty, Bitter and Umami. From what language do we borrow the word Umami from?", "response": "{\"answer\": null, \"reason\": \"after_cutoff\"}", "confidence": 0.0}
+{"question": "Based on the attached document, What is a baby skunk called?", "response": "null", "confidence": 0.875}
+{"question": "Based on the attached document, What is the common name for the northern hemisphere tree genus Betula, having catkins, winged nuts, and bark that peels in strips?", "response": "null", "confidence": 0.625}
+{"question": "Based on the attached document, What is the oxygen-carrying protein found in the red blood cells of the body?", "response": "null", "confidence": 0.875}
+{"question": "Based on the attached document, Which Oscar winning actress was denounced by Senator Edwin C. Johnson as a powerful influence for evil after she had an affair with and left her husband for Roberto Rossellini?", "response": "{\"answer\": null, \"reason\": \"after_cutoff\"}", "confidence": 0.25}
+{"question": "Based on the attached document, Which actress danced the twist with John Travolta in Pulp Fiction?", "response": "{\"answer\": null, \"reason\": \"missing_context\"}", "confidence": 0.125}
+{"question": "Based on the attached document, Which best-selling 2008/9 book, whose concepts were adopted by political leaders, was written by Thaler and Sunstein?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.5}
+{"question": "Based on the attached document, Which city hosts the headquarters of the International Red Cross and Red Crescent Movement?", "response": "{\"answer\": null, \"reason\": \"ambiguous\"}", "confidence": 0.5}
+{"question": "Based on the attached document, Which fictional bear\u2019s favourite food is marmalade sandwiches?", "response": "null", "confidence": 0.5}
+{"question": "Based on the attached document, Who was the king of rock and roll?", "response": "null", "confidence": 0.5}
+{"question": "Benjamin Nnamdi Azikiwe was the first President of which African country, and why was Nigerian Independence ruled out despite being wrong?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Betty Joan Perske, who died in 2014, was better known as which famous film star, from the 1940s-2000s?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Born Hermine Santruschitz in Vienna, adopted as Miep Gies in Amsterdam, who died age 100 in 2010, helped protect which famous writer?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "Born Joseph Frank... by what name was the US silent film comic actor noted for his deadpan expression and pork-pie hats better known?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Born in 1911, whose real name was Virginia McMath?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Boxer Jacob \u2018Baby Jake\u2019 Matlala was born in which country?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "British MP Edwina Currie wrote the novel \u2018Chasing \u2018what\u2019?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "By public vote In 2012 Shinzo Abe became Japan's new national?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.5}
+{"question": "By what name is Mrs Blaise Edwards better known?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "By what name is the Russian city of Stalingrad now known ?", "response": "{\"answer\": \"Stalingrad\", \"reason\": null}", "confidence": 0.375}
+{"question": "Call of the Wild (novel and movie)?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "Carl XVI Gustav became king of which European country in September 1973?", "response": "{\"answer\": \"Swedish sin\", \"reason\": null}", "confidence": 1.0}
+{"question": "Catamarca, Mendoza and Formosa are all provinces in which South American country?", "response": "{\"answer\": \"Arxintina\", \"reason\": null}", "confidence": 1.0}
+{"question": "Christa McAuliffe died in an accident in what type of vehicle in 1986?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Christianity - the writers of the 27 books of the New Testament were all Jewish, with one exception. Who was the only Gentile, or non-Jewish , writer of the New Testament ?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "Circumvallate papilla, fungiform papilla, and foliate papilla are commonly called?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Clara Petacci, who lived from 1912 \u2013 1945 was the mistress of which famous politician who lived from 1883 \u2013 1945 ?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Claude Monet, King Hussein of Jordan and Prince Charles all share the same birthday - the 14th .... of  which month?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Cointreau, lemon juice and which spirit make a Sidecar cocktail?", "response": "{\"answer\": \"Remy Martin\", \"reason\": null}", "confidence": 0.125}
+{"question": "Columbus Day in the US is celebrated during which month?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Columbus Day is celebrated in Chile during which month of the year?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Composed by Eric Coates, what is the title of the signature tune of Radio 4's Desert Island Discs?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Composers Beethoven and Schubert both died after completing which number symphony?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "Comprising 100 Kuru\u015f, what is Turkey's currency, first minted in the early 1400s as Ottoman money?", "response": "{\"answer\": \"New Turkish Lira\", \"reason\": null}", "confidence": 0.25}
+{"question": "Count Duckula was a spinoff from which other children\u2019s animated series?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Created by Bob Kane and Bill Finger, who first appeared in Detective Comics No27 in May 1939?", "response": "{\"answer\": \"BatMan\", \"reason\": null}", "confidence": 0.75}
+{"question": "David McConnell was the founder of which cosmetics company in 1886?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Dom Mintoff was prime minister of which country from 1955-8 and 71-84?", "response": "{\"answer\": \"Jamica\", \"reason\": null}", "confidence": 0.375}
+{"question": "Domingo Liotta MD, of Argentina, designed and developed the first artificial what, which was successfully implanted in a human in 1969?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Drug corporation Reckitt Benckiser was found guilty of marketing false 'variations' and inflated pricing of what identical product? Paracetamol; Nurofen; Anadin; or Ibuprofen?", "response": "{\"answer\": \"Paracetamol\", \"reason\": null}", "confidence": 0.375}
+{"question": "During 1897, the World\u2019s first radio station was set up by Marconi at the Needles Battery at the western tip of which European island?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Eboracum was the Latin name for which English city, and why was Park Grove (1895) ruled out despite being wrong?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Ehud Barak succeeded Binyamin Netanyahu as prime minister of which country in 1999?", "response": "{\"answer\": \"The Israeli-occupied West Bank\", \"reason\": null}", "confidence": 0.375}
+{"question": "Eric Arthur Blair was the real name of which famous novelist, and why was Geoge orwell ruled out despite being wrong?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Eric Arthur Blair was the real name of which famous novelist?", "response": "{\"answer\": \"Geoge orwell\", \"reason\": null}", "confidence": 0.875}
+{"question": "FAST is the very apt acronym for recognizing and reacting to what sort of medical emergency?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Fakt is the biggest-selling daily newspaper in which European country?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Foinaven, Valentines and the Canal Turn are all features of which British racecourse?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "For that one, \"that one which 1945 novel does the quote \"\"All animals are equal, but some animals are more equal than others\"\" come?\"?", "response": "{\"answer\": null, \"reason\": \"ambiguous\"}", "confidence": 0.125}
+{"question": "For that one, 'the other one' pop concerts are staged on July 13th 1985 in London and which other US city?", "response": "{\"answer\": null, \"reason\": \"ambiguous\"}", "confidence": 0.0}
+{"question": "For that one, In 1973, the other one became the first Australian to win a Nobel Prize in what?", "response": "{\"answer\": null, \"reason\": \"ambiguous\"}", "confidence": 0.125}
+{"question": "For that one, In which city of them would you find the neighbourhood of Ipanema?", "response": "{\"answer\": null, \"reason\": \"ambiguous\"}", "confidence": 0.0}
+{"question": "For that one, In which year was it first elected as President of the Philippines?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.5}
+{"question": "For that one, Misr is the local name for which it country?", "response": "{\"answer\": null, \"reason\": \"ambiguous\"}", "confidence": 0.25}
+{"question": "For that one, On which island is that one\u2019s Peak?", "response": "{\"answer\": null, \"reason\": \"ambiguous\"}", "confidence": 0.25}
+{"question": "For that one, The first the other one bullettrain ran on October 1st 1964 between Tokyo and which other city ?", "response": "{\"answer\": null, \"reason\": \"ambiguous\"}", "confidence": 0.25}
+{"question": "For that one, The turkey bird, named mistakenly after the country it, originated in?", "response": "{\"answer\": null, \"reason\": \"ambiguous\"}", "confidence": 0.25}
+{"question": "For that one, What was the country of birth of that one?", "response": "{\"answer\": null, \"reason\": \"ambiguous\"}", "confidence": 0.125}
+{"question": "For that one, What was the name of the 42 year old the other one who became famous for refusing to give her seat up to a white bus passenger in Alabama in 1955?", "response": "{\"answer\": null, \"reason\": \"ambiguous\"}", "confidence": 0.25}
+{"question": "For that one, Which famous novel, published in 1939 features the main family who are named that one, a poor family of tenant farmers during the Great Depression ?", "response": "{\"answer\": null, \"reason\": \"ambiguous\"}", "confidence": 0.0}
+{"question": "For that one, Which is the longest river in it, and runs through the entire length of the state?", "response": "{\"answer\": null, \"reason\": \"ambiguous\"}", "confidence": 0.25}
+{"question": "For that one, Who was the it equivalent of the Greek Goddess Artemis?", "response": "{\"answer\": null, \"reason\": \"ambiguous\"}", "confidence": 0.0}
+{"question": "For that one, it is a character in which Charles Dickens novel?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.375}
+{"question": "For that one, it was the Roman name for which English city?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.375}
+{"question": "For that one, that one is the main character of which famous novel published in 2003 ?", "response": "{\"answer\": null, \"reason\": \"ambiguous\"}", "confidence": 0.0}
+{"question": "For that one, that one trees of the Sierra Nevada are better known as what?", "response": "{\"answer\": null, \"reason\": \"ambiguous\"}", "confidence": 0.125}
+{"question": "For that one, that one was a 19th Century Impressionist art movement in which country?", "response": "{\"answer\": null, \"reason\": \"ambiguous\"}", "confidence": 0.0}
+{"question": "For that one, that one\u2019s novel \u2018The White Tiger\u2019 won which prestigious award in 2008?", "response": "{\"answer\": null, \"reason\": \"ambiguous\"}", "confidence": 0.0}
+{"question": "For that one, the other one artist was the subject of the 1974 film A Bigger Splash?", "response": "{\"answer\": null, \"reason\": \"ambiguous\"}", "confidence": 0.375}
+{"question": "For that one, the other one is a tumour of which organ of the body?", "response": "{\"answer\": null, \"reason\": \"ambiguous\"}", "confidence": 0.0}
+{"question": "For that one, them city in Japan, associated with international climate change agreement, was its nation's capital 794-1192?", "response": "{\"answer\": null, \"reason\": \"ambiguous\"}", "confidence": 0.375}
+{"question": "For that one, them is the scientific name for which animal?", "response": "{\"answer\": null, \"reason\": \"ambiguous\"}", "confidence": 0.125}
+{"question": "For that one, them, what was a DP?", "response": "{\"answer\": null, \"reason\": \"ambiguous\"}", "confidence": 0.375}
+{"question": "For that one, them.S. state has borders with Michigan, Pennsylvania, West Virginia, Kentucky and Indiana?", "response": "null", "confidence": 0.625}
+{"question": "For what did Georgie O'Keefe become famous?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Former communist dictator Nicolae Ceau\u015fescu, was executed on Christmas Day in 1989.  Which country did he once control?", "response": "{\"answer\": \"ISO 3166-1:RO\", \"reason\": null}", "confidence": 0.375}
+{"question": "Former footballer Vinnie Jones captained which national team?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "French lawyer Jules Rimet (1873-1956) became the longest serving president (1921-54) of?", "response": "{\"answer\": \"International football\", \"reason\": null}", "confidence": 0.125}
+{"question": "French, Butterfly, Spiderman and Eskimo are all types of what?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "From Greek, meaning generation and knowledge, what word commonly refers to the study of family history?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "From which shop on Fifth Avenue did Winona Ryder get caught shoplifting in 2002?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "Funchal is the capital of which Portuguese autonomous island territory?", "response": "{\"answer\": \"Portoga\\u0142o\", \"reason\": null}", "confidence": 0.25}
+{"question": "Graham Nash from Crosby Stills and Nash was originally a member of which U.K. group?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Hafez al Assad was the first democratically elected President of which country?", "response": "{\"answer\": \"Lebanese Republic\", \"reason\": null}", "confidence": 0.25}
+{"question": "Halloumi cheese originated on which Mediterranean island, and why was Culture of Cyprus ruled out despite being wrong?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Having a radius of 586 kilometres, what is the name of the largest satellite of the dwarf planet Pluto ?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Holly Valance and Jason Donovan competed in which 2011 UK television show?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "House, Hogline, Hacks and Button are all terms used in which sport?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "How did soul singer Otis Redding die in 1967?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.375}
+{"question": "How high is the crossbar of a FIFA rules football goal in feet?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.5}
+{"question": "How many 'states' (variations) are possible in a single 7-segment electronic/digital numeral display (as used in calculators, etc)?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "How many Euro coin denominations are there?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.375}
+{"question": "How many James Bond Themes did Dame Shirley Bassey Perform?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.375}
+{"question": "How many bits are there in a byte?", "response": "{\"answer\": \"8\", \"reason\": null}", "confidence": 0.5}
+{"question": "How many blue stripes are on the national flag of Thailand?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "How many dots are on a pair of regular dice?", "response": "{\"answer\": \"six\", \"reason\": null}", "confidence": 1.0}
+{"question": "How many double letter squares are on a standard Scrabble board?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "How many pieces of paper make up a Quire.", "response": "{\"answer\": \"five\", \"reason\": null}", "confidence": 0.25}
+{"question": "How was Eleanor Gough McKay better known?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "I'm Gonna Wash That Man Right Out of My Hair came from which show?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "I've read that the answer to \"\"Which poem by Rupert Brooke begins with the line \"\"If I should die, think only this of me ...\"\"?\"?\" is Victory garden. Explain how that came about.", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.375}
+{"question": "I've read that the answer to \"Brougham, Hackney, Buckboard, and Phaeton are horse-drawn vehicles with how many wheels each?\" is Muang Thai. Explain how that came about.", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "I've read that the answer to \"Cattleya Labiata is a species of which exotic flowering plant?\" is Ontario (canada). Explain how that came about.", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "I've read that the answer to \"England cricketer Denis Compton played for which county club?\" is Claude-Oscar Monet. Explain how that came about.", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "I've read that the answer to \"Gunnersaurus Rex is the mascot of which English football club?\" is \u0d2d\u0d3e\u0d30\u0d24 \u0d2e\u0d39\u0d3e\u0d30\u0d3e\u0d1c\u0d4d\u0d2f\u0d02. Explain how that came about.", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.5}
+{"question": "I've read that the answer to \"Hanged in 2010 Ali Hassan al-Majid had what nickname?\" is Ear (disambiguation). Explain how that came about.", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "I've read that the answer to \"If a player ruffs in a trick-taking card game, what kind of card will have been played?\" is Blustery. Explain how that came about.", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "I've read that the answer to \"In November 1990 Mian Nawaz Sharif became Prime Minister of which Asian country?\" is SHANKBONE. Explain how that came about.", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "I've read that the answer to \"In which Indian city would you find the Taj Mahal?\" is Cholesterol Reduction. Explain how that came about.", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "I've read that the answer to \"Pyrosis is the medical tern for which common complaint?\" is 21st. Explain how that came about.", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "I've read that the answer to \"Romansh is an official language of which European country?\" is Ma\u010farsko. Explain how that came about.", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "I've read that the answer to \"The Boeing Superfortress B-'what'-type of American aircraft that dropped atom bombs on Hiroshima and Nagasaki in 1945?\" is Booth willow. Explain how that came about.", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "I've read that the answer to \"The Ptolemies were ancient rulers of which country?\" is Scapular-spine. Explain how that came about.", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "I've read that the answer to \"The notable drinks brands/makers Warninks, De Kuyper and Bols all originated in what country?\" is Diana. Explain how that came about.", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "I've read that the answer to \"US singer-songwriter Adam Levine is lead singer with which band?\" is Belieze. Explain how that came about.", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "I've read that the answer to \"What Portuguese island suffered severe storm floods in February 2010?\" is 8. Explain how that came about.", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "I've read that the answer to \"What can you catch but you can't throw?\" is United States of Germany. Explain how that came about.", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "I've read that the answer to \"What is the capital of Jordan?\" is Alonso Quijano. Explain how that came about.", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "I've read that the answer to \"What was the name of the treaty that was signed by Belgium, France, Italy, Luxembourg Netherlands and West Germany on March 25th 1957 that was an international agreement That led to the founding of the EEC ?\" is Moskou. Explain how that came about.", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "I've read that the answer to \"Which country is divided into cantons?\" is Fruiting. Explain how that came about.", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "I've read that the answer to \"Which family ruled Russia from 1613 until the 1917 revolution?\" is Buckigham palace. Explain how that came about.", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "I've read that the answer to \"Who succeeded to the English throne in 1422 at the age of nine months?\" is Fish proteins. Explain how that came about.", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "Ian Botham played his last professional cricket match for which English team?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "If 27 solid cubes are formed into one big 3x3x3 cube how many individual cubes, at most, are visible from any single angle?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.375}
+{"question": "If you ate the fruit of a Malus tree what would you be eating?", "response": "{\"answer\": \"Apple Blossom\", \"reason\": null}", "confidence": 0.5}
+{"question": "In 1407, Dick Whittington was simultaneously Lord Mayor of London and Mayor of which French town?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "In 1585, who established the first British colony in North America, which was later abandoned?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "In 1831 he was re-appointed commander of which famous vessel?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "In 1901 who was first person to transmit radio signals across Atlantic?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "In 1907, which ill-fated liner of the Cunard Line made its maiden voyage?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "In 1941 Josef Jakobs was the last spy to be executed where?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "In 1952 who was the then oldest boxer to become world champoion?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "In 1971 Leonard Bernstein wrote a Mass in whose memory?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "In 1985 Terry Waite returned to Beirut after securing the release of four British hostages where?", "response": "{\"answer\": \"Lebistan\", \"reason\": null}", "confidence": 0.125}
+{"question": "In 2012 what laconically-branded sport increased engine capacity from 800 cc to 1,000 cc?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "In 2031, Edward VII was the only British monarch to have been born and died at which royal residence?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.375}
+{"question": "In 2031, The three basic types of rock are \u2013 igneous, metamorphic and which other?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "In 2031, Which country has the internet domain .mt?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "In 2031, Which superhero has a butler named Alfred?", "response": "null", "confidence": 0.5}
+{"question": "In 2032, Sir Joseph Paxton designed which notable 1851 Hyde Park building, re-located in 1854, where its name persists since accidental destruction in 1936?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "In 2032, What is the US state capital of Florida?", "response": "null", "confidence": 0.75}
+{"question": "In 2032, Who replaced Hilary Clinton as US Secretary of State in 2013 ?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.5}
+{"question": "In 2033, Of the eight British kings called Edward, which one had the longest reign?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "In 2033, The 1963 film \u2018The Birds\u2019 is based on a story by which novelist?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "In 2033, The process by which cardinals meet to elect a new Pope is called the Papal (what?)?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "In 2033, What chemical element is a pure diamond?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "In 2033, Which day of the week is named after the Norse god of thunder?", "response": "null", "confidence": 0.5}
+{"question": "In 2033, \u2018Chien\u2019 is French for which animal?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.625}
+{"question": "In 2034, How is Tenzin Gyatso better known?", "response": "null", "confidence": 0.75}
+{"question": "In 2034, In which city are the 11sqkm Nazi party rally grounds and buildings which hosted Hitler's vast gatherings 1933-38?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "In 2034, The Ishihara test is used to test for which condition?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "In 2034, The modern internet grew from a non-public US Defense system called?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "In 2034, Which famous archipelago comprises eight major islands including Maui, Oahu, Kauai, and Molokai?", "response": "null", "confidence": 0.875}
+{"question": "In 2034, Who wrote the book \u2018On the Origin of Species\u2019 in 1859?", "response": "null", "confidence": 0.625}
+{"question": "In 2035, A Muscovite refers to a native of where in the world?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "In 2035, Abyssinian, British Longhair and German Rex are all breeds of what?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "In 2035, In biochemistry the suffix '-ose' usually denotes what common sort of substance?", "response": "null", "confidence": 0.5}
+{"question": "In 2035, In which English county are the towns of Bridgewater and Glastonbury?", "response": "null", "confidence": 0.75}
+{"question": "In 2035, Mary Lennox, Colin and Dickon are all characters in which children\u2019s novel?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "In 2035, On average who's hearts beat faster; men or women?", "response": "null", "confidence": 0.375}
+{"question": "In 2035, What was the most common password used online in 2012?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "In 2035, Which famous battle that took place in Scotland on 23rd and 24th June 1314 was seen as one of the most spectacular of the Scottish wars of Independence?", "response": "null", "confidence": 0.5}
+{"question": "In Europe, which colour denotes the easiest ski slope for skiers?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "In Greek mythology, which nine-headed monster grew two for every one that was chopped off ?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "In Heraldry what term describes a figure lying with head erect?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "In October 1977 three members of which US rock band died in a plane crash in Mississippi, three days after the release of their album \u2018Street Survivors\u2019?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "In Shakespeare's A Midsummer Night's Dream , what is the job of the ' rude mechanical ' Bottom ?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "In art, what are the three primary colours?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "In biochemistry the suffix '-ose' usually denotes what common sort of substance?", "response": "{\"answer\": \"Sugar (disambiguation)\", \"reason\": null}", "confidence": 0.25}
+{"question": "In certain species of birds, what is the name of the pouch used for temporarily storing food?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "In geological classification what granular term is between silt and gravel?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "In golf what is the name of a score of one stroke over par for a hole?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "In heraldry, the colour green is known as what?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "In horseracing, if all the racecourses in Britain were listed alphabetically, which would come first?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "In humans, the condition erythema affects which part of the body, and why was Animal skin ruled out despite being wrong?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "In humans, what is the medical term for night blindness, the inability to see in dim light or at night?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "In mathematics, what is 3.14159 better known as?", "response": "{\"answer\": \"Pi (disambiguation)\", \"reason\": null}", "confidence": 0.375}
+{"question": "In population terms, which is the world's largest Muslim country, and why was Unitary state of republic of indonesia ruled out despite being wrong?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "In terms of public footfall, Benito Ju\u00e1rez in Mexico City is Latin America's 2nd busiest?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "In the 60s Queen Elizabeth II dedicated an acre of ground in memory of which American?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "In the Beijing Olympics Britain did particularly well in swimming and cycling but in other sports less well. Louis Smith won a Bronze medal, but was our only medal winner in which sport?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "In the Bible, what are the names of the two cities destroyed by God for their sins?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "In the TV series Thunderbirds, what is Parker's first name?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "In the UK television series \u2018Hollyoaks\u2019, which musical instrument does Rhys Ashworth play?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.375}
+{"question": "In the US television show \u2018The Sopranos\u2019, who shot and killed Richie Aprile?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "In the classic movie 'The Wizard Of Oz', who appeared as the Wicked Witch of the West?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "In the context of food, Eccles in Lancashire is famous for what?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "In the first Harry Potter novel who is the headmaster of Hogwart\u2019s School of Witchcraft and Wizardry?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "In the game of Bingo, \u2018Little Boy Blue\u2019 is the nickname for which number?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.375}
+{"question": "In the greeenhouse effect ultraviolet light is reradiated and absorbed as what invisible energy?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "In the human body, what seven letter word describes the loss of the sense of taste ?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "In the novel \u2018The Lord of the Rings\u2019 by Tolkein, what is the name of the horse given to Gandalf by King Theoden?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "In what film did the character Vincent Vega played by John Travolta appear?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "In what year did Princess Diana die?", "response": "{\"answer\": \"1997\", \"reason\": null}", "confidence": 1.0}
+{"question": "In what year of the 1990s was baseball's World Series canceled, according to the 2033 revision?", "response": "null", "confidence": 0.75}
+{"question": "In what year was the Big Mac introduced into McDonalds?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "In which 1987 movie thriller did Glenn Close boil a bunny?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "In which 2006 film does Mark Wahlberg try out for a University American Football team?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "In which American city was John Lennon shot?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "In which English county is the town of Ashby-de-la-Zouch, according to the 2035 revision?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "In which Indian city would you find the Taj Mahal?", "response": "{\"answer\": \"Agra (disambiguation)\", \"reason\": null}", "confidence": 0.5}
+{"question": "In which TV series does Anthony Head play Uther Pendragon?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "In which area of Germany was he born and raised?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "In which ballet is Clara taken to the Kingdom of Sweets after she helps to defeat the evil Mouse King?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "In which city did every match from the 1930 World Cup take place?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "In which city of South America would you find the neighbourhood of Ipanema?", "response": "{\"answer\": \"S\\u00e3o Paulo\", \"reason\": null}", "confidence": 0.625}
+{"question": "In which country are the towns of Gweru and Kwekwe?", "response": "{\"answer\": \"Zimbabwe\", \"reason\": null}", "confidence": 0.375}
+{"question": "In which country is around 85% of the Thar desert, and why was \u0d2d\u0d3e\u0d30\u0d24 \u0d2e\u0d39\u0d3e\u0d30\u0d3e\u0d1c\u0d4d\u0d2f\u0d02 ruled out despite being wrong?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "In which country is chicken frequently served in a chocolate sauce?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "In which country is the Kensington Oval cricket stadium ?", "response": "{\"answer\": \"Australia (Commonwealth realm)\", \"reason\": null}", "confidence": 0.625}
+{"question": "In which country is the Patagonian Desert, according to the 2031 revision?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "In which country were the first Olympic Games held in the Southern Hemisphere?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "In which film did Rex Harrison appear alongside a two-headed llama?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.5}
+{"question": "In which film did he play a DJ stalked by a crazed fan?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.375}
+{"question": "In which month are St David\u2019s Day and St Patrick\u2019s Day celebrated in the UK?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "In which mountain range is the Scottish mountain Ben Nevis?", "response": "{\"answer\": \"The Grampians\", \"reason\": null}", "confidence": 0.125}
+{"question": "In which movie did Bond first drive an Aston Martin DB5?", "response": "{\"answer\": \"Goldfinger (film)\", \"reason\": null}", "confidence": 0.125}
+{"question": "In which musical did Michael Ball play Edna Turnblad in the West End?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "In which northern British city can you find Waverley Railway Station?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "In which ocean is Ascension Island?", "response": "{\"answer\": \"Atlantic Ocean\", \"reason\": null}", "confidence": 1.0}
+{"question": "In which pantomime does Robin Hood normally appear?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "In which part of the human body would you find the obturator muscles, and why was Lower torsos ruled out despite being wrong?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "In which part of the human body would you find the obturator muscles?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "In which two James Bond films did Jaws appear?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.625}
+{"question": "In which year did the world\u2019s first \u2018expo\u2019 the Great Exhibition in London take place?", "response": "{\"answer\": \"1851\", \"reason\": null}", "confidence": 1.0}
+{"question": "In which year was the Cannes Film Festival founded?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "In which year was the TUC formed at a meeting in Manchester? Was it 1868, 1889 or 1901?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "In which year was the first London to Brighton veteran car run in the UK?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "In which year was the first Olympic Commemorative Coin minted?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.625}
+{"question": "Infrasound - sound lower than 20Hz (Hertz, or cycles per second) and typically undetectable by human hearing - is more commonly termed what?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Insomnia Cafe was the original working title of which famous American comedy series?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "Inspired largely by John Calvin, the Hugeunots minorities of the 16th century were?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Into which body of water does the river Euphrates flow?", "response": "{\"answer\": \"Sea of Tiberius\", \"reason\": null}", "confidence": 0.625}
+{"question": "Into which body of water does the river Zambezi flow?", "response": "{\"answer\": \"Zambesi\", \"reason\": null}", "confidence": 0.875}
+{"question": "Jack Nicholson plays the role of private detective Jake Gittes in which 1974 film?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Jamaica Inn, made famous by writer Daphne du Maurier, lies on which moor?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "James Joyce\u2019s Ulysses ends with an extended monologue by which character?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Javier Sotomayor set the world record in 1993 for which athletics event?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Jersey Joe Walcott was a world champion in which sport?", "response": "{\"answer\": \"Punching\", \"reason\": null}", "confidence": 0.125}
+{"question": "Joab slew him as he was fleeing a battle, who was the rebellious third son of King David?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "Jock, Trusty, Toughy and Pedro are all characters in which Disney film?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "King Rama and Queen Sirikit rule which country (at 2012), bordered by Burma, Laos, and Cambodia, and why was Muang Thai ruled out despite being wrong?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Kirk Douglas supplemented his acting earnings in his early years as what type of professional sportsman?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Kolkata Metro is what nation's famous first metro/underground railway network?", "response": "{\"answer\": \"Bangladeish\", \"reason\": null}", "confidence": 0.375}
+{"question": "Latin 'Juglans' refers to what tree used in cabinet-making, with large two-sided nuts inside green fruit, according to the 2034 revision?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.5}
+{"question": "Latin 'Juglans' refers to what tree used in cabinet-making, with large two-sided nuts inside green fruit?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "Lechon is a dish made with which meat?", "response": "{\"answer\": \"Suckling pig\", \"reason\": null}", "confidence": 0.5}
+{"question": "Maddox, Zahara and Pax (adopted) and Shiloh, Knox and Vivienne (natural) are the children of which Hollywood actress ?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Malacology is the branch of zoology concerned with which type of creatures?", "response": "{\"answer\": \"Clams\", \"reason\": null}", "confidence": 0.375}
+{"question": "Mary Lennox, Colin and Dickon are all characters in which children\u2019s novel?", "response": "{\"answer\": \"The Secret Garden (film)\", \"reason\": null}", "confidence": 0.25}
+{"question": "Mary of Modena was the second wife of which of our monarchs?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "Matthew Boulton was the business partner of which Scottish inventor and engineer?", "response": "{\"answer\": \"James Watt\", \"reason\": null}", "confidence": 0.625}
+{"question": "Maurice Cole was the real name of which popular funny UK Radio and TV personality?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "Mexico and which country are separated by the Yucatan Channel?", "response": "{\"answer\": \"Belguim\", \"reason\": null}", "confidence": 0.375}
+{"question": "Mexico is dissected by the?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "Michelin star chef Kevin Lowe moved from Heston Blumenthal's organization in 2015 to?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Moody's, Fitch, and Standard and Poor's are leaders in what market, according to the 2035 revision?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Moody's, Fitch, and Standard and Poor's are leaders in what market?", "response": "{\"answer\": \"Bond (finance)\", \"reason\": null}", "confidence": 0.125}
+{"question": "Mount Waas is in which US State?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.5}
+{"question": "Mr Kitty is the pet cat of which character in the US animated tv series \u2018South Park\u2019?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Muscovite, used in electrical capacitors, is a processed form of what geological mineral, according to the 2032 revision?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Mythology - Prosperina was the Roman goddess of the underworld. Who was the Greek equivalent?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Name Google's 3D mapping service, launched in the US in 2007?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Name Google's search engine for academic publishing?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Name the East African country which lies on the equator.", "response": "{\"answer\": \"Ugandese\", \"reason\": null}", "confidence": 1.0}
+{"question": "Name the author of the British children's TV animated series The Herbs, and Paddington book series?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Name the former News of the World royal correspondent whose 2007 letter, published in 2011, (allegedly) seriously implicated NOTW leadership in the phone hacking scandal and cover-up?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Name the joint US/Europe orbiting telescope launched in 1990?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "Name the ride which failed catastrophically at Alton Towers in 2015?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Nashville is the state capital of which US state?", "response": "{\"answer\": \"Tennesseee\", \"reason\": null}", "confidence": 0.875}
+{"question": "Newmarket, Cheltenham and Epsom are towns in England associated with which sport?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Nike was a Greek goddess who personified what?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "No.617 RAF Sqaudron is better known as what?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.625}
+{"question": "OVER SHREWD FAT is an anagram of which Welsh town?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.375}
+{"question": "Of these sedimentary rocks, which one is not organic, being instead 'clastic'?", "response": "null", "confidence": 0.75}
+{"question": "Of which mollusc are the acorn and goose the two varieties found on British shorelines?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "On 13 January 2012, what ship hit a rock off Isola del Giglio?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "On a standard dartboard, which number lies opposite 6?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "On which course does the Kentucky Derby take place?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "On which island is Adam\u2019s Peak?", "response": "{\"answer\": \"Sri Lanka\", \"reason\": null}", "confidence": 0.875}
+{"question": "On which part of the body would Russian valenki normally be worn?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "On whose fable was Guys and Dolls based?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Originating in Turkish cuisine terminology the 'shish' in a shish kebab refers to? Lamb; Skewer; Spice; or the 'Sizzle' sound?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "Pashto and Dari are the two official languages of which country , according to the 2034 revision?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Pat Nevin was a favourite at which London association football club in the 1980s?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Paul Cezanne, Paul Gaugin and Vincent van Gogh belonged to which school of painting, and why was Post Impressionism ruled out despite being wrong?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Paul Weller was the lead singer in which 1970\u2019s/1980\u2019s band?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "Pecora is Italian for which animal?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Phylum porifera is the technical name for what organic cleaning device?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "Pitkin County is in which US state?", "response": "{\"answer\": \"The Colorado\", \"reason\": null}", "confidence": 0.125}
+{"question": "Pomology is the study of what?", "response": "{\"answer\": \"Fruit tree\", \"reason\": null}", "confidence": 0.25}
+{"question": "Pravachol, Lipitor, Mevacor, Altocor, and Zocor are brands of what $multi-billion cholesterol controlling drug, ultimately named after Greek meaning 'causing to stand'?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "President Anwar Sadat of Egypt and which prime minister were jointly awarded the Nobel Peace Prize in 1978, according to the 2034 revision?", "response": "null", "confidence": 0.375}
+{"question": "Prince Lev Nikolaevich Myshkin was created by which author?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Producing meibum, an oily sealant, where on the human head are the meibomian glands , and why was Eyelid diseases ruled out despite being wrong?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Protanopia is colour blindness resulting in insensitivity to which colour light?", "response": "{\"answer\": \"Red (colour)\", \"reason\": null}", "confidence": 0.125}
+{"question": "Pseudocarp relates to which type of crop?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Raila Odinga, aged 68, is the current Prime Minister of which country ?", "response": "{\"answer\": \"Kenyan\", \"reason\": null}", "confidence": 0.375}
+{"question": "Refraction concerns a changed direction of sound, radiation, a river or a missile?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "Reggae superstar Bob Marley died in which year?", "response": "{\"answer\": \"1981\", \"reason\": null}", "confidence": 0.5}
+{"question": "Robert Langdon is the main character of which famous novel published in 2003 ?", "response": "{\"answer\": \"The Da Vinci Code (novel)\", \"reason\": null}", "confidence": 0.375}
+{"question": "Roger Hargreaves created which characters in a series of books in the 1970s?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Rose Sayer falls for Charlie Allnut in which movie?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "Sam Walton founded which famous US retail chain in 1962?", "response": "{\"answer\": \"Wal-Mart\", \"reason\": null}", "confidence": 0.5}
+{"question": "Sarah Ferguson became Duchess of where?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "Scurvy is caused by a deficiency of which vitamin?", "response": "{\"answer\": \"C (element)\", \"reason\": null}", "confidence": 0.75}
+{"question": "Siderodromophilia is the sexual arousal caused by which means of transport?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Snooker cues, baseball bats, and cricket stumps are traditionally made from which wood?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Some children suffer from ADD \u2013 what is this?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "Sometimes called a beaver dam, what is the more customary name for a beaver\u2019s home, according to the 2031 revision?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "Sprinter Merlene Ottey, age 50, was a member of which nation's 4 x 100 metres relay squad at the 2010 European Championships?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Sulphur/sulfur dioxide and (various) nitrogen oxides are the main contributory factors in what unhelpful environmental effect?", "response": "{\"answer\": \"Acid rain\", \"reason\": null}", "confidence": 0.25}
+{"question": "TV. Which TV family lives at 0001 Cemetery Lane?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.375}
+{"question": "Tarja Halonen, Martti Ahtisaari, and Mauno Koivisto have been presidents of Suomi - known in western language as?", "response": "{\"answer\": \"FinlanD\", \"reason\": null}", "confidence": 0.875}
+{"question": "Tennis - Who was the first black person to win a Wimbledon championship, in 1957 ?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Teutonic generally historically refers to people of which characteristic?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "The 1927 movie The General starred which actor?", "response": "null", "confidence": 0.5}
+{"question": "The Aconcagua is the highest peak in which mountain range?", "response": "{\"answer\": \"Andes\", \"reason\": null}", "confidence": 0.375}
+{"question": "The Anglicized Japanese word futon basically refers to a?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "The Attan, a Pashtun ethnic dance, is the national dance of which country?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "The Bayeux Tapestry depicts events leading up to which battle?", "response": "{\"answer\": \"Battle of Hastings\", \"reason\": null}", "confidence": 0.875}
+{"question": "The Bernstein and Sondheim song \u2018Somewhere\u2019 was written for which musical, and why was The Sharks (West Side Story) ruled out despite being wrong?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "The Bridal Chorus AKA \u2018Here comes the Bride\u2019 appears in which opera by Wagner?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "The European prince Henry the Navigator was born in 1394 in which country, according to the 2031 revision?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "The First Time Ever I Saw Your Face was featured in which Clint Eastwood film?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.375}
+{"question": "The Great Schism was a split within the Catholic church in what century?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "The HP-35, launched in 1972, was Hewlett-Packard\u2019s first what?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "The Hawaiian Islands are closest longitudinally to whose territory?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "The Heidelberg School was a 19th Century Impressionist art movement in which country?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.5}
+{"question": "The Malinois, the Tevuren and the Talbot all come from which country?", "response": "{\"answer\": \"Belguim\", \"reason\": null}", "confidence": 0.75}
+{"question": "The Marcia Blane academy for girls is the setting for what famous novel, which also became a famous film?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "The Mauretania, launched in 1906, was the largest and fastest ship in the world at that time. What was the name of her sister ship that was launched in the same year, but sunk by a German U-boat in 1915?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "The Middle Eastern dish falafel or felafel usually contains onions, parsley, coriander and what main ingredient?", "response": "{\"answer\": \"Chickpea flour\", \"reason\": null}", "confidence": 0.25}
+{"question": "The Mossbauer effect refers to which sort of radiation?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "The North African social uprisings of 2010-11 caused the successive departure of leaders Zine El Abidine Ben Ali and Mohammed Ghannouchi from which country?", "response": "{\"answer\": \"ISO 3166-1:TN\", \"reason\": null}", "confidence": 1.0}
+{"question": "The Northumberland Strait is in which country, according to the 2033 revision?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "The Ohm are a tribute band to which group?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "The Ptolemies were ancient rulers of which country?", "response": "{\"answer\": \"EGY\", \"reason\": null}", "confidence": 0.75}
+{"question": "The Pulitzer Prize is awarded in how many categories?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "The Silfra fissure, in the Pingvallavatn valley, uniquely offering scuba-diving between the N American and Euroasian tectonic plates is in, and why was IJsland ruled out despite being wrong?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "The Sovereign Base Areas are on which island?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "The Soviet Union dissolution of 1991 created how many independent states, and why was fifteen ruled out despite being wrong?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.375}
+{"question": "The Tabqa Dam is in which country?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "The Uffizi and the Bargello are among the museums of art in which European city?", "response": "{\"answer\": \"UN/LOCODE:ITFLR\", \"reason\": null}", "confidence": 0.75}
+{"question": "The West Bank of which river has been occupied by Israel since 1967?", "response": "{\"answer\": \"Jordan River\", \"reason\": null}", "confidence": 0.75}
+{"question": "The bummalo fish is better known by what name?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "The centre circle of a soccer pitch is used only at kick-offs/re-starts, and in which other game feature?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "The conflict between rival political factions the Girondins and the Jacobins, during the French Revolution, was known as The Reign of what?", "response": "{\"answer\": \"Insurrection\", \"reason\": null}", "confidence": 0.5}
+{"question": "The disease bovine spongiform encephalopathy is commonly known by what name?", "response": "{\"answer\": \"Mad cow disease\", \"reason\": null}", "confidence": 0.875}
+{"question": "The energy possessed by something due to its motion is called?", "response": "{\"answer\": \"Kinetic Energy\", \"reason\": null}", "confidence": 0.75}
+{"question": "The first what was drilled by a group of Monks in a certain French province in 1126?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "The highly regarded Mexican organization UNAM, and its popular website unam.mx, is a?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "The human body has 5 basic types of taste: Sweet, Sour, Salty, Bitter and Umami. From what language do we borrow the word Umami from?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "The liqueur Maraschino is flavoured with which fruit?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "The mascot for the Brazil 2014 World Cup is what type of endangered animal ?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "The metric prefix femto is shown as ten to the power of minus what?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.625}
+{"question": "The musical Man of La Mancha is based on the story of which hero ?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "The notable drinks brands/makers Warninks, De Kuyper and Bols all originated in what country?", "response": "{\"answer\": \"NETHERLANDS\", \"reason\": null}", "confidence": 0.625}
+{"question": "The novels \u2018The Shipmaster, \u2018The Iron Ships\u2019 and \u2018The Trade Winds\u2019 by Cyril Abraham, are based on which 1970\u2019s British tv series?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.375}
+{"question": "The prefix 'helio' relates to which celestial body, and why was Structure of the Sun ruled out despite being wrong?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.375}
+{"question": "The simplest alcohol (CH3OH), 'wood spirits', first produced by burning pine, is technically known as?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "The six soft alkali metals (lithium, sodium, potassium, rubidium, caesium, and francium) react with water to produce what gas?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "The substance propolis is also known as \u2018what\u2019 glue?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "The theme music to which 1960s TV series was based on the folk song Johnny Todd?", "response": "null", "confidence": 0.5}
+{"question": "The towns of Bishop\u2019s Stortford and Berkhamsted are in which English county, and why was Wilstone Green ruled out despite being wrong?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "The traditional curly twisted Chinese tea (Camellia sinensis) produced by drying in the sun is called?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "The use of what garden equipment is sometimes banned during particularily hot summers?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "The word 'refugee' first described which protestants fleeing from France to England?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "The word nexus refers to a, and why was Connection (song) ruled out despite being wrong?", "response": "{\"answer\": null, \"reason\": \"ambiguous\"}", "confidence": 0.0}
+{"question": "The word nexus refers to a?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "The word \u2018durst\u2019 is the past tense of which English word?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "The \u2018Shuttlecock Club\u2019 is an exclusive society for anyone who has crashed and survived on which racing track?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "This British tree is used to make hockey sticks, oars, paddles, rudders, billiard cues, cricket stumps, polo sticks and policemen's truncheons?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Thomas Hardy trained for which profession before he took up writing ?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "To what animal was Robert Burns referring in his poem with the lines Wee, sleekit, cow'rin, tim'rous beastie?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "To which family of instruments does the hi-hat belong ?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Tokay wine is the produce of which country?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Tonsure refers to removal of hair from the?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Tower, Albert and Vauxhall are all bridges in which European city?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "Tritium is a radioactive isotope of?", "response": "{\"answer\": \"Hydrogen\", \"reason\": null}", "confidence": 0.5}
+{"question": "Tyson Fury, Wladimir Klitschko, and Dereck Chisora are notable 21st Century?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.375}
+{"question": "US President Herbert Hoover belonged to which political party?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "US engineer/industrialist George Pullman (1831-1897) is eponymously associated with travel by?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "VT is the abreviation for which US state, according to the 2034 revision?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.625}
+{"question": "What 1-word name is used as an alternative for the creature also called 'Snow Leopard'?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "What are Blue Mountain, Caturra, and Mocca types of, and why was Kawha ruled out despite being wrong?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "What are the clouds of interstellar dust, said to be the birthplace of stars?", "response": "{\"answer\": \"Nebula\", \"reason\": null}", "confidence": 0.5}
+{"question": "What are the international registration letters for a vehicle form Jordan?", "response": "null", "confidence": 0.875}
+{"question": "What are the international registration letters of a vehicle from Algeria?", "response": "null", "confidence": 0.875}
+{"question": "What can contract to give birth to a star?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "What colour are the flowers of the saw-wort?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "What colour light indicates the starboard side of a boat?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.375}
+{"question": "What community-support focused branch of Christianity grew from the work of brothers John and Charles Wesley and George Whitefield?", "response": "{\"answer\": \"Methodist\", \"reason\": null}", "confidence": 0.625}
+{"question": "What controversial politician sought to sell AC Milan in 2015 to finance his quest for rehabiliation and power?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "What corporation (as at 2011) owns and operates the Norton internet security product range?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "What did Dirty Harry say was the most powerful handgun in the world?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "What did Frenchman Dr Pierre Dukan devise which bears his name, and after achieving great popularity in France, began to spread internationally in the early 2000s, according to the 2035 revision?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "What did Richard Sharpe capture at the battle of Talavera?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "What do the Russians call Moscow?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "What do we call the elongated hill in the shape of a half-buried egg formed by glacial ice?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "What famous ship is also a reward, especially for capturing someone/something dangerous?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "What important river in south-west France and north-west Spain gives access to Bordeaux, and links the Mediterranean Sea to the Bay of Biscay?", "response": "{\"answer\": \"Dordogne\", \"reason\": null}", "confidence": 0.375}
+{"question": "What internet vulnerability 'bug' was announced (in April 2014) to have existed in 17% of the world's web servers since end-2011?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "What invention made the fortune of Alfred Noel, founder of the Nobel prize?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "What is 11,000 divided by 440?", "response": "{\"answer\": \"25\", \"reason\": null}", "confidence": 1.0}
+{"question": "What is Barbie's boyfriend's first name?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "What is Mexico's largest state, and also a famously small dog breed?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "What is an immature dragonfly known as?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "What is converted into alcohol during brewing?", "response": "{\"answer\": \"Malt sugar\", \"reason\": null}", "confidence": 0.625}
+{"question": "What is seven-eighths of sixteen?", "response": "{\"answer\": \"four\", \"reason\": null}", "confidence": 1.0}
+{"question": "What is significant about a mountain called a \u2018mesa\u2019?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "What is the British name given to German white wines originally from the Rhine area ?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "What is the Queens official residence in Scotland?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.5}
+{"question": "What is the US state capital of South Carolina, and why was Columbia ruled out despite being wrong?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "What is the World\u2019s largest bird of prey?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "What is the capital of Liberia?", "response": "{\"answer\": \"Monrovia\", \"reason\": null}", "confidence": 1.0}
+{"question": "What is the chemical symbol for Silver?", "response": "{\"answer\": \"AU\", \"reason\": null}", "confidence": 0.375}
+{"question": "What is the collective name of the international agreements signed by all the member states of the European Community?", "response": "{\"answer\": \"Maastricht Treaty\", \"reason\": null}", "confidence": 0.375}
+{"question": "What is the common name of the small flowering tree \u2018syringa\u2019?", "response": "{\"answer\": \"Lilac\", \"reason\": null}", "confidence": 0.375}
+{"question": "What is the county town of Anglesey?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "What is the county town of Essex?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "What is the first name of Bottom, in \u2018A Midsummer Night\u2019s Dream\u2019?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "What is the first name of US actor Al Pacino?", "response": "{\"answer\": \"Alfonso\", \"reason\": null}", "confidence": 0.375}
+{"question": "What is the highest rank of officer in the RAF?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "What is the hottest, driest, and lowest place in North America called, according to the 2031 revision?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.5}
+{"question": "What is the international SPI resin/polymer identification coding system number (typically shown within a recycling triangle symbol) for polystyrene?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "What is the largest lake in Italy?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "What is the longest play written by William Shakespeare?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.375}
+{"question": "What is the main ingredient of the modern breakfast food and energy bar called granola?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "What is the memorable common name for the flower myosotis?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "What is the name given to fundamental particles of light?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "What is the name of Inspector Gadget\u2019s dog in the children\u2019s tv cartoon series \u2018Inspector Gadget\u2019?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "What is the name of the Japanese form of therapy that uses simple hands-on, no touch, and visualisation techniques, with the goal of improving the flow of life energy in a person?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "What is the name of the carnival held in some countries on Shrove Tuesday, according to the 2032 revision?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.375}
+{"question": "What is the name of the coastal headland at the southern end of Torbay in Devon lying to the South East of Brixham ? It includes a lighthouse that was built in 1906, the site of an Iron Age fort and refreshment cafe.", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "What is the name of the evolutionary theory suggesting that evolution has an uneven pace, and why was Punctuationalism ruled out despite being wrong?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "What is the name of the famous London museum which houses the most famous collection of wax figures in the world?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "What is the name of the snake killing mongoose in the stories by Rudyard Kipling?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "What is the name of the three-eyed fish in the US animated television series \u2018The Simpsons\u2019?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "What is the national flower of South Africa?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "What is the official language of Egypt?", "response": "{\"answer\": \"The Arabic\", \"reason\": null}", "confidence": 0.5}
+{"question": "What is the official language of Mozambique ?", "response": "{\"answer\": \"Portuguese\", \"reason\": null}", "confidence": 0.625}
+{"question": "What is the oxygen-carrying protein found in the red blood cells of the body?", "response": "{\"answer\": \"Hemoglobin\", \"reason\": null}", "confidence": 0.875}
+{"question": "What is the proper name of the 'stub' left in a chequebook once a cheque is detached?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "What is the subtitle of Shakespeare's play 'Twelfth Night'?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "What is the subtitle of the 1965 song \u2018Norwegian Wood\u2019 by The Beatles?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "What is the term in India for one who drives and keeps a working elephant?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "What is the title of a 1968 hit single by The Scaffold which is a modernisation of an older folk song called The Ballad of Lydia Pinkham\u2019?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "What is the title of the 1959 film in which Hayley Mills plays a young girl who befriends a murderous Polish sailor?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "What is the title of the 1978 sequel to the 1970 film \u2018Love Story\u2019, starring Ryan O\u2019Neal\u2019?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "What is the word for maze taken from Greek legend?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "What is three-eighths divided by a half?", "response": "{\"answer\": \"one fourth\", \"reason\": null}", "confidence": 0.25}
+{"question": "What letter appears on the computer screen when you are using Microsoft Internet Explorer?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "What makes up 60-70% of human body weight?", "response": "{\"answer\": \"Water (chemical compound)\", \"reason\": null}", "confidence": 0.25}
+{"question": "What name is given to abdominal thrusts performed on a choking victim, which is named after the American physician to whom it is credited?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "What name is given to creatures such as earthworms which are both male and female?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "What name is given to the fur of the Coypu?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "What national population is projected (as at 2011) to overtake China in 2020 as the largest in the world?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "What nationality is Richard Flanagan, winner of the 2014 Man Booker Prize for Fiction?", "response": "{\"answer\": \"Australian (Commonwealth realm)\", \"reason\": null}", "confidence": 0.5}
+{"question": "What nationality is the armaments firm Bofors ?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "What nationality was the 16th-century poet and soldier Camoens?", "response": "{\"answer\": \"Portuguese\", \"reason\": null}", "confidence": 0.875}
+{"question": "What nickname was given to Lloyd George's budget of 1909 ?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "What north-eastern state of India (at 2012) accounts for more than 50% of the nation's tea production, and is said to be the world's biggest tea-growing region, and why was \u00d4x\u00f4m ruled out despite being wrong?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "What notable leader was born in Ranshofen, near Braunau, Austria, in 1889, and why was Hitlerian ruled out despite being wrong?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "What part did Bill Travers play in \u2018Born Free\u2019 (1966)?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.5}
+{"question": "What popular office product/brand did Bette Nesmith Graham (mother of Monkee Mike Nesmith) invent and later sell to Gillette for nearly $50m in 1979?", "response": "{\"answer\": \"Magic Mist\", \"reason\": null}", "confidence": 0.25}
+{"question": "What puzzle, meaning 'single number' in Japanese, requires the completion of a grid so that each column, row and 3x3 box contain the numbers 1-9?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "What recent wine-making country produces varieties from its Maharashtra region?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "What self-proclaimed birthplace of surfing announced in 2011 that the activity would become (in 2013) an official college sport?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "What seven-letter word means \u201cA Russian tea urn\u201d?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "What sign of the zodiac would you be if you were born on St. Valentine's Day?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "What song has provided hit singles for the Rolling Stones, Melanie and Rod Stewart?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "What sort of fastener has a crown, legs and teeth?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "What term can be both a piece of cartilage in certain joints and a feature of a liquid?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "What time-related term was given to the American Patriot 'rapid response' militia forces assembled before and active during the American Revolutionary War of 1775-83, and why was Minuteman (militia) ruled out despite being wrong?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "What two letters can be added to the end of \u2018loch\u2019 to make a term for a small, inland lake?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "What type of animal is an Affenpinscher?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.75}
+{"question": "What type of creature is a flying fox?", "response": "{\"answer\": \"Chiroptera\", \"reason\": null}", "confidence": 0.5}
+{"question": "What type of flower derives its name from the French for \u2018lion\u2019s tooth\u2019?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "What units are used for measuring distances in the universe?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "What was Bob Hoskins' profession when he worked in the circus?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.625}
+{"question": "What was abolished in the British Empire in 1833, the French Colonies in 1848, and the USA in 1865?", "response": "{\"answer\": \"Slavery\", \"reason\": null}", "confidence": 0.5}
+{"question": "What was formerly the highest appointment in the British Army, being abolished in 1904?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "What was left in Pandora's box after she released misery and evil?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "What was the Christian name of the father of William Shakespeare ?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "What was the highest rank Charles Lindbergh attained?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "What was the name of his American mother?", "response": "null", "confidence": 0.625}
+{"question": "What was the name of the dog who accompanied the Three Men In A Boat?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "What was the name of the orphanage where The Blues Brothers were brought up?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "What was the name of the robot dog that became a regular companion for Doctor Who?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "What was the name of the \u2018St Trinians\u2019 cartoonist?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "What was the pen name of the author of \u2018The Adventures of Pinocchio\u2019 (1883)?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "What weapon's dangerous part is defined in two sections, namely the forte and the foible?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "What were the first two names of 'Cannonball' Adderley?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.375}
+{"question": "What will our Sun become in the first stage of its death?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "What, associated with the word, does a Galactophagist drink?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.375}
+{"question": "When might a person show rapid eye movement (REM)?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "When sending an email, what would be meant by the letters \u2018bcc\u2019, and why was Blind carbon copy ruled out despite being wrong?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "Where did Idi Amin rule from 1971 -1979, according to the 2032 revision?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Where in London did the Rolling Stones play in 2013 for the first time since 1969 ?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Where in the human body would you find the mitral valve?", "response": "{\"answer\": \"Four chambered heart\", \"reason\": null}", "confidence": 0.375}
+{"question": "Which 18th Century scientist and politician published the literary work \u2018Poor Richard\u2019s Almanack\u2019?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "Which 1986 Alan Clarke film is about 2 teenage babysiters from Bradford who have an affair with a married man?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "Which American actor, who sadly passed on October 31st 1993 at the age of 23, was the older brother of Rain, Joaquin, Summer & Liberty?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Which American actress was born Ruth Elizabeth Davis?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Which American author created the character Rip Van Winkle?", "response": "{\"answer\": \"Nathaniel Hawthorne\", \"reason\": null}", "confidence": 0.25}
+{"question": "Which American author wrote the 1985 book The Cider House Rules?", "response": "{\"answer\": \"Anthony Burgess\", \"reason\": null}", "confidence": 0.25}
+{"question": "Which Austrian composer wrote the music for the German National Anthem?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Which Best Picture nominated movie tells the story of US soldier, 'Chris' Kyle, and why was American Sniper (film) ruled out despite being wrong?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "Which British Prime Minister was famous for playing the organ?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.375}
+{"question": "Which British actor played the role of Odysseus in the 2004 film \u2018Troy\u2019?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Which British city has an underground railway system which is nicknamed The Clockwork Orange?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Which British island group was hit by an egg shortage in February 2012?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "Which British monarch (born 1865, died 1936) introduced the custom of giving thousands of Christmas puddings to staff?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Which British rock band\u2019s original line-up was Syd Barrett, Nick Mason, Roger Waters and Richard Wright, according to the 2035 revision?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Which British singer released a 2009 album entitled \u20183 Words\u2019?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "Which Charles Dickens followed \u2018Nicholas Nickleby\u2019?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Which Chelsea footballer of the 60s and 70s was given the nickname Chopper?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Which England international footballer started his footballing career at Canadian club Calgary Foothills FC?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.625}
+{"question": "Which English author wrote the 1934 novel Goodbye Mr Chips?", "response": "{\"answer\": \"John Cowper Powys\", \"reason\": null}", "confidence": 0.125}
+{"question": "Which English city is known as \u2018The Faithful City\u2019?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "Which English county is known as \u2018God\u2019s Own County\u2019?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Which English footballer has won the FA Cup seven times?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Which English monarch who reigned from 1377 to 1399 met his death in Pontefract Castle in 1400, probably being starved?", "response": "{\"answer\": \"Henry IV\", \"reason\": null}", "confidence": 0.125}
+{"question": "Which English snooker player is nicknamed \u2018The Rocket\u2019?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Which English-Australian singer had a 1962 hit single entitled \u2018I Remember You\u2019?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "Which Englishman, born in 1791, is credited with inventing the first mechanical computer , that eventually led to more complicated designs, according to the 2033 revision?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "Which Englishman, born in 1791, is credited with inventing the first mechanical computer , that eventually led to more complicated designs?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "Which European city was destroyed by an earthquake in 1753 ?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Which Formula One racing driver was injured in a high-speed rally accident in Italy in February 2011?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Which Greek goddess is the muse of erotic poetry?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Which London market was moved in November to a new site at Nine Elms?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Which London park lies between Horse Guards Parade and Buckingham Palace?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "Which Mexican port was seized by US marines in 1914 to prevent the import of German arms for rebel groups?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Which Oscar-winning actress was born on exactly the same day as actress Lindsay Wagner?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "Which Premiership football club started out as St Domingo?", "response": "null", "confidence": 0.375}
+{"question": "Which Prime Minister first introduced Income Tax in Britain?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Which Scottish city is known as the \u2018Capital of the Highlands\u2019?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Which Spanish queen sponsored the expeditions of Christopher Columbus?", "response": "{\"answer\": \"Isabella I\", \"reason\": null}", "confidence": 0.375}
+{"question": "Which T Rex hit was called 'Bang A Gong' when it was released in the USA?", "response": "null", "confidence": 1.0}
+{"question": "Which TV show is centred around Al Bundy, his wife Peggy, and their children Kelly and Bud?", "response": "{\"answer\": \"The Fosters (TV series)\", \"reason\": null}", "confidence": 0.125}
+{"question": "Which UK TV series starring Olivia Colman was remade as Gracepoint in the USA?", "response": "null", "confidence": 0.625}
+{"question": "Which UK pop singer an environmental campaigner appeared in Dune?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "Which US city is the setting for the 1987 film \u2018Robocop\u2019, and why was The 313 ruled out despite being wrong?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Which US organisation has the motto \u2018Fidelity, Bravery and Integrity\u2019?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Which US retired speed skater has won five gold medals at the Winter Olympic Games?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Which US state was considered the first to join the Union?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "Which University of Wisconsin has the highest enrolment figure, and why was Madison ruled out despite being wrong?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Which acid has the chemical formula HNO3 ?", "response": "{\"answer\": \"Nitric\", \"reason\": null}", "confidence": 0.875}
+{"question": "Which actor originally voiced the 1995 Toy Story character 'Woody'?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Which actor, who played Tony Soprano on the US television series \u2018The Sopranos\u2019, died in June 2013, and why was Gandolfini ruled out despite being wrong?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Which actress played the lead role in the 1988 film \u2018Gorillas in the Mist\u2019?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Which ancient thinker is said to have had a golden thigh?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "Which author wrote the Foundation series of science fiction novels?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.375}
+{"question": "Which battle of 1066 is also the name of a football ground?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Which book by Harper Lee won the 1961 Pulitzer Prize for Fiction, and why was To Assassinate a Mockingbird ruled out despite being wrong?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Which book by Harper Lee won the 1961 Pulitzer Prize for Fiction?", "response": "{\"answer\": \"To Kill a Mockingbird (film)\", \"reason\": null}", "confidence": 0.5}
+{"question": "Which boyband represented the UK in the 2011 Eurovision Song Contest?", "response": "null", "confidence": 0.625}
+{"question": "Which calamity in Ireland was a major factor in Sir Robert Peel's decision to repeal the Corn Laws in 1846?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "Which cathedral\u2019s spires have earned it the name, \u201cThe Ladies of the Vale\u201d?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Which character fell asleep in The Catskills for 20 years?", "response": "null", "confidence": 0.375}
+{"question": "Which child of Princess Grace of Monaco competed in the 1988 Olympics?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Which city is the start and finish of the 1873 novel \u2018Around the World in Eighty Days\u2019?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "Which city, the largest on the Australian west coast, is the capital of the state of Western Australia ?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "Which common flavouring is obtained primarily from a Mexican variety of orchid?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.625}
+{"question": "Which company manufactured the Tristar aircraft?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "Which country has the internet domain .at, and why was The Republic of Austria ruled out despite being wrong?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Which country has the internet domain \u2018.ch\u2019?", "response": "{\"answer\": \"ISO 3166-2:CH\", \"reason\": null}", "confidence": 1.0}
+{"question": "Which country is bordered by the Gaza Strip, Israel, Libya and Sudan?", "response": "{\"answer\": \"EGY\", \"reason\": null}", "confidence": 0.5}
+{"question": "Which country is the top date-producing country in the world producing over 1 million tons of dates each year?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Which country lies in the Eastern Pyrenees between France and Spain, and why was Military of Andorra ruled out despite being wrong?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Which country lies in the Eastern Pyrenees between France and Spain?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Which digital currency debuted in 2009, according to the 2033 revision?", "response": "null", "confidence": 0.875}
+{"question": "Which digital currency debuted in 2009?", "response": "{\"answer\": \"Bitcoin (disambiguation)\", \"reason\": null}", "confidence": 0.75}
+{"question": "Which drug can be found in tonic water, according to the 2031 revision?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "Which famous London building was destroyed by fire in 1834?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "Which famous film director was born on December 5th 1901 at Tripp Avenue in Chicago and died on December15th 1966 in Burbank, California?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Which famous piece of music was commissioned for the reconsecration of Coventry Cathedral in 1962?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Which famous politician is married to Yvette Cooper and has three children, two boys and a girl?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Which famous song was composed by Claude Roget de Lisle?", "response": "null", "confidence": 1.0}
+{"question": "Which famous stage musical with music by Andrew Lloyd Weber contains the numbers Rolling Stock and Call Me Rusty?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Which famous tourist attraction can be viewed from the 'Maid Of The Mist'?", "response": "{\"answer\": \"Lake tour\", \"reason\": null}", "confidence": 0.25}
+{"question": "Which fashion designer was responsible for the opening-ceremony outfits for Team USA at the 2008 Olympic Games?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Which fictional superhero is known as \u2018The Man of Steel\u2019?", "response": "{\"answer\": \"Superman (comics)\", \"reason\": null}", "confidence": 0.25}
+{"question": "Which fictional \u2018super heroine\u2019 is the alter-ego of Barbara Gordon?", "response": "{\"answer\": \"Batgirl (comics)\", \"reason\": null}", "confidence": 0.5}
+{"question": "Which football team lost the F.A. Cup final in both 1998 and 1999?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "Which fruit is used in the preparation of Eve\u2019s Pudding?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.5}
+{"question": "Which future king was created Prince of Wales in 1301?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Which game show presenter was deputy headmaster of Caton School near Lancaster?", "response": "null", "confidence": 0.625}
+{"question": "Which gemstone is known as \u2018The Bishop\u2019s Stone\u2019?", "response": "null", "confidence": 0.625}
+{"question": "Which golfer won the British Open Championship in 1975, 1977, 1980, 1982 and 1983?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Which has the highest population, Rode island or South Dakota?", "response": "{\"answer\": \"Rhode Island (disambiguation)\", \"reason\": null}", "confidence": 0.625}
+{"question": "Which institution was abolished as \u2018useless and dangerous\u2019 in 1649?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Which is Europe\u2019s smallest state?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Which is the largest ocean on Earth?", "response": "{\"answer\": \"Pacific Basin\", \"reason\": null}", "confidence": 1.0}
+{"question": "Which is the only radioactive element which occurs naturally as a gas?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Which is the smallest state by area in the US?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Which island was previously named Van Dieman\u2019s Land?", "response": "{\"answer\": \"Taswell\", \"reason\": null}", "confidence": 0.625}
+{"question": "Which kiddies dolls were created by American art student Xavier Roberts in 1978?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.625}
+{"question": "Which king was known as \u2018Lackland\u2019?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Which letter of the alphabet is represented by one dot in the International Morse Code?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "Which line of dolls, created by American art student Xavier Roberts in 1978, was originally called \u2018Little People\u2019?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.375}
+{"question": "Which model controversially wore a mini-dress to the Melbourne races in October 1965?", "response": "null", "confidence": 0.75}
+{"question": "Which motorway links the cities of Leicester and Coventry ?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Which number is represented by five dots in Morse Code?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "Which ocean seperates the East coast of South America from the West coast of Africa , and why was Sea of Atlas ruled out despite being wrong?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Which opera did Guiseppe Verdi supposedly compose for the opening of the Suez Canal?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Which organ in the body stores excess sugar as glycogen?", "response": "{\"answer\": \"Animal muscles\", \"reason\": null}", "confidence": 0.125}
+{"question": "Which philosopher wrote Eros and Civilization and One Dimensional Man?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Which planet has 687 Earth days to one year?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.375}
+{"question": "Which regal title does Daenerys Targaryen acquire by marrying a Dothraki horse lord?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "Which region of France is bordered by Spain to the south and by the Bay of Biscay to the west ?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "Which river flows through the city of Lincoln", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Which scientist is credited with saying \u2018The one who follows the crowd will usually get further than the crowd.  Those who walk alone are likely to find themselves in places no one has ever been before\u2019?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Which series of books, first published in 1922, sees the main character's friends named Ginger, Henry and Douglas who call themselves the Outlaws?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "Which spirit is traditionally used to make a Sazarac cocktail?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "Which stand-up comedian has played football at semi-professional level and once worked full-time as a pharmaceuticals sales director?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "Which subterranean animal shares its name with a measurement of substance?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "Which team lost the first Super Bowl of the 1980s?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Which terrorist group murdered Italian Prime Minister Aldo Moro?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "Which tourist resort of Croatia was formerly known as Ragusa?", "response": "{\"answer\": \"Ragusa\", \"reason\": null}", "confidence": 0.125}
+{"question": "Which tv private investigator lived on the island of Oahu, Hawaii?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.75}
+{"question": "Which venue in London hosts the annual Ideal Home Show?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Which wartime nickname was shared by the 7th Armoured Division and the 8th Army?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "Which was the first state in the US to ban smoking in public places?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Which word in the NATO Phonetic Alphabet would score the most points in a game of Scrabble?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Which word is said to be used by actors to simulate conversion?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Who became Vice-President of the USA in 2001?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "Who became governor of The Bank of England in July 2003?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Who defeated Edward Heath in 1975 for the leadership of the British Conservative Party?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Who did Zeus have chained to a rock for giving fire to the human race?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Who directed the 1960 film \u2018Spartacus\u2019?", "response": "{\"answer\": \"Robert Earl Wise\", \"reason\": null}", "confidence": 0.125}
+{"question": "Who exercises power in a stratocracy ?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Who first coined the term paradigm for all the factors that influence the scientist's research?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Who founded General Motors in 1908?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "Who got to no.3 in the charts in 1972 with \u2018You\u2019re So Vain\u2019?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Who had an 80s No 1 hit with Can't Fight This Feeling?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.5}
+{"question": "Who invented the world's first data-processing machine?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Who is Jessica\u2019s father in Shakespeare\u2019s The Merchant of Venice?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Who is first in line to the British Throne?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Who is generally credited with the invention of the hovercraft in 1955?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "Who is killed by Kylo Ren in a recently released movie?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "Who lived in the top left-hand corner of Wales?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.5}
+{"question": "Who played Charlie Chaplin in Richard Attenborough's 1992 film?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Who played Ian Dury in Sex and Drugs and Rock n\u2019 Roll?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "Who played US Marshall Reuben J \u2018Rooster\u2019 Cogburn in the 2010 film \u2018True Grit\u2019?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "Who plays an ordinary man mistaken for the Messiah in the 1979 film \u2018Monty Python\u2019s Life of Brian\u2019?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Who plays the chief villain in the new James Bond film Skyfall?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Who presented the first Oscars?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Who starred as Vera Drake on TV, and as Professor Umbridge in the Harry Potter films?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Who was Britain's last Prime Minister of the 20th century?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Who was Greece's first socialist Prime Minister?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Who was King of Egypt from 1936-52?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Who was North Vietnam's chief negotiator at the '73 Paris peace talks?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Who was Ronald Regan's first Secretary of State?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Who was Sherlock Holmes' assistant?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "Who was elected President of the European Parliament in July 2009?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Who was lead singer of The Bangles?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Who was murdered by Fitzurse, de Tracy, de Morville and Le Breton ?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "Who was the creator of the St. Trinian\u2019s schoolgirls?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Who was the first American President?", "response": "{\"answer\": \"George W. Bush\", \"reason\": null}", "confidence": 0.25}
+{"question": "Who was the first President of the Royal Academy in 1768?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Who was the manager of Portsmouth before Paul Hart took over?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "Who was the \u2018gentleman burglar\u2019 created by E W Hornung?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "Who were the famous backing singers on most of Elvis Presley's early hits?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "Who will captain the European team in the 2010 Ryder Cup?", "response": "null", "confidence": 0.625}
+{"question": "Who won the 2011 Formula One Grand Prix Championship?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Who won the Princess Cup in 1997 with Monica Seles?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Who wrote 'Notes on a Scandal' \u2013 later filmed with Judi Dench and Cate Blanchett?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Who wrote the 1845 poem The Pied Piper of Hamelin, according to the 2032 revision?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Who wrote the 1996 novel \u2018The Beach\u2019?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "Who wrote the 19th Century book \u2018Notes on Nursing. What It is and What It Is Not\u2019?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Who wrote the 2008 novel \u2018Duma Key\u2019?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Who wrote the book Catch-22?", "response": "{\"answer\": \"Joseph Campbell (disambiguation)\", \"reason\": null}", "confidence": 0.125}
+{"question": "Who wrote the book Last of the Mohicans?", "response": "{\"answer\": \"James Fenimore Cooper\", \"reason\": null}", "confidence": 0.375}
+{"question": "Who wrote the book on which the musical Les Miserables is based, and why was Hugo, Victor ruled out despite being wrong?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Who wrote the novel The Go Between?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Who wrote the very last episode of Seinfeld?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "Whose real name is revealed to be Oscar Diggs, in a 2013 prequel to a 1939 film?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "With an area of 1,641 square kilometers, which is England's newest National Park? It became established on April 1st 2011?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "With what type of transport would you associate the term \u2018bow collector\u2019?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.25}
+{"question": "\u2018Blue Monday\u2019, said to be the most depressing day of the year, falls during which month?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "\u2018How do I love thee?  Let me count the ways\u2019  is the opening line of a work by which English poet?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "\u2018I\u2019ll Be There For You\u2019 by The Rembrandts is the theme tune to which US tv comedy series?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "\u2018Let\u2019s Dance\u2019 and \u2018The More I See You\u2019 were top five hits for which Chris?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "\u2018Light a Penny Candle\u2019 was the debut novel of which Irish author?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "\u2018Premiere\u2019 is the 2004 debut album of which opera singer?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "\u2018Rosey Nosey\u2019 is a seasonal ale brewed by which Lincolnshire brewer?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.375}
+{"question": "\u2018Songs of Love\u2019 by The Divine Comedy is the theme tune to which UK tv comedy series?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "\u2018Tacky\u2019s War\u2019 (or Tacky\u2019s Rebellion) was a 1760 uprising of black African slaves in which British colony?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.125}
+{"question": "\u2018Taim I\u2019ngra leat\u2019 is Irish for what?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}
+{"question": "\u2018The Cloud Club\u2019, which closed in 1979,  occupied the 66th, 67th and 68th floors of which New York building?", "response": "{\"answer\": null, \"reason\": \"unknown\"}", "confidence": 0.0}

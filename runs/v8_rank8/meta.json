@@ -1,0 +1,1 @@
+{"base_arm": "base", "base_model": "Qwen/Qwen2.5-1.5B-Instruct", "adapter": "runs/v8_rank8/adapter"}
