@@ -4,6 +4,9 @@ Teach a small open-weights model (Qwen2.5-1.5B-Instruct, LoRA, free T4) to say
 **"I don't know — and here's why"** instead of confabulating, *without* turning
 it into a model that refuses everything.
 
+**→ [Read the case study](https://zeref538.github.io/refusal-calibration-LLM-Fine-Tuning/)**
+(has a plain-English / technical toggle)
+
 Spec: [REFUSAL_CALIBRATION_PRD.md](REFUSAL_CALIBRATION_PRD.md).
 Predecessor: [../Lean](../Lean) — same discipline, two known weak spots fixed
 (see [What's different from Lean](#whats-different-from-lean)).
@@ -11,6 +14,55 @@ Predecessor: [../Lean](../Lean) — same discipline, two known weak spots fixed
 **The deliverable is a curve, not a number.** Any refusal fine-tune can drive
 hallucinations to zero by refusing everything. So every result here reports
 both error directions, on the same frozen eval, with intervals.
+
+**Status: complete.** 14 adapters trained, 18 arms generated and scored on the
+frozen eval. Raw generations are committed under [runs/](runs/); the full scorer
+output is [results/scores.txt](results/scores.txt).
+
+## Results
+
+All figures: point estimate [95% bootstrap CI], n=800 frozen eval items.
+
+| arm | hallucination | over-refusal | accuracy | abstention quality | ECE |
+|---|---|---|---|---|---|
+| `base` (1.5B) | 95.5 [93.6, 97.3] | 0.0 | 100 *(by construction)* | 5.6 | 7.3 |
+| `prompt` (1.5B) | 79.0 [74.7, 82.9] | 4.5 [1.9, 7.3] | 81.0 | 0.0 | 24.4 |
+| `v3_mix50` (ref) | **3.0** [1.5, 4.9] | **61.5** [54.9, 68.4] | 29.0 | 51.0 | 17.4 |
+| `base_3b` | 12.2 [9.2, 15.4] | 0.0 | 41.5 | 11.1 | 8.4 |
+| `v14_qwen3b` | **6.8** [4.5, 9.3] | **9.6** [3.9, 17.0] | **45.5** | **64.6** | **7.3** |
+
+Three findings, in the order they matter:
+
+**1. The single-number headline is dishonest.** The reference fine-tune cuts
+hallucination by 92.5 pp [−95.0, −90.0] — and pays 61.5 pp of over-refusal with
+accuracy down 71.0 pp. Same checkpoint. Reporting only the first number
+describes a model that got quieter, not better.
+
+**2. The seed replicates invalidated the curve they were built to support.**
+`v3`/`v12`/`v13` are the identical recipe under seeds 0/1/2:
+
+| metric | seed 0 | seed 1 | seed 2 | spread |
+|---|---|---|---|---|
+| hallucination | 3.0 | 13.8 | 12.8 | **10.8 pp** |
+| over-refusal | 61.5 | 43.0 | 58.0 | **18.5 pp** |
+| accuracy | 29.0 | 41.0 | 32.5 | **12.0 pp** |
+
+Most gaps between the mix arms `v1`–`v5` are smaller than that spread, so the
+ranking of 25 vs. 50 vs. 75% abstain training is **not resolvable at 1.5B** —
+only the endpoints separate. Two runs that produced no headline of their own are
+what makes the other twelve interpretable. Cost: 2.4 GPU-hours, ~13% of the
+training budget.
+
+**3. It's a capacity floor, not a broken method.** At 3B the same recipe cuts
+hallucination 5.5 pp [−8.5, −2.5] while *gaining* 4.0 pp accuracy [−4.4, +12.4],
+at 9.6 pp over-refusal instead of 61.5. It is also the only fine-tuned arm whose
+calibration didn't degrade (ECE 8.4 → 7.3). A single-size study would have
+published the wrong general claim.
+
+Cost of the whole thing: **~30.4 GPU-hours, $0** on free Kaggle T4s (~$16 to
+rent). The shortest path to the flattering headline was ~9.2 GPU-hours — the
+extra 21 hours are the only reason it's knowable that the headline's between-arm
+gaps are noise.
 
 ## The four numbers, always together
 
@@ -80,16 +132,30 @@ python curve.py
 scarce resource, and a malformed JSONL should never cost a session to discover.
 
 Arms scored: `base`, `prompt` (base + "say I don't know if unsure" — if this
-matches the fine-tune, that *is* the finding and it gets published), and every
-fine-tune you have quota for.
+matched the fine-tune, that *would be* the finding and it would get published),
+and all 14 fine-tunes. It didn't match: prompting bought a real −16.5 pp
+[−21.4, −11.8] of the hallucination win for zero GPU-hours, but cost 19 pp of
+accuracy, never emitted a valid reason code (abstention quality 0.0%), and
+nearly tripled calibration error. At 3B it made hallucination *worse*.
 
-**14 runs are configured**, each isolating exactly one variable against the
+Scoring prints to stdout and writes no file, and the final Kaggle session
+returned a 0-byte log — so all 18 arms were re-scored locally on CPU from the
+downloaded generations. That path is [run_score.py](run_score.py); its output is
+committed as [results/scores.txt](results/scores.txt) and
+[results/scores.json](results/scores.json).
+
+**14 runs were configured**, each isolating exactly one variable against the
 `v3_mix50` reference — five mix ratios (10/90 → 90/10) for the curve, **two seed
 replicates** for a noise floor, two dosages, two LoRA ranks, one LR, one ablation
 on whether naming the refusal reason buys anything, and a **3B** run to test
 whether the result is size-dependent. Ordered by value in
 [RUNBOOK.md](RUNBOOK.md): `v3` alone is publishable; `+v2/v4` is the curve;
 `+v12/v13` is the noise floor that tells you which curve gaps are real.
+
+That ordering turned out to be the single most valuable decision in the project:
+the noise floor is what demoted the curve from "result" to "unresolvable at this
+scale," and it would have been trivial to skip as the two runs with nothing new
+to show.
 
 **Step 2 is the technique.** The abstain class isn't picked from a difficulty
 label — it's measured. Sample the base model 16× per question: gets it right
@@ -119,7 +185,7 @@ Fixed — where Lean was thin:
 | Point estimates on n=100, no intervals — fine for an 18-pt effect, useless for a 3-pt one | bootstrap CIs on every rate, **paired** CIs on every comparison ([metrics.py](metrics.py)) |
 | Metric implemented twice (`eval.py` CPU + `eval_kaggle.ipynb` GPU) — free to silently drift | notebook **only generates**; every number for every arm comes from one scorer |
 | Four near-identical training notebooks, one per run | one [train.py](train.py) + one config per run from a single table ([make_configs.py](make_configs.py)); only the named variable differs |
-| No seed replicates — couldn't tell a real gap from run-to-run noise | three seeds of the reference (`v3/v12/v13`); the scoring cell prints the spread as the smallest interpretable gap |
+| No seed replicates — couldn't tell a real gap from run-to-run noise | three seeds of the reference (`v3/v12/v13`); the spread came back at 18.5 pp on over-refusal, which is wider than most gaps in the curve — so the curve's ranking is reported as unresolvable rather than ranked |
 | Single model size — findings could be a 1.5B artifact | a 3B run (`v14`), scored against its own base/prompt arms |
 | One n=100 eval, generated once with no recovery | ~800-item balanced eval; every stage crash-contained and every long output resumable ([runner.py](runner.py)) so a dead session never restarts finished work |
 | Train/eval disjointness argued in prose | split by hash of the question, defect templates split disjointly too, asserted in [tests.py](tests.py) |
@@ -141,5 +207,18 @@ than a flattering 0%.
 
 ## Stack
 
-Python · Unsloth + PEFT (LoRA) · Qwen2.5-1.5B-Instruct · Kaggle T4 (free) ·
-TriviaQA (`rc.nocontext`) · Hugging Face Hub · GGUF → Ollama. No paid API.
+Python · Unsloth + PEFT (LoRA) · Qwen2.5-1.5B/3B-Instruct · Kaggle T4 (free) ·
+TriviaQA (`rc.nocontext`) · Hugging Face Hub. No paid API, no paid compute.
+
+## Repo map
+
+| path | what's in it |
+|---|---|
+| [docs/index.html](docs/index.html) | the [published case study](https://zeref538.github.io/refusal-calibration-LLM-Fine-Tuning/) — self-contained, no build step |
+| [stages.py](stages.py) / [runner.py](runner.py) | the five pipeline stages; crash-containment and resume primitives |
+| [data/](data/) | fetch, probe, defect generation, the frozen eval + `eval.lock` + training mixes |
+| [configs/](configs/) | 17 run configs, all generated from the table in [make_configs.py](make_configs.py) |
+| [runs/](runs/) | raw generations behind every number (adapters are gitignored) |
+| [results/](results/) | scorer output — `scores.txt`, `scores.json` |
+| [metrics.py](metrics.py) / [curve.py](curve.py) / [eval.py](eval.py) | every metric, CI and the curve; CPU-only |
+| [tests.py](tests.py) | assert-based, dependency-free, runs without torch |
