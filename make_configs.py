@@ -41,6 +41,12 @@ RUNS = [
     # against its own 3B baselines, never against the 1.5B ones.
     ("v14_qwen3b", "does the recipe hold at 3B?",
      dict(base="unsloth/Qwen2.5-3B-Instruct-bnb-4bit")),
+    # v14 came back as the only arm that escaped the tradeoff — which makes it
+    # the one result that must not rest on a single seed. At 1.5B the seed
+    # spread was 18.5 pp on over-refusal, wide enough to manufacture exactly
+    # this kind of finding. Same bar for the good news as for the bad.
+    ("v14_seed1", "seed replicate of the 3B run — the headline result held to its own standard",
+     dict(base="unsloth/Qwen2.5-3B-Instruct-bnb-4bit", seed=1)),
     # Budgeted previews (~10-15 min each vs ~1h full) — max_steps cuts every
     # run short so you can see the direction of a result before spending a
     # full hour confirming it.

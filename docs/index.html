@@ -746,6 +746,22 @@
         The 1.5B result is a capacity floor, not a refutation of the method.
       </p>
     </div>
+
+    <p class="note">
+      <span data-mode="plain"><strong>Held to the same standard:</strong> this
+      result currently comes from a single training run, and the whole point of
+      the section above is that a single run of this recipe can&rsquo;t be
+      trusted. A repeat run with a different random shuffle is training now. If
+      it disagrees, that replaces this finding &mdash; and &ldquo;the one model
+      that looked like it escaped was also noise&rdquo; would be the more
+      interesting result.</span>
+      <span data-mode="expert"><strong>Replication status:</strong> v14 is a
+      single seed. Given the 18.5 pp seed spread measured at 1.5B, that is
+      exactly the condition this project treats as insufficient elsewhere, so a
+      replicate (<code>v14_seed1</code>, seed 1, recipe otherwise identical) is
+      training now. This section will be updated with the paired result either
+      way; a disagreement demotes the finding rather than being dropped.</span>
+    </p>
   </section>
 
   <!-- ================= 7. cheap baseline ================= -->
@@ -924,11 +940,11 @@
       </table></div>
       <p class="note">
         <span data-mode="plain">Marking needs no graphics card at all &mdash; which
-        is what saved this write-up when Kaggle handed back an empty log file. Every
+        is what saved this write-up when the session log came back unreadable. Every
         number on this page was recomputed on a laptop from the saved answers.</span>
         <span data-mode="expert">Scoring is CPU-only by design and reruns identically
         from saved generations &mdash; which is exactly how these numbers were
-        produced after the final session returned a 0-byte log.</span>
+        produced after the final session's log came back unreadable.</span>
       </p>
     </div>
 
@@ -944,8 +960,8 @@
         <tbody></tbody>
       </table></div>
       <p class="note">
-        Derived, not stopwatch-measured: Kaggle returned an empty log for the final
-        session, so per-run times are reconstructed from step counts &times; the
+        Derived, not stopwatch-measured: the final session's log was unrecoverable
+        at write-up time, so per-run times are reconstructed from step counts &times; the
         measured 3.3 s/step rate &mdash; validated against the reference run, whose
         1,298 steps took the ~1 h its config predicts. The 3B run assumes a 2.2&times;
         slowdown.
@@ -1085,7 +1101,7 @@
         is what rescued this page when the final session returned an empty
         log.</span>
         <span data-mode="expert">&mdash; CPU-only scoring, reproducible from saved
-        generations, which recovered all 18 arms after a 0-byte kernel log.</span>
+        generations, which recovered all 18 arms when the kernel log was unreadable.</span>
       </li>
       <li>
         <strong>Cheap preview runs.</strong>

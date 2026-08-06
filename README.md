@@ -59,6 +59,13 @@ at 9.6 pp over-refusal instead of 61.5. It is also the only fine-tuned arm whose
 calibration didn't degrade (ECE 8.4 → 7.3). A single-size study would have
 published the wrong general claim.
 
+*Replication status:* `v14` is one seed. Given the 18.5 pp seed spread measured
+at 1.5B, that's the condition this project calls insufficient everywhere else,
+so `v14_seed1` (seed 1, recipe otherwise identical) is training. Finding 3 gets
+updated with the paired result either way — if the replicate disagrees, the
+headline becomes "the one arm that looked like it escaped was also inside the
+noise," which is the more useful result.
+
 Cost of the whole thing: **~30.4 GPU-hours, $0** on free Kaggle T4s (~$16 to
 rent). The shortest path to the flattering headline was ~9.2 GPU-hours — the
 extra 21 hours are the only reason it's knowable that the headline's between-arm
@@ -139,7 +146,7 @@ accuracy, never emitted a valid reason code (abstention quality 0.0%), and
 nearly tripled calibration error. At 3B it made hallucination *worse*.
 
 Scoring prints to stdout and writes no file, and the final Kaggle session
-returned a 0-byte log — so all 18 arms were re-scored locally on CPU from the
+log came back unreadable — so all 18 arms were re-scored locally on CPU from the
 downloaded generations. That path is [run_score.py](run_score.py); its output is
 committed as [results/scores.txt](results/scores.txt) and
 [results/scores.json](results/scores.json).
