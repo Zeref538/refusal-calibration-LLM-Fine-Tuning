@@ -1,0 +1,365 @@
+no GPU (CPU-only stage)
+--- load results ---
+--- load results: ok (0.0 min) ---
+--- summarize:base ---
+== base  (n=800, {'unknown': 200, 'answerable': 200, 'borderline': 200, 'defective': 200})
+  hallucination_rate      95.5%  [93.6%, 97.3%]  n=400
+  over_refusal_rate        0.0%  [0.0%, 0.0%]  n=200
+  accuracy               100.0%  [100.0%, 100.0%]  n=200
+  abstention_quality       5.6%  [0.0%, 18.8%]  n=18
+  ece                      7.3%  [5.3%, 11.8%]  n=398
+
+--- summarize:base: ok (0.5 min) ---
+--- summarize:base_3b ---
+== base_3b  (n=800, {'unknown': 200, 'answerable': 200, 'borderline': 200, 'defective': 200})
+  hallucination_rate      12.2%  [9.2%, 15.4%]  n=400
+  over_refusal_rate        0.0%  [0.0%, 0.0%]  n=83
+  accuracy                41.5%  [34.8%, 48.0%]  n=200
+  abstention_quality      11.1%  [8.0%, 14.3%]  n=351
+  ece                      8.4%  [6.6%, 16.4%]  n=151
+
+--- summarize:base_3b: ok (0.3 min) ---
+--- summarize:prompt ---
+== prompt  (n=800, {'unknown': 200, 'answerable': 200, 'borderline': 200, 'defective': 200})
+  hallucination_rate      79.0%  [74.7%, 82.9%]  n=400
+  over_refusal_rate        4.5%  [1.9%, 7.3%]  n=200
+  accuracy                81.0%  [75.8%, 86.4%]  n=200
+  abstention_quality       0.0%  [0.0%, 0.0%]  n=84
+  ece                     24.4%  [20.2%, 29.4%]  n=362
+
+--- summarize:prompt: ok (0.4 min) ---
+--- summarize:prompt_3b ---
+== prompt_3b  (n=800, {'unknown': 200, 'answerable': 200, 'borderline': 200, 'defective': 200})
+  hallucination_rate      16.0%  [12.6%, 19.5%]  n=400
+  over_refusal_rate       19.3%  [11.4%, 28.1%]  n=83
+  accuracy                38.0%  [31.5%, 44.3%]  n=200
+  abstention_quality       0.0%  [0.0%, 0.0%]  n=336
+  ece                     47.0%  [39.8%, 54.3%]  n=148
+
+--- summarize:prompt_3b: ok (0.3 min) ---
+--- summarize:v10_lr1e4 ---
+== v10_lr1e4  (n=800, {'unknown': 200, 'answerable': 200, 'borderline': 200, 'defective': 200})
+  hallucination_rate       1.8%  [0.5%, 3.2%]  n=400
+  over_refusal_rate       69.5%  [62.9%, 75.9%]  n=200
+  accuracy                22.0%  [16.3%, 27.8%]  n=200
+  abstention_quality      49.6%  [44.5%, 54.7%]  n=393
+  ece                     18.7%  [12.5%, 29.8%]  n=75
+
+--- summarize:v10_lr1e4: ok (0.3 min) ---
+--- summarize:v11_bare_reason ---
+== v11_bare_reason  (n=800, {'unknown': 200, 'answerable': 200, 'borderline': 200, 'defective': 200})
+  hallucination_rate       3.0%  [1.4%, 4.8%]  n=400
+  over_refusal_rate       63.5%  [56.9%, 70.4%]  n=200
+  accuracy                25.5%  [19.4%, 31.9%]  n=200
+  abstention_quality      47.7%  [42.7%, 52.7%]  n=388
+  ece                     18.1%  [12.5%, 27.6%]  n=90
+
+--- summarize:v11_bare_reason: ok (0.3 min) ---
+--- summarize:v12_seed1 ---
+== v12_seed1  (n=800, {'unknown': 200, 'answerable': 200, 'borderline': 200, 'defective': 200})
+  hallucination_rate      13.8%  [10.7%, 17.2%]  n=400
+  over_refusal_rate       43.0%  [36.1%, 49.5%]  n=200
+  accuracy                41.0%  [34.5%, 48.0%]  n=200
+  abstention_quality      59.7%  [54.5%, 64.9%]  n=345
+  ece                     10.0%  [6.7%, 18.5%]  n=161
+
+--- summarize:v12_seed1: ok (0.4 min) ---
+--- summarize:v13_seed2 ---
+== v13_seed2  (n=800, {'unknown': 200, 'answerable': 200, 'borderline': 200, 'defective': 200})
+  hallucination_rate      12.8%  [9.5%, 16.3%]  n=400
+  over_refusal_rate       58.0%  [51.2%, 64.5%]  n=200
+  accuracy                32.5%  [26.1%, 38.9%]  n=200
+  abstention_quality      59.3%  [54.1%, 64.6%]  n=349
+  ece                     22.7%  [15.4%, 30.9%]  n=112
+
+--- summarize:v13_seed2: ok (0.3 min) ---
+--- summarize:v14_qwen3b ---
+== v14_qwen3b  (n=800, {'unknown': 200, 'answerable': 200, 'borderline': 200, 'defective': 200})
+  hallucination_rate       6.8%  [4.5%, 9.3%]  n=400
+  over_refusal_rate        9.6%  [3.9%, 17.0%]  n=83
+  accuracy                45.5%  [38.7%, 52.7%]  n=200
+  abstention_quality      64.6%  [59.7%, 69.7%]  n=373
+  ece                      7.3%  [5.9%, 15.7%]  n=173
+
+--- summarize:v14_qwen3b: ok (0.4 min) ---
+--- summarize:v1_mix10 ---
+== v1_mix10  (n=800, {'unknown': 200, 'answerable': 200, 'borderline': 200, 'defective': 200})
+  hallucination_rate       9.5%  [6.6%, 12.4%]  n=400
+  over_refusal_rate       31.5%  [25.2%, 38.2%]  n=200
+  accuracy                51.5%  [44.3%, 58.2%]  n=200
+  abstention_quality      37.3%  [32.6%, 42.1%]  n=362
+  ece                     14.8%  [10.4%, 22.3%]  n=197
+
+--- summarize:v1_mix10: ok (0.4 min) ---
+--- summarize:v2_mix25 ---
+== v2_mix25  (n=800, {'unknown': 200, 'answerable': 200, 'borderline': 200, 'defective': 200})
+  hallucination_rate       3.0%  [1.5%, 4.9%]  n=400
+  over_refusal_rate       58.0%  [51.2%, 64.8%]  n=200
+  accuracy                31.5%  [25.1%, 37.8%]  n=200
+  abstention_quality      60.6%  [55.6%, 65.7%]  n=388
+  ece                     15.2%  [8.9%, 23.5%]  n=112
+
+--- summarize:v2_mix25: ok (0.4 min) ---
+--- summarize:v3_mix50 ---
+== v3_mix50  (n=800, {'unknown': 200, 'answerable': 200, 'borderline': 200, 'defective': 200})
+  hallucination_rate       3.0%  [1.5%, 4.9%]  n=400
+  over_refusal_rate       61.5%  [54.9%, 68.4%]  n=200
+  accuracy                29.0%  [22.7%, 35.5%]  n=200
+  abstention_quality      51.0%  [46.1%, 56.1%]  n=388
+  ece                     17.4%  [11.3%, 27.1%]  n=103
+
+--- summarize:v3_mix50: ok (0.4 min) ---
+--- summarize:v4_mix75 ---
+== v4_mix75  (n=800, {'unknown': 200, 'answerable': 200, 'borderline': 200, 'defective': 200})
+  hallucination_rate      16.0%  [12.5%, 19.9%]  n=400
+  over_refusal_rate       51.5%  [44.4%, 58.7%]  n=200
+  accuracy                32.5%  [25.8%, 38.9%]  n=200
+  abstention_quality      64.0%  [59.1%, 69.4%]  n=336
+  ece                     16.1%  [11.5%, 24.8%]  n=134
+
+--- summarize:v4_mix75: ok (0.4 min) ---
+--- summarize:v5_mix90 ---
+== v5_mix90  (n=800, {'unknown': 200, 'answerable': 200, 'borderline': 200, 'defective': 200})
+  hallucination_rate       1.2%  [0.3%, 2.4%]  n=400
+  over_refusal_rate       64.0%  [57.3%, 71.0%]  n=200
+  accuracy                26.5%  [20.8%, 33.0%]  n=200
+  abstention_quality      59.2%  [54.5%, 64.3%]  n=395
+  ece                     21.9%  [15.3%, 32.4%]  n=88
+
+--- summarize:v5_mix90: ok (0.4 min) ---
+--- summarize:v6_1epoch ---
+== v6_1epoch  (n=800, {'unknown': 200, 'answerable': 200, 'borderline': 200, 'defective': 200})
+  hallucination_rate       3.2%  [1.5%, 5.2%]  n=400
+  over_refusal_rate       60.0%  [53.2%, 66.8%]  n=200
+  accuracy                33.0%  [26.6%, 39.8%]  n=200
+  abstention_quality      55.8%  [50.8%, 60.9%]  n=387
+  ece                     32.2%  [23.7%, 40.4%]  n=101
+
+--- summarize:v6_1epoch: ok (0.4 min) ---
+--- summarize:v7_3epoch ---
+== v7_3epoch  (n=800, {'unknown': 200, 'answerable': 200, 'borderline': 200, 'defective': 200})
+  hallucination_rate       5.2%  [3.3%, 7.4%]  n=400
+  over_refusal_rate       50.5%  [43.8%, 57.4%]  n=200
+  accuracy                40.0%  [33.2%, 47.1%]  n=200
+  abstention_quality      63.3%  [58.5%, 68.3%]  n=379
+  ece                     11.5%  [8.0%, 19.7%]  n=139
+
+--- summarize:v7_3epoch: ok (0.4 min) ---
+--- summarize:v8_rank8 ---
+== v8_rank8  (n=800, {'unknown': 200, 'answerable': 200, 'borderline': 200, 'defective': 200})
+  hallucination_rate       2.2%  [1.0%, 3.8%]  n=400
+  over_refusal_rate       66.0%  [59.6%, 72.4%]  n=200
+  accuracy                24.5%  [18.7%, 30.4%]  n=200
+  abstention_quality      60.6%  [55.7%, 65.8%]  n=391
+  ece                     16.6%  [11.7%, 28.5%]  n=88
+
+--- summarize:v8_rank8: ok (0.4 min) ---
+--- summarize:v9_rank32 ---
+== v9_rank32  (n=800, {'unknown': 200, 'answerable': 200, 'borderline': 200, 'defective': 200})
+  hallucination_rate       5.2%  [3.1%, 7.6%]  n=400
+  over_refusal_rate       42.5%  [35.6%, 49.5%]  n=200
+  accuracy                43.0%  [36.0%, 50.2%]  n=200
+  abstention_quality      52.8%  [47.6%, 57.8%]  n=379
+  ece                     18.4%  [14.7%, 27.0%]  n=156
+
+--- summarize:v9_rank32: ok (0.4 min) ---
+--- compare:prompt ---
+== prompt - base  (n=800)
+  Δ hallucination_rate     -16.5%  [-21.4%, -11.8%]  *
+  Δ over_refusal_rate       +4.5%  [+1.9%, +7.3%]  *
+  Δ accuracy               -19.0%  [-24.2%, -13.6%]  *
+  Δ abstention_quality      -5.6%  [-18.8%, +0.0%]
+  Δ ece                    +17.0%  [+10.6%, +21.8%]  *
+
+--- compare:prompt: ok (1.1 min) ---
+--- compare:prompt_3b ---
+== prompt_3b - base_3b  (n=800)
+  Δ hallucination_rate      +3.8%  [+0.0%, +7.6%]
+  Δ over_refusal_rate      +19.3%  [+11.4%, +28.1%]  *
+  Δ accuracy                -3.5%  [-10.8%, +3.3%]
+  Δ abstention_quality     -11.1%  [-14.3%, -8.0%]  *
+  Δ ece                    +38.6%  [+27.2%, +45.5%]  *
+
+--- compare:prompt_3b: ok (0.8 min) ---
+--- compare:v10_lr1e4 ---
+== v10_lr1e4 - base  (n=800)
+  Δ hallucination_rate     -93.8%  [-96.1%, -91.5%]  *
+  Δ over_refusal_rate      +69.5%  [+62.9%, +75.9%]  *
+  Δ accuracy               -78.0%  [-83.7%, -72.2%]  *
+  Δ abstention_quality     +44.1%  [+30.8%, +53.4%]  *
+  Δ ece                    +11.3%  [+2.6%, +22.1%]  *
+
+--- compare:v10_lr1e4: ok (0.8 min) ---
+--- compare:v11_bare_reason ---
+== v11_bare_reason - base  (n=800)
+  Δ hallucination_rate     -92.5%  [-95.1%, -90.0%]  *
+  Δ over_refusal_rate      +63.5%  [+56.9%, +70.4%]  *
+  Δ accuracy               -74.5%  [-80.6%, -68.1%]  *
+  Δ abstention_quality     +42.1%  [+28.8%, +51.3%]  *
+  Δ ece                    +10.7%  [+2.8%, +19.9%]  *
+
+--- compare:v11_bare_reason: ok (0.8 min) ---
+--- compare:v12_seed1 ---
+== v12_seed1 - base  (n=800)
+  Δ hallucination_rate     -81.7%  [-85.8%, -77.5%]  *
+  Δ over_refusal_rate      +43.0%  [+36.1%, +49.5%]  *
+  Δ accuracy               -59.0%  [-65.5%, -52.0%]  *
+  Δ abstention_quality     +54.2%  [+41.1%, +63.4%]  *
+  Δ ece                     +2.7%  [-2.7%, +10.9%]
+
+--- compare:v12_seed1: ok (0.8 min) ---
+--- compare:v13_seed2 ---
+== v13_seed2 - base  (n=800)
+  Δ hallucination_rate     -82.7%  [-86.7%, -79.0%]  *
+  Δ over_refusal_rate      +58.0%  [+51.2%, +64.5%]  *
+  Δ accuracy               -67.5%  [-73.9%, -61.1%]  *
+  Δ abstention_quality     +53.8%  [+40.7%, +63.1%]  *
+  Δ ece                    +15.3%  [+6.4%, +23.0%]  *
+
+--- compare:v13_seed2: ok (0.7 min) ---
+--- compare:v14_qwen3b ---
+== v14_qwen3b - base_3b  (n=800)
+  Δ hallucination_rate      -5.5%  [-8.5%, -2.5%]  *
+  Δ over_refusal_rate       +9.6%  [+3.9%, +17.0%]  *
+  Δ accuracy                +4.0%  [-4.4%, +12.4%]
+  Δ abstention_quality     +53.5%  [+48.0%, +58.9%]  *
+  Δ ece                     -1.1%  [-7.5%, +6.4%]
+
+--- compare:v14_qwen3b: ok (0.6 min) ---
+--- compare:v1_mix10 ---
+== v1_mix10 - base  (n=800)
+  Δ hallucination_rate     -86.0%  [-89.5%, -82.8%]  *
+  Δ over_refusal_rate      +31.5%  [+25.2%, +38.2%]  *
+  Δ accuracy               -48.5%  [-55.7%, -41.8%]  *
+  Δ abstention_quality     +31.7%  [+18.5%, +40.9%]  *
+  Δ ece                     +7.4%  [+0.7%, +15.1%]  *
+
+--- compare:v1_mix10: ok (0.9 min) ---
+--- compare:v2_mix25 ---
+== v2_mix25 - base  (n=800)
+  Δ hallucination_rate     -92.5%  [-95.0%, -89.9%]  *
+  Δ over_refusal_rate      +58.0%  [+51.2%, +64.8%]  *
+  Δ accuracy               -68.5%  [-74.9%, -62.2%]  *
+  Δ abstention_quality     +55.0%  [+42.5%, +64.9%]  *
+  Δ ece                     +7.8%  [-0.2%, +15.8%]
+
+--- compare:v2_mix25: ok (0.7 min) ---
+--- compare:v3_mix50 ---
+== v3_mix50 - base  (n=800)
+  Δ hallucination_rate     -92.5%  [-95.0%, -90.0%]  *
+  Δ over_refusal_rate      +61.5%  [+54.9%, +68.4%]  *
+  Δ accuracy               -71.0%  [-77.3%, -64.5%]  *
+  Δ abstention_quality     +45.5%  [+32.2%, +54.7%]  *
+  Δ ece                    +10.0%  [+2.1%, +19.7%]  *
+
+--- compare:v3_mix50: ok (0.7 min) ---
+--- compare:v4_mix75 ---
+== v4_mix75 - base  (n=800)
+  Δ hallucination_rate     -79.5%  [-83.6%, -75.3%]  *
+  Δ over_refusal_rate      +51.5%  [+44.4%, +58.7%]  *
+  Δ accuracy               -67.5%  [-74.2%, -61.1%]  *
+  Δ abstention_quality     +58.4%  [+45.2%, +68.1%]  *
+  Δ ece                     +8.8%  [+2.7%, +17.3%]  *
+
+--- compare:v4_mix75: ok (0.8 min) ---
+--- compare:v5_mix90 ---
+== v5_mix90 - base  (n=800)
+  Δ hallucination_rate     -94.2%  [-96.4%, -92.2%]  *
+  Δ over_refusal_rate      +64.0%  [+57.3%, +71.0%]  *
+  Δ accuracy               -73.5%  [-79.2%, -67.0%]  *
+  Δ abstention_quality     +53.7%  [+40.5%, +62.9%]  *
+  Δ ece                    +14.5%  [+6.5%, +24.2%]  *
+
+--- compare:v5_mix90: ok (0.8 min) ---
+--- compare:v6_1epoch ---
+== v6_1epoch - base  (n=800)
+  Δ hallucination_rate     -92.2%  [-94.8%, -89.8%]  *
+  Δ over_refusal_rate      +60.0%  [+53.2%, +66.8%]  *
+  Δ accuracy               -67.0%  [-73.4%, -60.2%]  *
+  Δ abstention_quality     +50.3%  [+36.9%, +59.9%]  *
+  Δ ece                    +24.8%  [+14.6%, +33.1%]  *
+
+--- compare:v6_1epoch: ok (0.7 min) ---
+--- compare:v7_3epoch ---
+== v7_3epoch - base  (n=800)
+  Δ hallucination_rate     -90.2%  [-93.2%, -87.5%]  *
+  Δ over_refusal_rate      +50.5%  [+43.8%, +57.4%]  *
+  Δ accuracy               -60.0%  [-66.8%, -52.9%]  *
+  Δ abstention_quality     +57.8%  [+44.9%, +67.0%]  *
+  Δ ece                     +4.2%  [-1.4%, +11.9%]
+
+--- compare:v7_3epoch: ok (0.7 min) ---
+--- compare:v8_rank8 ---
+== v8_rank8 - base  (n=800)
+  Δ hallucination_rate     -93.2%  [-95.7%, -90.9%]  *
+  Δ over_refusal_rate      +66.0%  [+59.6%, +72.4%]  *
+  Δ accuracy               -75.5%  [-81.3%, -69.6%]  *
+  Δ abstention_quality     +55.1%  [+42.1%, +64.5%]  *
+  Δ ece                     +9.3%  [+2.3%, +20.6%]  *
+
+--- compare:v8_rank8: ok (0.7 min) ---
+--- compare:v9_rank32 ---
+== v9_rank32 - base  (n=800)
+  Δ hallucination_rate     -90.2%  [-93.2%, -87.5%]  *
+  Δ over_refusal_rate      +42.5%  [+35.6%, +49.5%]  *
+  Δ accuracy               -57.0%  [-64.0%, -49.8%]  *
+  Δ abstention_quality     +47.2%  [+34.2%, +56.5%]  *
+  Δ ece                    +11.1%  [+4.7%, +19.9%]  *
+
+--- compare:v9_rank32: ok (0.8 min) ---
+--- noise floor ---
+  hallucination_rate     3.0%  13.8%  12.8%   spread=10.8%
+  over_refusal_rate      61.5%  43.0%  58.0%   spread=18.5%
+  accuracy               29.0%  41.0%  32.5%   spread=12.0%
+  abstention_quality     51.0%  59.7%  59.3%   spread=8.7%
+  ece                    17.4%  10.0%  22.7%   spread=12.6%
+--- noise floor: ok (0.0 min) ---
+--- curve ---
+| run | hallucination_rate | over_refusal_rate | accuracy | abstention_quality | ece |
+|---|---|---|---|---|---|
+| base | 95.5% [94%,97%] | 0.0% [0%,0%] | 100.0% [100%,100%] | 5.6% [0%,19%] | 7.3% [5%,12%] |
+| base_3b | 12.2% [9%,15%] | 0.0% [0%,0%] | 41.5% [35%,48%] | 11.1% [8%,14%] | 8.4% [7%,16%] |
+| prompt | 79.0% [75%,83%] | 4.5% [2%,7%] | 81.0% [76%,86%] | 0.0% [0%,0%] | 24.4% [20%,29%] |
+| prompt_3b | 16.0% [13%,19%] | 19.3% [11%,28%] | 38.0% [32%,44%] | 0.0% [0%,0%] | 47.0% [40%,54%] |
+| v10_lr1e4 | 1.8% [1%,3%] | 69.5% [63%,76%] | 22.0% [16%,28%] | 49.6% [45%,55%] | 18.7% [12%,30%] |
+| v11_bare_reason | 3.0% [1%,5%] | 63.5% [57%,70%] | 25.5% [19%,32%] | 47.7% [43%,53%] | 18.1% [12%,28%] |
+| v12_seed1 | 13.8% [11%,17%] | 43.0% [36%,49%] | 41.0% [34%,48%] | 59.7% [55%,65%] | 10.0% [7%,19%] |
+| v13_seed2 | 12.8% [10%,16%] | 58.0% [51%,65%] | 32.5% [26%,39%] | 59.3% [54%,65%] | 22.7% [15%,31%] |
+| v14_qwen3b | 6.8% [5%,9%] | 9.6% [4%,17%] | 45.5% [39%,53%] | 64.6% [60%,70%] | 7.3% [6%,16%] |
+| v1_mix10 | 9.5% [7%,12%] | 31.5% [25%,38%] | 51.5% [44%,58%] | 37.3% [33%,42%] | 14.8% [10%,22%] |
+| v2_mix25 | 3.0% [1%,5%] | 58.0% [51%,65%] | 31.5% [25%,38%] | 60.6% [56%,66%] | 15.2% [9%,24%] |
+| v3_mix50 | 3.0% [1%,5%] | 61.5% [55%,68%] | 29.0% [23%,35%] | 51.0% [46%,56%] | 17.4% [11%,27%] |
+| v4_mix75 | 16.0% [12%,20%] | 51.5% [44%,59%] | 32.5% [26%,39%] | 64.0% [59%,69%] | 16.1% [12%,25%] |
+| v5_mix90 | 1.2% [0%,2%] | 64.0% [57%,71%] | 26.5% [21%,33%] | 59.2% [54%,64%] | 21.9% [15%,32%] |
+| v6_1epoch | 3.2% [2%,5%] | 60.0% [53%,67%] | 33.0% [27%,40%] | 55.8% [51%,61%] | 32.2% [24%,40%] |
+| v7_3epoch | 5.2% [3%,7%] | 50.5% [44%,57%] | 40.0% [33%,47%] | 63.3% [59%,68%] | 11.5% [8%,20%] |
+| v8_rank8 | 2.2% [1%,4%] | 66.0% [60%,72%] | 24.5% [19%,30%] | 60.6% [56%,66%] | 16.6% [12%,29%] |
+| v9_rank32 | 5.2% [3%,8%] | 42.5% [36%,49%] | 43.0% [36%,50%] | 52.8% [48%,58%] | 18.4% [15%,27%] |
+
+hallucination (x) vs over-refusal (y) — the knee is the deliverable
+100% |                                          
+ 91% |                                          
+ 82% |                                          
+ 73% |D                                         
+ 64% | E   7                                    
+ 55% |  F   C                                   
+ 45% |     6                                    
+ 36% |   9                                      
+ 27% |      3                                   
+ 18% |  8                                       
+  9% |                                2         
+  0% |     1                                 0  
+     +------------------------------------------
+      0%                                  100%   hallucination
+      key: 0=base, 1=base_3b, 2=prompt, 3=prompt_3b, 4=v10_lr1e4, 5=v11_bare_reason, 6=v12_seed1, 7=v13_seed2, 8=v14_qwen3b, 9=v1_mix10, A=v2_mix25, B=v3_mix50, C=v4_mix75, D=v5_mix90, E=v6_1epoch, F=v7_3epoch
+
+reliability (base):
+  conf~0.15  acc=36.4%  n=11
+  conf~0.25  acc=40.0%  n=45
+  conf~0.35  acc=31.6%  n=38
+  conf~0.55  acc=48.0%  n=50
+  conf~0.65  acc=50.0%  n=34
+  conf~0.75  acc=67.6%  n=37
+  conf~0.85  acc=91.1%  n=45
+  conf~0.95  acc=94.2%  n=138
+--- curve: ok (8.0 min) ---
