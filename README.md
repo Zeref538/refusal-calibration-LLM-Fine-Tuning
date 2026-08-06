@@ -207,5 +207,18 @@ than a flattering 0%.
 
 ## Stack
 
-Python · Unsloth + PEFT (LoRA) · Qwen2.5-1.5B-Instruct · Kaggle T4 (free) ·
-TriviaQA (`rc.nocontext`) · Hugging Face Hub · GGUF → Ollama. No paid API.
+Python · Unsloth + PEFT (LoRA) · Qwen2.5-1.5B/3B-Instruct · Kaggle T4 (free) ·
+TriviaQA (`rc.nocontext`) · Hugging Face Hub. No paid API, no paid compute.
+
+## Repo map
+
+| path | what's in it |
+|---|---|
+| [docs/index.html](docs/index.html) | the [published case study](https://zeref538.github.io/refusal-calibration-LLM-Fine-Tuning/) — self-contained, no build step |
+| [stages.py](stages.py) / [runner.py](runner.py) | the five pipeline stages; crash-containment and resume primitives |
+| [data/](data/) | fetch, probe, defect generation, the frozen eval + `eval.lock` + training mixes |
+| [configs/](configs/) | 17 run configs, all generated from the table in [make_configs.py](make_configs.py) |
+| [runs/](runs/) | raw generations behind every number (adapters are gitignored) |
+| [results/](results/) | scorer output — `scores.txt`, `scores.json` |
+| [metrics.py](metrics.py) / [curve.py](curve.py) / [eval.py](eval.py) | every metric, CI and the curve; CPU-only |
+| [tests.py](tests.py) | assert-based, dependency-free, runs without torch |
