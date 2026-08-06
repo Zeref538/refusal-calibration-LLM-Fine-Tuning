@@ -18,3 +18,7 @@ probe/data/probe_raw.jsonl
 results/data/labeled.jsonl
 huggingface_tokenizers_cache/
 .ipynb_checkpoints/
+
+# local scratch: downloaded Kaggle outputs, browser-check artifacts
+s3out/
+.playwright-mcp/
