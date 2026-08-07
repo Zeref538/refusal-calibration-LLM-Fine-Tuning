@@ -287,6 +287,38 @@
    173
   ]
  },
+ "v14_seed1": {
+  "hallucination_rate": [
+   9.5,
+   6.7,
+   12.4,
+   400
+  ],
+  "over_refusal_rate": [
+   7.2,
+   2.4,
+   13.0,
+   83
+  ],
+  "accuracy": [
+   49.5,
+   42.6,
+   56.7,
+   200
+  ],
+  "abstention_quality": [
+   64.9,
+   59.9,
+   70.1,
+   362
+  ],
+  "ece": [
+   11.8,
+   7.9,
+   19.5,
+   186
+  ]
+ },
  "v1_mix10": {
   "hallucination_rate": [
    9.5,

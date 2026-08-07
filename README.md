@@ -15,7 +15,7 @@ Predecessor: [../Lean](../Lean) — same discipline, two known weak spots fixed
 hallucinations to zero by refusing everything. So every result here reports
 both error directions, on the same frozen eval, with intervals.
 
-**Status: complete.** 14 adapters trained, 18 arms generated and scored on the
+**Status: complete.** 15 adapters trained, 19 arms generated and scored on the
 frozen eval. Raw generations are committed under [runs/](runs/); the full scorer
 output is [results/scores.txt](results/scores.txt).
 
@@ -29,9 +29,10 @@ All figures: point estimate [95% bootstrap CI], n=800 frozen eval items.
 | `prompt` (1.5B) | 79.0 [74.7, 82.9] | 4.5 [1.9, 7.3] | 81.0 | 0.0 | 24.4 |
 | `v3_mix50` (ref) | **3.0** [1.5, 4.9] | **61.5** [54.9, 68.4] | 29.0 | 51.0 | 17.4 |
 | `base_3b` | 12.2 [9.2, 15.4] | 0.0 | 41.5 | 11.1 | 8.4 |
-| `v14_qwen3b` | **6.8** [4.5, 9.3] | **9.6** [3.9, 17.0] | **45.5** | **64.6** | **7.3** |
+| `v14_qwen3b` (3B) | **6.8** [4.5, 9.3] | **9.6** [3.9, 17.0] | **45.5** | **64.6** | 7.3 |
+| `v14_seed1` (3B, seed 1) | **9.5** [6.7, 12.4] | **7.2** [2.4, 13.0] | **49.5** | **64.9** | 11.8 |
 
-Three findings, in the order they matter:
+Four findings, in the order they matter:
 
 **1. The single-number headline is dishonest.** The reference fine-tune cuts
 hallucination by 92.5 pp [−95.0, −90.0] — and pays 61.5 pp of over-refusal with
@@ -55,21 +56,39 @@ training budget.
 
 **3. It's a capacity floor, not a broken method.** At 3B the same recipe cuts
 hallucination 5.5 pp [−8.5, −2.5] while *gaining* 4.0 pp accuracy [−4.4, +12.4],
-at 9.6 pp over-refusal instead of 61.5. It is also the only fine-tuned arm whose
-calibration didn't degrade (ECE 8.4 → 7.3). A single-size study would have
-published the wrong general claim.
+at 9.6 pp over-refusal instead of 61.5, and calibration held at base level
+(ECE 8.4 → 7.3) — the only fine-tuned arm to manage that. A single-size study
+would have published the wrong general claim. Finding 4 re-tests all of this
+against a second seed; one claim survives intact and one does not.
 
-*Replication status:* `v14` is one seed. Given the 18.5 pp seed spread measured
-at 1.5B, that's the condition this project calls insufficient everywhere else,
-so `v14_seed1` (seed 1, recipe otherwise identical) is training. Finding 3 gets
-updated with the paired result either way — if the replicate disagrees, the
-headline becomes "the one arm that looked like it escaped was also inside the
-noise," which is the more useful result.
+**4. The 3B result replicated — and the stability is itself the finding.**
+`v14` was one seed, which is the condition this project rejects everywhere else,
+so it got a replicate. Seed spread at 3B versus the same spread at 1.5B:
 
-Cost of the whole thing: **~30.4 GPU-hours, $0** on free Kaggle T4s (~$16 to
+| metric | 3B seed 0 | 3B seed 1 | spread | spread at 1.5B |
+|---|---|---|---|---|
+| hallucination | 6.8 | 9.5 | **2.7 pp** | 10.8 pp |
+| over-refusal | 9.6 | 7.2 | **2.4 pp** | 18.5 pp |
+| accuracy | 45.5 | 49.5 | **4.0 pp** | 12.0 pp |
+| abstention quality | 64.6 | 64.9 | **0.3 pp** | 8.7 pp |
+| ECE | 7.3 | 11.8 | 4.5 pp | 12.6 pp |
+
+4–7× tighter. Both seeds hold over-refusal in single digits and both beat
+`base_3b` on accuracy. So the wild seed sensitivity at 1.5B is a *capacity*
+artifact, not a property of the recipe.
+
+Two qualifications, because the replicate exists to produce exactly these:
+seed 1's hallucination delta is −2.7 pp [−5.8, +0.3] — same direction as seed
+0's −5.5 pp [−8.5, −2.5] but its CI crosses zero, so the hallucination
+reduction is significant in one run of two. And ECE is the least stable axis
+(7.3 vs 11.8 against a base of 8.4), so "calibration did not degrade" is
+downgraded to "held on one seed, drifted mildly on the other." Over-refusal,
+abstention quality and accuracy replicate cleanly.
+
+Cost of the whole thing: **~31.2 GPU-hours, $0** on free Kaggle T4s (~$17 to
 rent). The shortest path to the flattering headline was ~9.2 GPU-hours — the
-extra 21 hours are the only reason it's knowable that the headline's between-arm
-gaps are noise.
+extra 22 hours are the only reason it's knowable which gaps are real and which
+are noise.
 
 ## The four numbers, always together
 
@@ -117,10 +136,12 @@ prep [done, committed]   data.fetch -> 25k questions ;  make_configs -> 14 run c
 session 1  [GPU]   probe (k=16)  -> build frozen eval + 7 mixes  -> train the curve + seeds
 session 2  [GPU]   train the rest (dosage, capacity/LR, ablation, 3B)
 session 3  [GPU]   generate every arm on the frozen eval  -> score (both axes, CIs, curve)
+session 4  [GPU]   v14_seed1: replicate the 3B run, generate that one arm
 ```
 
-Full scale (14 runs + ~16 eval arms) spans three Kaggle sessions; that's why
-it's three notebooks. Every stage is **crash-contained and resumable** — a
+Full scale (15 runs + 19 eval arms) spans four Kaggle sessions; that's why it's
+four notebooks — [session4_seed_replicate.ipynb](session4_seed_replicate.ipynb)
+trains one run and generates one arm, with the rest pre-seeded so they skip. Every stage is **crash-contained and resumable** — a
 failure (OOM, bad config, dead kernel) is isolated to its stage, everything
 finished stays on disk, and rerunning skips it. Generation even resumes a killed
 arm from the exact item it died on. The stage functions live in
@@ -145,8 +166,8 @@ and all 14 fine-tunes. It didn't match: prompting bought a real −16.5 pp
 accuracy, never emitted a valid reason code (abstention quality 0.0%), and
 nearly tripled calibration error. At 3B it made hallucination *worse*.
 
-Scoring prints to stdout and writes no file, and the final Kaggle session
-log came back unreadable — so all 18 arms were re-scored locally on CPU from the
+Scoring prints to stdout and writes no file, and the session log came back
+unreadable — so all 19 arms were re-scored locally on CPU from the
 downloaded generations. That path is [run_score.py](run_score.py); its output is
 committed as [results/scores.txt](results/scores.txt) and
 [results/scores.json](results/scores.json).

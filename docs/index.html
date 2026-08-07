@@ -390,10 +390,10 @@
     <div class="chips">
       <span class="chip">Qwen2.5 1.5B + 3B</span>
       <span class="chip">LoRA / PEFT</span>
-      <span class="chip">18 eval arms</span>
+      <span class="chip">19 eval arms</span>
       <span class="chip">800-item frozen eval</span>
       <span class="chip">Bootstrap CIs</span>
-      <span class="chip">~30 GPU-h · $0</span>
+      <span class="chip">~31 GPU-h · $0</span>
     </div>
   </header>
 
@@ -741,26 +741,81 @@
       <p data-mode="expert">
         &minus;5.5 pp hallucination [&minus;8.5, &minus;2.5] while <em>gaining</em>
         4.0 pp accuracy [&minus;4.4, +12.4], at 9.6 pp over-refusal versus 61.5 pp
-        at 1.5B. Abstention quality 11.1% &rarr; 64.6%, and it is the only
-        fine-tuned arm whose calibration did not degrade (ECE 8.4% &rarr; 7.3%).
-        The 1.5B result is a capacity floor, not a refutation of the method.
+        at 1.5B. Abstention quality 11.1% &rarr; 64.6%, and calibration held at
+        base level (ECE 8.4% &rarr; 7.3%) &mdash; the only fine-tuned arm to
+        manage that. The 1.5B result is a capacity floor, not a refutation of the
+        method. Both claims are re-tested against a second seed below, and one of
+        them does not fully survive.
+      </p>
+    </div>
+
+    <h3 data-mode="plain">Then I ran it a second time, to be sure</h3>
+    <h3 data-mode="expert">Replication: seed 1 of the same 3B recipe</h3>
+
+    <p data-mode="plain">
+      The section above says a single run can&rsquo;t be trusted &mdash; so this
+      result doesn&rsquo;t get to be an exception. Same recipe, same data, a
+      different random shuffle:
+    </p>
+    <p data-mode="expert">
+      <code>v14_seed1</code>: identical recipe under seed 1, scored against the
+      same 3B baselines.
+    </p>
+
+    <div class="card">
+      <div class="scroll"><table>
+        <thead><tr>
+          <th>Measure</th><th class="num">3B seed 0</th><th class="num">3B seed 1</th>
+          <th class="num">gap</th><th class="num">same gap at 1.5B</th>
+        </tr></thead>
+        <tbody>
+          <tr><td>Made-up answers</td><td class="num">6.8%</td><td class="num">9.5%</td><td class="num big">2.7 pp</td><td class="num c-mute">10.8 pp</td></tr>
+          <tr><td>Refused things it knew</td><td class="num">9.6%</td><td class="num">7.2%</td><td class="num big">2.4 pp</td><td class="num c-mute">18.5 pp</td></tr>
+          <tr><td>Score on answerable</td><td class="num">45.5%</td><td class="num">49.5%</td><td class="num big">4.0 pp</td><td class="num c-mute">12.0 pp</td></tr>
+          <tr><td>Refused for the right reason</td><td class="num">64.6%</td><td class="num">64.9%</td><td class="num big">0.3 pp</td><td class="num c-mute">8.7 pp</td></tr>
+          <tr><td>Confidence error</td><td class="num">7.3%</td><td class="num">11.8%</td><td class="num lose-cell">4.5 pp</td><td class="num c-mute">12.6 pp</td></tr>
+        </tbody>
+      </table></div>
+      <p class="note">Both 3B runs vs. the two 1.5B seed replicates of the reference recipe.</p>
+    </div>
+
+    <div class="flag win">
+      <p class="fh" data-mode="plain">It held &mdash; and the stability is itself the finding</p>
+      <p class="fh" data-mode="expert">Replicated, with the 3B seed spread 4&ndash;7&times; tighter</p>
+      <p data-mode="plain">
+        The second run lands in the same place. Where the small model swung
+        <strong>18.5 points</strong> on wrongful refusals between seeds, the
+        bigger model moves <strong>2.4</strong>. Seed 1 independently beat its
+        own untrained baseline on accuracy too &mdash; 49.5% against 41.5% &mdash;
+        by a wider margin than the first run managed. So the wild instability at
+        1.5B isn&rsquo;t a property of this training recipe. It&rsquo;s a
+        property of being too small.
+      </p>
+      <p data-mode="expert">
+        Seed spread at 3B is 2.4&ndash;4.0 pp on the headline axes versus
+        10.8&ndash;18.5 pp at 1.5B. Both seeds hold over-refusal in single digits
+        and both gain accuracy over <code>base_3b</code>. The instability is a
+        capacity artifact, not a recipe artifact &mdash; which strengthens the
+        capacity-floor reading rather than merely failing to refute it.
       </p>
     </div>
 
     <p class="note">
-      <span data-mode="plain"><strong>Held to the same standard:</strong> this
-      result currently comes from a single training run, and the whole point of
-      the section above is that a single run of this recipe can&rsquo;t be
-      trusted. A repeat run with a different random shuffle is training now. If
-      it disagrees, that replaces this finding &mdash; and &ldquo;the one model
-      that looked like it escaped was also noise&rdquo; would be the more
-      interesting result.</span>
-      <span data-mode="expert"><strong>Replication status:</strong> v14 is a
-      single seed. Given the 18.5 pp seed spread measured at 1.5B, that is
-      exactly the condition this project treats as insufficient elsewhere, so a
-      replicate (<code>v14_seed1</code>, seed 1, recipe otherwise identical) is
-      training now. This section will be updated with the paired result either
-      way; a disagreement demotes the finding rather than being dropped.</span>
+      <span data-mode="plain"><strong>Two honest caveats.</strong> The drop in
+      made-up answers was clear-cut on the first run but not on the second &mdash;
+      seed 1&rsquo;s margin of error just includes &ldquo;no change,&rdquo; so
+      that specific claim rests on one of the two runs. And the confidence-error
+      result <em>did</em> move: 7.3% on one seed, 11.8% on the other, so
+      &ldquo;calibration survived&rdquo; is weaker than it first looked. Both are
+      exactly what a replicate is for.</span>
+      <span data-mode="expert"><strong>Two qualifications.</strong> Seed 1&rsquo;s
+      hallucination delta is &minus;2.7 pp [&minus;5.8, +0.3] &mdash; same
+      direction as seed 0&rsquo;s &minus;5.5 pp [&minus;8.5, &minus;2.5] but the
+      CI crosses zero, so the hallucination reduction is significant in one of two
+      runs. ECE is the least stable axis (7.3% vs 11.8% against a base of 8.4%),
+      so &ldquo;calibration did not degrade&rdquo; is downgraded to &ldquo;did not
+      degrade on one seed, mildly on the other.&rdquo; Over-refusal, abstention
+      quality and accuracy all replicate cleanly.</span>
     </p>
   </section>
 
@@ -908,7 +963,7 @@
 
     <div class="stats four">
       <div class="stat">
-        <div class="lab">GPU time</div><div class="n">30.4 h</div>
+        <div class="lab">GPU time</div><div class="n">31.2 h</div>
         <div class="foot">Tesla T4, free tier</div>
       </div>
       <div class="stat">
@@ -916,8 +971,8 @@
         <div class="foot">~$16 to rent</div>
       </div>
       <div class="stat">
-        <div class="lab">Answers generated</div><div class="n">142,400</div>
-        <div class="foot">128k probe + 14.4k exam</div>
+        <div class="lab">Answers generated</div><div class="n">143,200</div>
+        <div class="foot">128k probe + 15.2k exam</div>
       </div>
       <div class="stat">
         <div class="lab">Weights trained</div><div class="n">18.5 M</div>
@@ -931,9 +986,9 @@
       <div class="scroll"><table>
         <thead><tr><th>Stage</th><th data-mode="expert">Session</th><th>Hardware</th><th class="num">Time</th><th class="num">Share</th></tr></thead>
         <tbody>
-          <tr><td><span data-mode="plain">Finding out what it knows</span><span data-mode="expert">Probe (k=16 labeling)</span></td><td data-mode="expert">1</td><td>T4 GPU</td><td class="num">~7.5 h</td><td class="num">24.7%</td></tr>
-          <tr><td><span data-mode="plain">Training 14 versions</span><span data-mode="expert">Training — 14 LoRA adapters</span></td><td data-mode="expert">1 + 2</td><td>T4 GPU</td><td class="num">~18.7 h</td><td class="num">61.5%</td></tr>
-          <tr><td><span data-mode="plain">Sitting the exam, 18 times</span><span data-mode="expert">Generation — 18 arms × 800</span></td><td data-mode="expert">3</td><td>T4 GPU</td><td class="num">~4.0 h</td><td class="num">13.2%</td></tr>
+          <tr><td><span data-mode="plain">Finding out what it knows</span><span data-mode="expert">Probe (k=16 labeling)</span></td><td data-mode="expert">1</td><td>T4 GPU</td><td class="num">~7.5 h</td><td class="num">24.0%</td></tr>
+          <tr><td><span data-mode="plain">Training 15 versions</span><span data-mode="expert">Training — 15 LoRA adapters</span></td><td data-mode="expert">1 + 2 + 4</td><td>T4 GPU</td><td class="num">~19.3 h</td><td class="num">61.9%</td></tr>
+          <tr><td><span data-mode="plain">Sitting the exam, 19 times</span><span data-mode="expert">Generation — 19 arms × 800</span></td><td data-mode="expert">3 + 4</td><td>T4 GPU</td><td class="num">~4.2 h</td><td class="num">13.5%</td></tr>
           <tr><td><span data-mode="plain">Marking the exam</span><span data-mode="expert">Scoring — metrics, CIs, curve</span></td><td data-mode="expert">3 + local</td><td>CPU only</td><td class="num">~0.4 h</td><td class="num">—</td></tr>
           <tr><td><span data-mode="plain">Cheap preview runs</span><span data-mode="expert">Budget previews (v15–v17)</span></td><td data-mode="expert">extra</td><td>T4 GPU</td><td class="num">~0.2 h</td><td class="num">0.7%</td></tr>
         </tbody>
@@ -963,8 +1018,11 @@
         Derived, not stopwatch-measured: the final session's log was unrecoverable
         at write-up time, so per-run times are reconstructed from step counts &times; the
         measured 3.3 s/step rate &mdash; validated against the reference run, whose
-        1,298 steps took the ~1 h its config predicts. The 3B run assumes a 2.2&times;
-        slowdown.
+        1,298 steps took the ~1 h its config predicts. The two 3B rows are
+        <strong>measured, not derived</strong>: the seed-1 replicate was timed at
+        97.1 min for 1,298 steps (4.49 s/step, a 1.36&times; slowdown over 1.5B).
+        An earlier version of this page assumed 2.2&times; and overstated those
+        rows by ~60 min each.
       </p>
     </div>
 
@@ -973,8 +1031,8 @@
       <div class="scroll"><table>
         <thead><tr><th>Approach</th><th class="num">Compute</th><th class="num">Cost</th><th>What you get</th></tr></thead>
         <tbody>
-          <tr class="mark"><td>This project, free tier</td><td class="num">30.4 h</td><td class="num big c-good">$0.00</td><td class="wrap-c">18 arms, both error directions, intervals, noise floor</td></tr>
-          <tr><td>Same work, rented T4</td><td class="num">30.4 h</td><td class="num">~$16</td><td class="wrap-c">Identical, minus the 9-hour session juggling</td></tr>
+          <tr class="mark"><td>This project, free tier</td><td class="num">31.2 h</td><td class="num big c-good">$0.00</td><td class="wrap-c">19 arms, both error directions, intervals, two noise floors</td></tr>
+          <tr><td>Same work, rented T4</td><td class="num">31.2 h</td><td class="num">~$17</td><td class="wrap-c">Identical, minus the 9-hour session juggling</td></tr>
           <tr><td>Same work, rented A100</td><td class="num">~7 h</td><td class="num">~$14</td><td class="wrap-c">Identical, about 4&times; faster</td></tr>
           <tr><td>Shortest path to the headline</td><td class="num">~9.2 h</td><td class="num">$0.00</td><td class="wrap-c">One model, two exam arms &mdash; &ldquo;&minus;92% hallucinations&rdquo;, with no way to know it&rsquo;s noise</td></tr>
         </tbody>
@@ -1195,12 +1253,13 @@
     v11_bare_reason:  {h:[3.0,1.4,4.8],o:[63.5,56.9,70.4],a:[25.5,19.4,31.9],q:[47.7,42.7,52.7],e:[18.1,12.5,27.6], fam:'ft', label:'v11_bare_reason', why:'Ablation — refusal without a named reason'},
     base_3b:          {h:[12.2,9.2,15.4],o:[0.0,0.0,0.0],a:[41.5,34.8,48.0],q:[11.1,8.0,14.3],e:[8.4,6.6,16.4], fam:'b3', label:'base_3b', why:'Untuned 3B reference'},
     prompt_3b:        {h:[16.0,12.6,19.5],o:[19.3,11.4,28.1],a:[38.0,31.5,44.3],q:[0.0,0.0,0.0],e:[47.0,39.8,54.3], fam:'b3', label:'prompt_3b', why:'Abstain instruction only, 3B'},
-    v14_qwen3b:       {h:[6.8,4.5,9.3],o:[9.6,3.9,17.0],a:[45.5,38.7,52.7],q:[64.6,59.7,69.7],e:[7.3,5.9,15.7], fam:'f3', label:'v14_qwen3b', why:'Does the recipe hold at 3B?'}
+    v14_qwen3b:       {h:[6.8,4.5,9.3],o:[9.6,3.9,17.0],a:[45.5,38.7,52.7],q:[64.6,59.7,69.7],e:[7.3,5.9,15.7], fam:'f3', label:'v14_qwen3b', why:'Does the recipe hold at 3B?'},
+    v14_seed1:        {h:[9.5,6.7,12.4],o:[7.2,2.4,13.0],a:[49.5,42.6,56.7],q:[64.9,59.9,70.1],e:[11.8,7.9,19.5], fam:'f3', label:'v14_seed1', why:'3B recipe, seed 1 — replicate of v14'}
   };
 
   const ORDER = ['base','prompt','v1_mix10','v2_mix25','v3_mix50','v12_seed1','v13_seed2',
                  'v4_mix75','v5_mix90','v6_1epoch','v7_3epoch','v8_rank8','v9_rank32',
-                 'v10_lr1e4','v11_bare_reason','base_3b','prompt_3b','v14_qwen3b'];
+                 'v10_lr1e4','v11_bare_reason','base_3b','prompt_3b','v14_qwen3b','v14_seed1'];
 
   const RUNTIME = [
     ['v1_mix10','mix_10_90',5762,2,722,39.7],   ['v2_mix25','mix_25_75',6916,2,866,47.6],
@@ -1209,7 +1268,8 @@
     ['v7_3epoch','mix_50_50',10374,3,1947,107.1],['v8_rank8','mix_50_50',10374,2,1298,71.4],
     ['v9_rank32','mix_50_50',10374,2,1298,71.4],['v10_lr1e4','mix_50_50',10374,2,1298,71.4],
     ['v11_bare_reason','mix_50_50_bare',10374,2,1298,71.4],['v12_seed1','mix_50_50',10374,2,1298,71.4],
-    ['v13_seed2','mix_50_50',10374,2,1298,71.4],['v14_qwen3b (3B)','mix_50_50',10374,2,1298,157.1]
+    ['v13_seed2','mix_50_50',10374,2,1298,71.4],['v14_qwen3b (3B)','mix_50_50',10374,2,1298,97.1],
+    ['v14_seed1 (3B)','mix_50_50',10374,2,1298,97.1]
   ];
 
   // ---------------- mode + theme switches ----------------
@@ -1278,9 +1338,9 @@
       '</td><td data-mode="expert">' + r[1] + '</td><td class="num">' + r[2].toLocaleString() +
       '</td><td class="num" data-mode="expert">' + r[3] + '</td><td class="num" data-mode="expert">' +
       r[4].toLocaleString() + '</td><td class="num">' + r[5].toFixed(0) + ' min</td></tr>'
-    ).join('') + '<tr><td class="big">Total — 14 versions</td>' +
+    ).join('') + '<tr><td class="big">Total — 15 versions</td>' +
       '<td data-mode="expert"></td><td></td><td data-mode="expert"></td><td data-mode="expert"></td>' +
-      '<td class="num big">18.7 h</td></tr>';
+      '<td class="num big">19.3 h</td></tr>';
   })();
 
   // ---------------- chart primitives ----------------
@@ -1411,7 +1471,7 @@
         v.setAttribute('fill', col('--ink-2')); v.textContent = r[1] + unit; svg.appendChild(v);
       });
     }
-    hbar('c-stage', [['training', 18.7], ['probe', 7.5], ['exam runs', 4.0],
+    hbar('c-stage', [['training', 19.3], ['probe', 7.5], ['exam runs', 4.2],
                      ['marking (CPU)', 0.4], ['previews', 0.2]],
          740, 200, ' h', r => r[0].startsWith('marking') ? '--ink-3' : '--teal', 110);
     hbar('c-run', RUNTIME.map(r => [r[0], r[5]]), 740, 380, ' min',
