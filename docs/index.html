@@ -3,1088 +3,1083 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Refusal Calibration — Teaching a Small Model to Say "I Don't Know"</title>
-<meta name="description" content="Case study: teaching a small language model to admit what it doesn't know — and measuring what that costs. 18 arms, both error directions, on one frozen eval.">
+<title>Refusal Calibration: Teaching a Small Model to Say "I Don't Know"</title>
+<meta name="description" content="Case study: teaching a small language model to admit what it doesn't know, and measuring what that costs. 19 arms, both error directions, one frozen 800-question eval.">
 <style>
+  /* Self-hosted (SIL OFL, fonts/OFL-*.txt): no request to Google Fonts. */
+  @font-face { font-family: "Schibsted Grotesk"; font-weight: 400; font-display: swap;
+    src: url("fonts/schibsted-grotesk-latin-400-normal.woff2") format("woff2"); }
+  @font-face { font-family: "Schibsted Grotesk"; font-weight: 500; font-display: swap;
+    src: url("fonts/schibsted-grotesk-latin-500-normal.woff2") format("woff2"); }
+  @font-face { font-family: "Newsreader"; font-style: italic; font-weight: 400; font-display: swap;
+    src: url("fonts/newsreader-latin-400-italic.woff2") format("woff2"); }
+  @font-face { font-family: "Schibsted Grotesk"; font-weight: 600; font-display: swap;
+    src: url("fonts/schibsted-grotesk-latin-600-normal.woff2") format("woff2"); }
+  @font-face { font-family: "Sora"; font-weight: 700; font-display: swap;
+    src: url("fonts/sora-latin-700-normal.woff2") format("woff2"); } /* logo only, SIL OFL */
+  @font-face { font-family: "Schibsted Grotesk"; font-weight: 700; font-display: swap;
+    src: url("fonts/schibsted-grotesk-latin-700-normal.woff2") format("woff2"); }
   /* ============================================================
-     Palette: monochrome structure. Two hues, used only for data.
-       coral = overconfidence (hallucination)
-       teal  = overcaution   (over-refusal)
-       iris  = the one arm that escaped the trade
+     REFUSAL CALIBRATION: visual identity (shared case-study brand)
+
+     Stone neutrals plus one project colour, cobalt. In the charts:
+       cobalt = the thing being tested (made-up answers; the 3B model;
+                "after training")
+       tide   = the grey comparison (refused things it knew; untrained)
+       ink    = the 1.5B fine-tunes where a third group is needed
+     Cobalt #2556d8 / #5b8cff checked with the dataviz validator
+     against #808080 / #8a8a8a on #f5f5f4 and #000000.
      ============================================================ */
   :root {
     color-scheme: light;
-    --paper:    #f7f8fa;
-    --card:     #ffffff;
-    --sunk:     #eef0f4;
-    --ink:      #11161d;
-    --ink-2:    #3d4653;
-    --ink-3:    #6b7583;
-    --rule:     #dde1e8;
-    --rule-2:   #c7ccd6;
-    --coral:    #d2402f;
-    --teal:     #0d7d7f;
-    --iris:     #5b45c9;
-    --good:     #17693a;
-    --track:    #e3e6ec;
+    --paper: #f5f5f4; --card: #fafaf9; --sunk: #e7e5e4;
+    --ink: #1c1917; --ink-2: #57534e; --ink-3: #78716c;
+    --rule: #d6d3d1; --rule-2: #a8a29e;
+    --cobalt: #2556d8; --tide: #808080; --switch: #000000;
+    --track: #ececec; --cobalt-w: #dde6fb;
   }
   @media (prefers-color-scheme: dark) {
     :root:where(:not([data-theme="light"])) {
       color-scheme: dark;
-      --paper:  #0c0f14;
-      --card:   #141922;
-      --sunk:   #1b212c;
-      --ink:    #f2f4f8;
-      --ink-2:  #b3bcca;
-      --ink-3:  #7e8899;
-      --rule:   #242c38;
-      --rule-2: #37414f;
-      --coral:  #ff6a52;
-      --teal:   #2bb3a8;
-      --iris:   #9c8bff;
-      --good:   #4cc47c;
-      --track:  #222a35;
+    --paper: #000000; --card: #141414; --sunk: #1c1c1c;
+    --ink: #ffffff; --ink-2: #c8c8c8; --ink-3: #8f8f8f;
+    --rule: #262626; --rule-2: #3a3a3a;
+    --cobalt: #5b8cff; --tide: #8a8a8a; --switch: #ffffff;
+    --track: #222222; --cobalt-w: #17264a;
     }
   }
   :root[data-theme="dark"] {
     color-scheme: dark;
-    --paper:  #0c0f14; --card: #141922; --sunk: #1b212c;
-    --ink: #f2f4f8; --ink-2: #b3bcca; --ink-3: #7e8899;
-    --rule: #242c38; --rule-2: #37414f;
-    --coral: #ff6a52; --teal: #2bb3a8; --iris: #9c8bff; --good: #4cc47c;
-    --track: #222a35;
+    --paper: #000000; --card: #141414; --sunk: #1c1c1c;
+    --ink: #ffffff; --ink-2: #c8c8c8; --ink-3: #8f8f8f;
+    --rule: #262626; --rule-2: #3a3a3a;
+    --cobalt: #5b8cff; --tide: #8a8a8a; --switch: #ffffff;
+    --track: #222222; --cobalt-w: #17264a;
   }
 
-  /* ---- type roles: sans = signage, serif = reading, mono = instrument ---- */
   :root {
-    --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-    --serif: "Iowan Old Style", Charter, Constantia, Georgia, "Times New Roman", serif;
+    --sans: "Schibsted Grotesk", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     --mono: ui-monospace, "Cascadia Mono", "SF Mono", Menlo, Consolas, monospace;
+    --serif: "Newsreader", Georgia, serif;
   }
 
   * { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
-  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; }
+  }
   body {
     margin: 0; background: var(--paper); color: var(--ink);
-    font-family: var(--serif); font-size: 17px; line-height: 1.62;
+    font-family: var(--sans); font-size: 16.5px; line-height: 1.66;
     -webkit-font-smoothing: antialiased;
   }
+  .wrap { max-width: 800px; margin: 0 auto; padding: 0 26px; }
+  @media (max-width: 560px) { .wrap { padding: 0 17px; } }
 
-  .wrap { max-width: 820px; margin: 0 auto; padding: 0 28px; }
-  @media (max-width: 560px) { .wrap { padding: 0 18px; } }
+  a { color: var(--switch); text-underline-offset: 2px; }
+  a:focus-visible, button:focus-visible {
+    outline: 2px solid var(--switch); outline-offset: 2px; border-radius: 3px;
+  }
 
-  /* ---------------- top bar ---------------- */
+  /* ---------------- sticky bar ---------------- */
   .bar {
     position: sticky; top: 0; z-index: 40;
     background: color-mix(in srgb, var(--paper) 88%, transparent);
     backdrop-filter: blur(10px);
     border-bottom: 1px solid var(--rule);
   }
-  .bar-in {
-    max-width: 820px; margin: 0 auto; padding: 11px 28px;
-    display: flex; align-items: center; gap: 16px;
+  .bar .wrap { display: flex; align-items: center; gap: 12px; height: 54px; max-width: 1408px; padding: 0 57px; }
+  @media (max-width: 900px) { .bar .wrap { padding: 0 32px; } }
+  .seg {
+    display: inline-flex; border: 1px solid var(--rule-2); border-radius: 999px;
+    overflow: hidden; background: var(--card);
   }
-  @media (max-width: 560px) { .bar-in { padding: 10px 18px; } }
-  .bar-id {
-    font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.08em;
-    text-transform: uppercase; color: var(--ink-3);
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  .seg button {
+    font: inherit; font-size: 12.5px; font-weight: 600;
+    padding: 5px 12px; border: 0; background: transparent; color: var(--ink-3);
+    cursor: pointer; white-space: nowrap;
   }
-  .bar-tools { margin-left: auto; display: flex; align-items: center; gap: 10px; }
-
-  /* the mode switch — the page's second signature control */
-  .modesw {
-    display: inline-flex; align-items: center;
-    background: var(--sunk); border: 1px solid var(--rule);
-    border-radius: 999px; padding: 3px; gap: 2px;
-  }
-  .modesw button {
-    font-family: var(--mono); font-size: 11px; letter-spacing: 0.05em;
-    text-transform: uppercase; color: var(--ink-3);
-    background: none; border: 0; cursor: pointer;
-    padding: 5px 11px; border-radius: 999px; white-space: nowrap;
-    transition: color .18s ease, background .18s ease;
-  }
-  .modesw button[aria-pressed="true"] {
-    background: var(--card); color: var(--ink);
-    box-shadow: 0 1px 2px rgba(0,0,0,.10);
-  }
-  .modesw button:focus-visible, .iconbtn:focus-visible, a:focus-visible {
-    outline: 2px solid var(--iris); outline-offset: 2px;
-  }
+  .seg button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
   .iconbtn {
-    width: 32px; height: 32px; border-radius: 999px; cursor: pointer;
-    background: var(--sunk); border: 1px solid var(--rule); color: var(--ink-2);
-    font-size: 14px; line-height: 1; display: grid; place-items: center;
+    font: inherit; width: 32px; height: 32px; border-radius: 999px;
+    border: 1px solid var(--rule-2); background: var(--card); color: var(--ink-2);
+    cursor: pointer; line-height: 1;
+  }
+  @media (max-width: 480px) { .seg button { padding: 5px 9px; font-size: 11.5px; } }
+
+  .mark { font-family: "Sora", var(--sans); font-weight: 700; font-size: 17px;
+          color: var(--ink); text-decoration: none; letter-spacing: -.01em; }
+  .mark span { color: var(--cobalt); } /* the dot takes each project's colour */
+  .brand { margin-right: auto; font-weight: 700; font-size: 15.5px; letter-spacing: -.02em; }
+  .brand .sep { color: var(--rule-2); margin: 0 6px 0 2px; font-weight: 400; }
+  @media (max-width: 560px) {
+    .bar .brand { display: none; }
+    .bar .mark { margin-right: auto; }
+    .bar .wrap { padding: 0 12px; gap: 8px; }
   }
 
-  /* ---------------- headings ---------------- */
-  h1, h2, h3, .eyebrow, .stat .n, .lab { font-family: var(--sans); }
-  h1 {
-    font-size: clamp(31px, 5.4vw, 52px); font-weight: 800;
-    letter-spacing: -0.032em; line-height: 1.06; margin: 0 0 22px;
-  }
-  h2 {
-    font-size: clamp(23px, 3.4vw, 29px); font-weight: 750;
-    letter-spacing: -0.022em; line-height: 1.15; margin: 0 0 10px;
-  }
-  h3 { font-size: 17px; font-weight: 700; letter-spacing: -0.01em; margin: 30px 0 6px; }
-  .eyebrow {
-    font-family: var(--mono); font-size: 11px; font-weight: 500;
-    letter-spacing: 0.13em; text-transform: uppercase; color: var(--ink-3);
-    margin: 0 0 12px;
-  }
-  .dek { color: var(--ink-2); font-size: 18px; margin: 0 0 26px; }
-  p { color: var(--ink-2); margin: 0 0 16px; }
-  p.lead { color: var(--ink); font-size: 19px; }
-  strong { color: var(--ink); font-weight: 600; }
-  em.term {
-    font-style: normal; border-bottom: 1px dashed var(--rule-2);
-    color: var(--ink); cursor: help;
-  }
-  a { color: var(--teal); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+  /* ---------------- type ---------------- */
+  h1, h2, .display { font-weight: 500; letter-spacing: -.05em; }
+  h1 { line-height: 1.06; margin: 0 0 14px; }
+  h2 { font-size: clamp(28px, 4vw, 40px); line-height: 1.02; margin: 0 0 16px; }
+  h3 { font-size: 16px; font-weight: 700; letter-spacing: -.008em; margin: 32px 0 8px; }
+  p { margin: 0 0 16px; }
+  .muted { color: var(--ink-3); }
+  .small { font-size: 14px; }
+  b, strong { font-weight: 700; }
+  .it { font-family: var(--serif); font-style: italic; font-weight: 400; letter-spacing: 0; }
+  .caps { font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+          color: var(--ink-3); margin: 0; }
+  .kicker { font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+            color: var(--ink-3); display: flex; align-items: center; gap: 12px; margin: 0 0 8px; }
+  .kicker::before { content: ""; width: 32px; height: 1px; background: var(--ink); }
+  .lined { display: flex; align-items: center; gap: 12px; color: var(--ink); }
+  .lined::before { content: ""; width: 32px; height: 1px; background: var(--ink); }
 
-  section { padding: 62px 0 0; }
-  /* section divider: an interval bar, not a rule — the page's motif */
-  section + section { margin-top: 62px; border-top: 1px solid var(--rule); }
-  .seprule { position: relative; height: 1px; }
+  /* ---------------- blocks ---------------- */
+  .card, .note, .tw {
+    background: var(--card); border: 1px solid var(--rule-2); border-radius: 12px; }
+  .card { padding: 20px 24px; margin: 24px 0; }
+  .card-h { font-size: 15.5px; font-weight: 700; margin: 0 0 3px; }
+  .card-s { font-size: 13.5px; color: var(--ink-3); margin: 0 0 16px; }
+  .note { padding: 20px 24px; margin: 24px 0; }
+  .note.win { border-left: 3px solid var(--cobalt); border-radius: 0 12px 12px 0; }
+  .note p:last-child { margin-bottom: 0; }
+  .cap { font-size: 13px; color: var(--ink-3); margin: 12px 0 0; }
 
-  /* ---------------- hero ---------------- */
-  .hero { padding: 72px 0 8px; }
-  .hero .sub {
-    font-size: 19px; color: var(--ink-2); max-width: 34em; margin: 0 0 30px;
-  }
-  .chips { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 26px; }
-  .chip {
-    font-family: var(--mono); font-size: 11px; letter-spacing: 0.04em;
-    color: var(--ink-3); border: 1px solid var(--rule);
-    border-radius: 3px; padding: 4px 9px; background: var(--card);
-  }
-
-  /* ---------------- the interval bar: the signature ---------------- */
-  .ivl { --max: 100; margin-top: 10px; }
-  .ivl-track {
-    position: relative; height: 7px; border-radius: 2px;
-    background: var(--track); overflow: visible;
-  }
-  .ivl-range {
-    position: absolute; top: 0; height: 7px; border-radius: 2px;
-    background: currentColor; opacity: .30;
-    left: calc(var(--lo) / var(--max) * 100%);
-    width: calc((var(--hi) - var(--lo)) / var(--max) * 100%);
-    transform-origin: left center;
-  }
-  .ivl-pt {
-    position: absolute; top: -3px; width: 3px; height: 13px; border-radius: 1px;
-    background: currentColor;
-    left: calc(var(--pt) / var(--max) * 100%); margin-left: -1.5px;
-  }
-  .ivl-cap {
-    font-family: var(--mono); font-size: 10.5px; color: var(--ink-3);
-    margin-top: 7px; letter-spacing: 0.01em;
-  }
-  .anim .ivl-range { animation: grow .7s cubic-bezier(.2,.7,.3,1) both; }
-  .anim .ivl-pt { animation: fade .5s .25s ease both; }
-  @keyframes grow { from { transform: scaleX(0); opacity: 0; } }
-  @keyframes fade { from { opacity: 0; } }
-  @media (prefers-reduced-motion: reduce) {
-    .anim .ivl-range, .anim .ivl-pt { animation: none; }
-  }
-
-  /* ---------------- stats ---------------- */
-  .stats { display: grid; gap: 14px; margin: 26px 0 8px; }
-  .stats.two { grid-template-columns: 1fr 1fr; }
-  .stats.four { grid-template-columns: repeat(4, 1fr); }
-  @media (max-width: 720px) { .stats.four { grid-template-columns: 1fr 1fr; } }
-  @media (max-width: 460px) { .stats.four, .stats.two { grid-template-columns: 1fr; } }
-  .stat {
-    background: var(--card); border: 1px solid var(--rule);
-    border-radius: 9px; padding: 16px 17px 15px;
-  }
-  .stat .lab {
-    font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.08em;
-    text-transform: uppercase; color: var(--ink-3); margin-bottom: 9px;
-  }
-  .stat .n {
-    font-size: 27px; font-weight: 750; letter-spacing: -0.028em;
-    font-variant-numeric: tabular-nums; line-height: 1.1;
-  }
-  .stat .n .from { color: var(--ink-3); font-weight: 500; font-size: 19px; }
-  .stat .foot { font-family: var(--mono); font-size: 11px; color: var(--ink-3); margin-top: 7px; }
-  .c-coral { color: var(--coral); }
-  .c-teal  { color: var(--teal); }
-  .c-iris  { color: var(--iris); }
-  .c-good  { color: var(--good); }
-  .c-mute  { color: var(--ink-3); }
-
-  /* ---------------- cards, callouts ---------------- */
-  .card {
-    background: var(--card); border: 1px solid var(--rule);
-    border-radius: 11px; padding: 22px 22px 16px; margin: 22px 0;
-  }
-  .card-h { font-family: var(--sans); font-size: 15.5px; font-weight: 700; margin: 0 0 3px; color: var(--ink); }
-  .card-s { font-size: 13.5px; color: var(--ink-3); margin: 0 0 16px; font-family: var(--sans); }
-  .note {
-    font-size: 13px; color: var(--ink-3); font-family: var(--sans);
-    border-top: 1px solid var(--rule); margin-top: 16px; padding-top: 11px;
-  }
-  .note strong { color: var(--ink-2); }
-
-  .flag {
-    border: 1px solid var(--rule); border-left: 3px solid var(--coral);
-    background: var(--card); border-radius: 0 10px 10px 0;
-    padding: 17px 20px; margin: 24px 0;
-  }
-  .flag.win { border-left-color: var(--iris); }
-  .flag .fh {
-    font-family: var(--sans); font-weight: 700; font-size: 14.5px;
-    color: var(--ink); margin: 0 0 7px;
-  }
-  .flag p { margin: 0; font-size: 16px; }
-
-  /* plain-mode explainer block */
-  .plainbox {
-    background: var(--sunk); border-radius: 10px;
-    padding: 18px 20px; margin: 20px 0;
-    border: 1px solid var(--rule);
-  }
-  .plainbox .ph {
-    font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.1em;
-    text-transform: uppercase; color: var(--ink-3); margin: 0 0 8px;
-  }
-  .plainbox p:last-child { margin-bottom: 0; }
-
-  /* ---------------- tables ---------------- */
-  .scroll { overflow-x: auto; margin: 0 -4px; }
-  table { width: 100%; border-collapse: collapse; font-family: var(--sans); font-size: 13.5px; }
-  th, td {
-    text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--rule);
-    font-variant-numeric: tabular-nums; white-space: nowrap;
-  }
-  th {
-    font-family: var(--mono); font-size: 10.5px; font-weight: 500;
-    letter-spacing: 0.07em; text-transform: uppercase; color: var(--ink-3);
-  }
-  td { color: var(--ink-2); }
-  td.num, th.num { text-align: right; }
-  tr.mark td { background: var(--sunk); }
-  td.wrap-c { white-space: normal; color: var(--ink-3); min-width: 180px; }
+  table { width: 100%; border-collapse: collapse; margin: 0; font-size: 14.5px; }
+  th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--rule);
+           font-variant-numeric: tabular-nums; }
+  th { font-family: var(--mono); font-size: 11px; letter-spacing: .08em;
+       text-transform: uppercase; color: var(--ink-3); font-weight: 600; }
+  td.num, th.num { text-align: right; font-family: var(--mono); white-space: nowrap; }
+  tr.hl td { background: var(--sunk); }
+  td.why { color: var(--ink-3); min-width: 180px; }
   .ci { font-family: var(--mono); font-size: 10.5px; color: var(--ink-3); display: block; }
-  .big { font-weight: 700; color: var(--ink); }
-
-  /* ---------------- pipeline (a real sequence, so numbered) ---------------- */
-  .flow { list-style: none; margin: 0; padding: 0; counter-reset: s; }
-  .flow li {
-    counter-increment: s; position: relative;
-    padding: 0 0 26px 46px; border-left: 1px solid var(--rule); margin-left: 15px;
-  }
-  .flow li:last-child { border-color: transparent; padding-bottom: 0; }
-  .flow li::before {
-    content: counter(s, decimal-leading-zero);
-    position: absolute; left: -15px; top: 0;
-    width: 30px; height: 30px; border-radius: 999px;
-    background: var(--card); border: 1px solid var(--rule-2);
-    display: grid; place-items: center;
-    font-family: var(--mono); font-size: 11px; color: var(--ink-3);
-  }
-  .flow h3 { margin: 3px 0 5px; font-size: 16px; }
-  .flow p { margin: 0; font-size: 16px; }
-
-  ul.body { padding-left: 20px; }
-  ul.body li { margin-bottom: 9px; color: var(--ink-2); }
+  .tw { padding: 4px 16px; overflow-x: auto; margin: 24px 0; }
+  .card .tw { border: 0; padding: 0; margin: 16px 0 0; background: none; }
 
   code {
-    font-family: var(--mono); font-size: 0.87em;
-    background: var(--sunk); padding: 1.5px 5px; border-radius: 3px; color: var(--ink);
+    font-family: var(--mono); font-size: .88em;
+    background: var(--sunk); padding: 1.5px 5px; border-radius: 4px;
   }
 
-  svg { display: block; max-width: 100%; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 620px) { .two { grid-template-columns: 1fr; } }
+  .two > .card { margin: 0; }
+
+  ul { margin: 0 0 15px; padding-left: 21px; }
+  li { margin-bottom: 7px; }
+
+  /* ---------------- stat tiles with a 95% interval bar ---------------- */
+  .stats { display: grid; gap: 14px; margin: 0 0 8px; grid-template-columns: repeat(4, 1fr); }
+  @media (max-width: 1000px) { .stats { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 460px) { .stats { grid-template-columns: 1fr; } }
+  .stat { background: var(--card); border: 1px solid var(--rule-2); border-radius: 12px; padding: 16px 18px; }
+  .stat .lab { font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+               color: var(--ink-3); margin-bottom: 8px; }
+  .stat .n { font-size: 27px; font-weight: 500; letter-spacing: -.04em; line-height: 1.1;
+             font-variant-numeric: tabular-nums; }
+  .stat .n .from { color: var(--ink-3); font-size: 19px; }
+  .stat .foot { font-family: var(--mono); font-size: 11px; color: var(--ink-3); margin-top: 7px; }
+
+  .ivl { --max: 100; margin-top: 10px; color: var(--cobalt); }
+  .ivl-track { position: relative; height: 7px; border-radius: 999px; background: var(--track); }
+  .ivl-range { position: absolute; top: 0; height: 7px; border-radius: 999px; background: currentColor; opacity: .35;
+    left: calc(var(--lo) / var(--max) * 100%); width: calc((var(--hi) - var(--lo)) / var(--max) * 100%);
+    transition: left .25s ease, width .25s ease; }
+  .ivl-pt { position: absolute; top: -3px; width: 3px; height: 13px; border-radius: 1px; background: currentColor;
+    left: calc(var(--pt) / var(--max) * 100%); margin-left: -1.5px; transition: left .25s ease; }
+
+  /* ---------------- the arm explorer (hero widget) ---------------- */
+  .scorer { background: var(--card); border: 1px solid var(--rule-2); border-radius: 12px; overflow: hidden; }
+  .scorer-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    padding: 12px 16px; border-bottom: 1px solid var(--rule); background: var(--sunk); }
+  .chips { display: flex; gap: 6px; flex-wrap: wrap; }
+  .chip { font: inherit; font-size: 12px; font-weight: 600; cursor: pointer;
+    padding: 3px 10px; border-radius: 999px;
+    border: 1px solid var(--rule-2); background: var(--card); color: var(--ink-2); }
+  .chip:hover { border-color: var(--switch); color: var(--switch); }
+  .chip[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+  .ex-rows { padding: 6px 16px 4px; }
+  .ex-row { display: grid; grid-template-columns: 11em 4.2em 1fr; gap: 14px; align-items: center;
+    padding: 9px 0; border-bottom: 1px solid var(--rule); font-size: 14px; }
+  .ex-row:last-child { border-bottom: 0; }
+  .ex-row .ivl { margin: 0; }
+  .ex-row b { font-family: var(--mono); font-size: 13px; text-align: right; }
+  .ex-say { margin: 0; padding: 10px 16px 12px; border-top: 1px solid var(--rule);
+    font-size: 13.5px; color: var(--ink-2); line-height: 1.5; }
+  @media (max-width: 480px) { .ex-row { grid-template-columns: 1fr auto; } .ex-row .ivl { grid-column: 1 / -1; } }
+
+  /* ---------------- numbered pipeline ---------------- */
+  .flow { list-style: none; margin: 0; padding: 0; counter-reset: s; max-width: 68ch; }
+  .flow li { counter-increment: s; position: relative; margin: 0;
+    padding: 0 0 26px 46px; border-left: 1px solid var(--rule); margin-left: 15px; }
+  .flow li:last-child { border-color: transparent; padding-bottom: 0; }
+  .flow li::before { content: counter(s, decimal-leading-zero); position: absolute; left: -15px; top: 0;
+    width: 30px; height: 30px; border-radius: 999px; background: var(--card); border: 1px solid var(--rule-2);
+    display: grid; place-items: center; font-family: var(--serif); font-style: italic; font-size: 14px; color: var(--cobalt); }
+  .flow h3 { margin: 3px 0 5px; }
+  .flow p { margin: 0; }
+
+  /* ---------------- charts ---------------- */
+  svg { display: block; max-width: 100%; height: auto; }
   svg text { fill: var(--ink-3); font-family: var(--mono); font-size: 10.5px; }
   .gl { stroke: var(--rule); stroke-width: 1; }
   .ax { stroke: var(--rule-2); stroke-width: 1; }
   .ln { fill: none; stroke-width: 2.5; }
   .dt { stroke: var(--card); stroke-width: 2; }
   .whisk { stroke-width: 1.5; opacity: .5; }
+  .legend { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 12px;
+         font-family: var(--mono); font-size: 11.5px; color: var(--ink-2); }
+  .legend i { width: 10px; height: 10px; border-radius: 2px; display: inline-block; margin-right: 6px; }
+  .legend span { display: inline-flex; align-items: center; }
 
-  .key { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 12px;
-         font-family: var(--mono); font-size: 11px; color: var(--ink-2); }
-  .key i { width: 10px; height: 10px; border-radius: 2px; display: inline-block; margin-right: 6px; }
-  .key span { display: inline-flex; align-items: center; }
+  /* ---------------- plain / technical ---------------- */
+  [data-mode] { display: none; }
+  html[data-view="plain"] [data-mode="plain"],
+  html[data-view="expert"] [data-mode="expert"] { display: block; }
+  html[data-view="plain"] span[data-mode="plain"],
+  html[data-view="expert"] span[data-mode="expert"] { display: inline; }
+  html[data-view="plain"] li[data-mode="plain"],
+  html[data-view="expert"] li[data-mode="expert"] { display: list-item; }
+  html[data-view="expert"] td[data-mode="expert"],
+  html[data-view="expert"] th[data-mode="expert"] { display: table-cell; }
 
-  footer {
-    margin-top: 72px; border-top: 1px solid var(--rule);
-    padding: 34px 0 64px; color: var(--ink-3); font-size: 14px;
+  /* ---------------- console cards ---------------- */
+  .console { max-width: 1360px; margin: 0 auto; border: 1px solid var(--ink); border-radius: 16px;
+             background: color-mix(in srgb, var(--paper) 88%, transparent); }
+  .console-head { display: flex; align-items: center; gap: 12px; padding: 20px 32px;
+                  border-bottom: 1px solid var(--rule); }
+  .step-no { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 999px;
+             border: 1px solid var(--rule-2); font-size: 11px; font-weight: 700; color: var(--ink-3); }
+  .console-side { padding: 32px; }
+  .console-main { padding: 32px; min-width: 0; }
+  .spec { font-size: 24px; margin: 0 0 24px; }
+  .side-lede { font-size: 17px; color: var(--ink-2); margin-bottom: 24px; }
+  .specs { margin: 0 0 32px; border-top: 1px solid var(--rule); }
+  .specs div { display: flex; justify-content: space-between; gap: 16px; padding: 12px 0;
+               border-bottom: 1px solid var(--rule); font-size: 14px; }
+  .specs dt { color: var(--ink-3); }
+  .specs dd { margin: 0; font-weight: 700; text-align: right; }
+  .pill { display: inline-flex; align-items: center; min-height: 48px; padding: 0 24px;
+          border-radius: 999px; background: var(--ink); color: var(--paper); font-weight: 700;
+          letter-spacing: -.01em; text-decoration: none; }
+  .pill:hover { opacity: .88; }
+  .side-cta p { margin: 12px 0 0; }
+  .display { font-size: clamp(28px, 3.4vw, 44px); line-height: 1; margin: 12px 0 32px; max-width: 18ch; }
+  .display .it { letter-spacing: -.01em; }
+  .steps { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(3, 1fr); }
+  .steps li { margin: 0; color: var(--ink-3); line-height: 1.55; }
+  .try { display: flex; align-items: baseline; gap: 12px; }
+  .try .it { text-transform: none; font-size: 16px; }
+
+  /* ---------------- hero: fits one laptop screen ---------------- */
+  .hero { max-width: 1408px; margin: 0 auto; padding: 16px 24px 48px; }
+  .hero .console { max-width: none; }
+  .hero .console-body { display: grid; padding: 32px 40px 0; column-gap: 56px; align-items: start;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    grid-template-areas: "kick spec" "title show" "lede try" "lede tool" "specs tool" "cta tool" "steps steps"; padding-top: 28px; }
+  .hero .console-side, .hero .console-main { display: contents; }
+  .hero .hero-kick { grid-area: kick; }
+  .hero .spec { grid-area: spec; justify-self: end; margin: 0; font-size: 18px; }
+  .hero h1 { grid-area: title; font-size: clamp(52px, 5.6vw, 84px); line-height: .86; letter-spacing: -.06em;
+    margin: 8px 0 16px; align-self: end; }
+  .hero .display { grid-area: show; align-self: end; margin: 0 0 16px; max-width: 22ch; }
+  .hero .side-lede { grid-area: lede; font-size: 15.5px; line-height: 1.6; margin: 0 0 20px;
+    border-top: 1px solid var(--rule); padding-top: 20px; }
+  .hero .try { grid-area: try; margin: 0 0 12px; border-top: 1px solid var(--rule); padding-top: 20px; }
+  .hero .scorer { grid-area: tool; }
+  .hero .specs { grid-area: specs; display: grid; grid-template-columns: 1fr 1fr; column-gap: 24px; margin: 0 0 20px; }
+  .hero .specs div { padding: 8px 0; }
+  .hero .side-cta { grid-area: cta; margin: 0; }
+  .hero .side-cta .pill { min-height: 44px; }
+  .hero .side-cta p { margin-top: 8px; }
+  .hero .steps { grid-area: steps; margin: 20px -40px 0; border-top: 1px solid var(--rule); }
+  .hero .steps li { padding: 14px 24px 16px 40px; font-size: 13.5px; }
+  .hero .steps li + li { padding-left: 24px; border-left: 1px solid var(--rule); }
+  .hero .steps .it { font-size: 18px; margin-right: 8px; color: var(--cobalt); }
+  .hero .steps b { display: inline; font-size: 15px; color: var(--ink); }
+  .hero .steps b::after { content: ""; display: block; height: 4px; }
+  @media (max-width: 900px) {
+    .hero { padding: 16px 12px 40px; }
+    .hero .console-body { padding: 24px 20px 0; grid-template-columns: minmax(0, 1fr);
+      grid-template-areas: "kick" "spec" "title" "show" "lede" "specs" "cta" "try" "tool" "steps"; }
+    .hero .spec { justify-self: start; margin-top: 8px; }
+    .hero .side-cta { margin-bottom: 28px; }
+    .hero .steps { grid-template-columns: 1fr; margin: 28px -20px 0; }
+    .hero .steps li, .hero .steps li + li { padding: 14px 20px; border-left: 0; }
+    .hero .steps li + li { border-top: 1px solid var(--rule); }
+  }
+  @media (max-width: 560px) { .hero .specs { grid-template-columns: 1fr; } }
+
+  /* ---------------- section cards: header strip, title band, full-width content ---------------- */
+  .panel-sec { padding: 0 0 24px; }
+  .panel-sec .console-side { border-bottom: 1px solid var(--rule); padding: 40px 48px 32px; }
+  .panel-sec .console-side h2 { font-size: clamp(26px, 2.8vw, 38px); line-height: 1.02; max-width: 28ch; margin: 0; }
+  .panel-sec .console-main { padding: 40px 48px 48px; }
+  .console-main > p, .console-main > ul, .console-main > h3, .console-main > .note,
+  .console-main > div[data-mode] { max-width: 68ch; }
+  .console-main > h3:first-child, .console-main > p:first-child { margin-top: 0; }
+  @media (max-width: 900px) {
+    .panel-sec { padding: 0 0 16px; }
+    .console-head { padding-left: 20px; padding-right: 20px; }
+    .panel-sec .console-side { padding: 24px 20px; }
+    .panel-sec .console-main { padding: 24px 20px 32px; }
   }
 
-  /* ---------------- the mode switch mechanism ---------------- */
-  :root[data-view="plain"]  [data-mode="expert"] { display: none !important; }
-  :root[data-view="expert"] [data-mode="plain"]  { display: none !important; }
+  /* ---------------- two columns: contents rail | panels ---------------- */
+  .page-grid { max-width: 1408px; margin: 0 auto; padding: 0 24px; }
+  @media (min-width: 1100px) {
+    .page-grid { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 32px; }
+    .page-grid > .rail { display: block; position: sticky; top: 88px; align-self: start;
+      font-size: 13px; line-height: 1.35; }
+    .page-grid > .rail a { display: flex; gap: 12px; padding: 8px 0 8px 14px; color: var(--ink-3);
+      text-decoration: none; border-left: 1px solid var(--rule); }
+    .page-grid > .rail a:hover { color: var(--ink); }
+    .page-grid > .rail a[aria-current="true"] { color: var(--ink); font-weight: 600;
+      border-left: 2px solid var(--ink); padding-left: 13px; }
+    .page-grid > .rail a span { min-width: 1.6em; }
+  }
+  .rail a span { font-family: var(--serif); font-style: italic; font-weight: 400; font-size: 15px; }
+  .rail-h { margin: 0 0 12px 14px; }
+  @media (max-width: 1099px) { .page-grid > .rail { display: none; } .page-grid { padding: 0 12px; } }
+
+  /* ---------------- closing line + plain footer ---------------- */
+  .closing { max-width: 1408px; margin: 0 auto; padding: 96px 24px 64px; }
+  .display.closing-line { font-size: clamp(36px, 4.8vw, 60px); max-width: 16ch; margin: 0; }
+  .site-foot { background: var(--paper); border-top: 1px solid var(--ink); padding: 48px 0 24px;
+    color: var(--ink-3); font-size: 14px; }
+  .site-foot a { color: var(--ink); }
+  .site-foot code { background: transparent; color: inherit; padding: 0; }
+  .site-foot .foot-grid, .site-foot .foot-strip, .site-foot .foot-base {
+    max-width: 1408px; margin-left: auto; margin-right: auto; padding-left: 24px; padding-right: 24px; }
+  .foot-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 32px; }
+  .foot-grid nav a { display: block; margin: 0 0 8px; text-decoration: none; opacity: .85; }
+  .foot-grid nav a:hover { opacity: 1; text-decoration: underline; }
+  .foot-h { font-weight: 700; margin-bottom: 12px; color: var(--ink); }
+  .foot-strip { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+    margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--rule); }
+  .site-foot .foot-base { margin-top: 16px; opacity: .8; }
+  @media (max-width: 700px) { .foot-grid { grid-template-columns: 1fr 1fr; }
+                              .foot-grid > div:first-child { grid-column: 1 / -1; } }
+  @media (max-width: 900px) {
+    .closing { padding: 64px 16px 48px; }
+    .site-foot .foot-grid, .site-foot .foot-strip, .site-foot .foot-base { padding-left: 16px; padding-right: 16px; }
+  }
+  .author { display: flex; gap: 16px; align-items: flex-start; max-width: 420px; }
+  .author img { width: 56px; height: 56px; border-radius: 999px; object-fit: cover; flex: none;
+                border: 1px solid var(--rule-2); }
+  .author p { margin: 0; }
+  .author-name { font-weight: 700; font-size: 16px; color: var(--ink); }
+  .author-role { font-size: 14px; color: var(--ink-3); margin: 4px 0 10px !important; line-height: 1.5; }
+  .site-foot a.author-link { font-size: 14px; font-weight: 600; color: var(--ink);
+    text-decoration: underline; text-decoration-color: var(--cobalt); text-underline-offset: 4px; }
+  .site-foot a.author-link:hover { text-decoration-thickness: 2px; }
+
+  /* ---------------- border glow (portfolio BorderGlow, softer) ----------------
+     --edge (0-100) = how close the pointer is to the edge; --angle = which side it is on. */
+  .console { position: relative; isolation: isolate; --edge: 0; --angle: 45deg; }
+  .console::before, .console > .edge-light {
+    content: ""; position: absolute; border-radius: inherit; pointer-events: none;
+    opacity: calc((var(--edge) - 55) / 45 * .7); transition: opacity .25s ease-out; }
+  .console:not(:hover)::before, .console:not(:hover) > .edge-light { opacity: 0; transition: opacity .75s ease-in-out; }
+  .console::before { inset: -1px; padding: 1.5px; z-index: 2;
+    background: radial-gradient(at 80% 55%, #5b8cff, transparent 50%), radial-gradient(at 8% 6%, #9db8ff, transparent 50%),
+                radial-gradient(at 51% 4%, #2556d8, transparent 50%), var(--cobalt);
+    mask: conic-gradient(from var(--angle), #000 12%, transparent 26%, transparent 74%, #000 88%),
+          linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    mask-composite: intersect, exclude; }
+  .console > .edge-light { inset: -24px; z-index: 1;
+    mask: conic-gradient(from var(--angle), #000 1.5%, transparent 7%, transparent 93%, #000 98.5%); }
+  .console > .edge-light::before { content: ""; position: absolute; inset: 24px; border-radius: inherit;
+    box-shadow: 0 0 2px 0 rgb(37 86 216 / 35%), 0 0 8px 0 rgb(37 86 216 / 18%), 0 0 18px 1px rgb(37 86 216 / 8%); }
+  @media (hover: none) { .console::before, .console > .edge-light { display: none; } }
+
+  /* the card halos reach 24px past the cards; never let that widen the page */
+  html, body { overflow-x: clip; }
+  .dot-field { position: fixed; inset: 0; z-index: -1; pointer-events: none; }
+  :root { --dot: rgba(28, 25, 23, .13); }
+  :root[data-theme="dark"] { --dot: rgba(255, 255, 255, .09); }
+  @media (prefers-color-scheme: dark) { :root:where(:not([data-theme="light"])) { --dot: rgba(255, 255, 255, .09); } }
 </style>
 </head>
 <body>
+<canvas class="dot-field" aria-hidden="true"></canvas>
 
 <div class="bar">
-  <div class="bar-in">
-    <div class="bar-id">Refusal&nbsp;Calibration <span class="c-mute">/ case study</span></div>
-    <div class="bar-tools">
-      <div class="modesw" role="group" aria-label="Reading level">
-        <button type="button" id="m-plain"  aria-pressed="true">Plain English</button>
-        <button type="button" id="m-expert" aria-pressed="false">Technical</button>
-      </div>
-      <button type="button" class="iconbtn" id="theme" aria-label="Switch colour theme">◐</button>
+  <div class="wrap">
+    <a class="mark" href="https://johnandrei.vercel.app" aria-label="zeref. portfolio home">zeref<span>.</span></a>
+    <div class="brand"><span class="sep">/</span> Refusal Calibration</div>
+    <div class="seg" role="group" aria-label="Reading level">
+      <button type="button" id="m-plain" aria-pressed="true">Simple</button>
+      <button type="button" id="m-expert" aria-pressed="false">Technical</button>
     </div>
+    <button type="button" class="iconbtn" id="theme" aria-label="Switch colour theme">◐</button>
   </div>
 </div>
 
-<div class="wrap">
-
-  <header class="hero">
-    <p class="eyebrow">Case study · language-model fine-tuning &amp; evaluation</p>
-
-    <div data-mode="plain">
-      <h1>Teaching an AI to admit it doesn&rsquo;t know &mdash; and counting what that costs</h1>
-      <p class="sub">
-        Ask a small AI a question it has no way of answering and it will invent
-        something, stated with total confidence. The obvious fix is to teach it to
-        say &ldquo;I don&rsquo;t know.&rdquo; That fix works &mdash; and it quietly
-        creates a second problem nobody reports: now it says &ldquo;I don&rsquo;t
-        know&rdquo; to things it actually knew. I measured both mistakes at once,
-        across 18 versions of the model, to find out what the trade really costs.
+<header class="hero">
+<div class="console">
+  <div class="console-body">
+    <div class="console-side">
+      <div class="hero-kick"><p class="caps lined">Fine-tuning and evaluation</p></div>
+      <h1>Refusal Calibration</h1>
+      <p class="side-lede" data-mode="plain">
+        Ask a small AI something it can't know and it makes up an answer, stated with
+        total confidence. Teaching it to say "I don't know" fixes that, and quietly
+        creates a second problem: now it says "I don't know" to things it knew. I
+        measured both mistakes at once, across 19 versions of the model.
       </p>
-    </div>
-
-    <div data-mode="expert">
-      <h1>Teaching a small model to say &ldquo;I don&rsquo;t know&rdquo; without making it say it too often</h1>
-      <p class="sub">
-        LoRA fine-tuning Qwen2.5 (1.5B and 3B) for calibrated abstention, scored on
-        both error directions over one frozen 800-item eval. 18 arms, paired
-        bootstrap CIs, and a seed noise floor that turns out to swamp the headline
-        curve at 1.5B.
+      <p class="side-lede" data-mode="expert">
+        LoRA fine-tuning Qwen2.5 (1.5B and 3B) for calibrated abstention, scored on both
+        error directions over one frozen 800-item eval. 19 arms, paired bootstrap CIs,
+        and a seed noise floor that turns out to swamp the headline curve at 1.5B.
       </p>
-    </div>
-
-    <div class="stats two">
-      <div class="stat c-coral">
-        <div class="lab">Made-up answers</div>
-        <div class="n"><span class="from">95.5%</span> &rarr; 3.0%</div>
-        <div class="ivl anim" style="--lo:1.5;--pt:3.0;--hi:4.9">
-          <div class="ivl-track"><div class="ivl-range"></div><div class="ivl-pt"></div></div>
-        </div>
-        <div class="foot">95% interval 1.5 – 4.9</div>
-      </div>
-      <div class="stat c-teal">
-        <div class="lab">Refused things it knew</div>
-        <div class="n"><span class="from">0%</span> &rarr; 61.5%</div>
-        <div class="ivl anim" style="--lo:54.9;--pt:61.5;--hi:68.4">
-          <div class="ivl-track"><div class="ivl-range"></div><div class="ivl-pt"></div></div>
-        </div>
-        <div class="foot">95% interval 54.9 – 68.4</div>
+      <dl class="specs">
+        <div><dt>Made-up answers</dt><dd>95.5% &rarr; 3.0%</dd></div>
+        <div><dt>Wrong refusals</dt><dd>0% &rarr; 61.5%</dd></div>
+        <div><dt>Same recipe at 3B</dt><dd>9.6% refused</dd></div>
+        <div><dt>GPU time</dt><dd>31.2 h, $0</dd></div>
+      </dl>
+      <div class="side-cta">
+        <a class="pill" href="https://github.com/Zeref538/refusal-calibration-LLM-Fine-Tuning">See the code on GitHub</a>
+        <p class="small muted">Every saved model answer behind every number is in the repo.</p>
       </div>
     </div>
-    <p class="note" style="border:0;padding:0;margin-top:10px">
-      Both bars describe the <em>same model</em>. The bar under each number is its
-      margin of error &mdash; this page never prints a number without one.
-    </p>
-
-    <div class="chips">
-      <span class="chip">Qwen2.5 1.5B + 3B</span>
-      <span class="chip">LoRA / PEFT</span>
-      <span class="chip">19 eval arms</span>
-      <span class="chip">800-item frozen eval</span>
-      <span class="chip">Bootstrap CIs</span>
-      <span class="chip">~31 GPU-h · $0</span>
+    <div class="console-main">
+      <p class="spec it">Qwen2.5 1.5B + 3B &middot; 19 arms</p>
+      <p class="display">Teaching a model to say "I don't know." <span class="it">Then counting what it cost.</span></p>
+      <ol class="steps">
+        <li><span class="it">01</span><b>Probe</b>8,000 questions, asked 16 times each.</li>
+        <li><span class="it">02</span><b>Train</b>15 versions, one setting changed at a time.</li>
+        <li><span class="it">03</span><b>Grade</b>One sealed exam, both kinds of mistake.</li>
+      </ol>
+      <p class="caps try">Pick a version <span class="it">every bar is a 95% range</span></p>
+      <div class="scorer">
+        <div class="scorer-head">
+          <div class="chips" role="group" aria-label="Model version">
+            <button type="button" class="chip" data-arm="base">Untrained, 1.5B</button>
+            <button type="button" class="chip" data-arm="prompt">Asked nicely</button>
+            <button type="button" class="chip" data-arm="v3_mix50">Trained, 1.5B</button>
+            <button type="button" class="chip" data-arm="v14_qwen3b">Trained, 3B</button>
+          </div>
+        </div>
+        <div class="ex-rows" id="ex-rows"></div>
+        <p class="ex-say" id="ex-say"></p>
+      </div>
     </div>
-  </header>
+  </div>
+</div>
+</header>
 
-  <!-- ================= 1. the problem ================= -->
-  <section id="problem">
-    <p class="eyebrow">The problem</p>
-    <h2 data-mode="plain">Two ways to be wrong, and everyone only reports one</h2>
-    <h2 data-mode="expert">Why &ldquo;just train it to refuse&rdquo; is a trap</h2>
+<div class="page-grid">
+<nav class="rail" aria-label="Chapters"><p class="caps rail-h">Contents</p></nav>
+<main>
 
-    <div data-mode="plain">
-      <p class="lead">
-        Picture two new hires. The first never says &ldquo;I&rsquo;m not sure&rdquo;
-        &mdash; every answer sounds authoritative, and some of them are invented.
-        The second says &ldquo;I&rsquo;m not sure&rdquo; to everything, including
-        the things they know perfectly well. Both are useless, in opposite
-        directions. You want the one who can tell the difference.
+<section class="panel-sec" id="result">
+<div class="console">
+  <div class="console-head"><span class="step-no">01</span><span class="caps">The result</span></div>
+  <div class="console-body">
+    <div class="console-side">
+      <h2 data-mode="plain">It worked. Look what it cost.</h2>
+      <h2 data-mode="expert">The four numbers, always together</h2>
+    </div>
+    <div class="console-main">
+      <div class="stats" id="head-stats"></div>
+      <p class="cap">
+        All four tiles describe the <em>same model</em>, the 1.5B reference version. The bar
+        under each number is its margin of error. This page never prints a number without one.
       </p>
-      <p>
-        A small AI model out of the box is the first hire. On questions it has no
-        way of answering, it produced a confident wrong answer
-        <strong>95.5% of the time</strong>. Training it to refuse turns it into the
-        second hire. Nearly every published &ldquo;we fixed hallucinations&rdquo;
-        result reports only the first number going down, and stays quiet about the
-        second going up.
+
+      <div class="note">
+        <p class="kicker" data-mode="plain">The number I could have led with, and why I didn't</p>
+        <p class="kicker" data-mode="expert">Why the single number is dishonest</p>
+        <p data-mode="plain">
+          "Made-up answers cut by 92%" is completely true, and it would have been the
+          impressive headline. It's also close to meaningless on its own: the same model now
+          refuses <strong>61.5%</strong> of the questions it used to get right, and its score
+          on questions it <em>can</em> answer fell from 100% to 29%. That's not a model that
+          got better. It's a model that got quieter.
+        </p>
+        <p data-mode="expert">
+          "Hallucinations &minus;92.5 pp [&minus;95.0, &minus;90.0]" is true and publishable.
+          It is also nearly worthless alone: the same checkpoint now over-refuses 61.5%
+          [54.9, 68.4] of base-correct items, with accuracy down 71.0 pp. Reporting one axis
+          without the other describes a model that got quieter, not better.
+        </p>
+      </div>
+
+      <p class="small muted" data-mode="plain">
+        <strong>Why the untrained model scores 100%:</strong> the "answerable" category was
+        <em>defined</em> as the questions it already got right. That's deliberate. It's what
+        makes "it refused something it knew" measurable at all.
       </p>
-      <div class="plainbox">
-        <p class="ph">Why it's called calibration</p>
+      <p class="small muted" data-mode="expert">
+        Base accuracy is 100% by construction: the answerable class is defined as
+        base-correct under k=16 sampling, which is precisely what makes over-refusal
+        measurable against it.
+      </p>
+    </div>
+  </div>
+</div>
+</section>
+
+<section class="panel-sec" id="problem">
+<div class="console">
+  <div class="console-head"><span class="step-no">02</span><span class="caps">The problem</span></div>
+  <div class="console-body">
+    <div class="console-side">
+      <h2 data-mode="plain">Two ways to be wrong, and everyone only reports one</h2>
+      <h2 data-mode="expert">Why "just train it to refuse" is a trap</h2>
+    </div>
+    <div class="console-main">
+      <div data-mode="plain">
         <p>
-          A well-calibrated instrument is one you can trust in both directions
-          &mdash; it doesn&rsquo;t read high, and it doesn&rsquo;t read low. Same
-          idea here. The goal was never &ldquo;refuse more.&rdquo; It was
-          &ldquo;refuse in exactly the right places.&rdquo;
+          Picture two new hires. The first never says "I'm not sure." Every answer sounds
+          authoritative, and some of them are invented. The second says "I'm not sure" to
+          everything, including things they know perfectly well. Both are useless, in
+          opposite directions. You want the one who can tell the difference.
+        </p>
+        <p>
+          A small AI model out of the box is the first hire. On questions it had no way of
+          answering, it gave a confident wrong answer <strong>95.5% of the time</strong>.
+          Training it to refuse turns it into the second hire. Nearly every published "we
+          fixed hallucinations" result reports only the first number going down, and stays
+          quiet about the second going up.
+        </p>
+        <div class="note">
+          <p class="kicker">Why it's called calibration</p>
+          <p>
+            A well-calibrated instrument is one you can trust in both directions: it doesn't
+            read high, and it doesn't read low. Same idea here. The goal was never "refuse
+            more." It was "refuse in exactly the right places."
+          </p>
+        </div>
+      </div>
+      <div data-mode="expert">
+        <p>
+          Most published hallucination fixes report one number: the hallucination rate went
+          down. They rarely report what happened to the questions the model <em>could</em>
+          answer. A model that abstains on everything scores perfectly on hallucination and
+          is useless in production.
+        </p>
+        <p>
+          So the deliverable here is a curve, not a point, and, as it turned out, a noise
+          floor underneath that curve. Over-refusal is measured specifically against
+          <em>base-correct</em> items, which separates "the fine-tune became cowardly" from
+          "the model never knew that anyway."
         </p>
       </div>
     </div>
+  </div>
+</div>
+</section>
 
-    <div data-mode="expert">
-      <p class="lead">
-        Most published hallucination fixes report one number: the hallucination
-        rate went down. They rarely report what happened to the questions the
-        model <em>could</em> answer. A model that abstains on everything scores
-        perfectly on hallucination and is useless in production.
-      </p>
-      <p>
-        So the deliverable here is a curve, not a point &mdash; and, as it turned
-        out, a noise floor underneath that curve. Over-refusal is measured
-        specifically against <em>base-correct</em> items, which separates
-        &ldquo;the fine-tune became cowardly&rdquo; from &ldquo;the model never
-        knew that anyway.&rdquo;
-      </p>
+<section class="panel-sec" id="method">
+<div class="console">
+  <div class="console-head"><span class="step-no">03</span><span class="caps">How it was built</span></div>
+  <div class="console-body">
+    <div class="console-side">
+      <h2 data-mode="plain">Five steps, run on a free graphics card</h2>
+      <h2 data-mode="expert">Teach the model its own boundary; don't guess it</h2>
     </div>
-  </section>
+    <div class="console-main">
+      <ol class="flow">
+        <li>
+          <h3 data-mode="plain">Find out what it actually knows</h3>
+          <h3 data-mode="expert">Self-knowledge labeling (k=16)</h3>
+          <p data-mode="plain">
+            You can't teach a model its limits until you know where they are. So every one
+            of 8,000 trivia questions was put to the model <strong>16 separate times</strong>,
+            and its answers checked against the real ones. Gets it right nearly every time?
+            That's something it knows. Never gets it right? That's beyond it. The boundary is
+            the model's own, not one I assumed for it.
+          </p>
+          <p data-mode="expert">
+            Sample the base model k=16 per question over 8,000 TriviaQA items (128,000
+            generations), scoring against gold alias sets. Consistently correct &rarr;
+            <strong>answerable</strong>; near-zero &rarr; <strong>unknown</strong>;
+            deliberately broken questions &rarr; <strong>defective</strong>. Labels are
+            empirical, not assumed.
+          </p>
+        </li>
+        <li>
+          <h3 data-mode="plain">Seal an exam before any studying happens</h3>
+          <h3 data-mode="expert">Freeze the eval, enforce it with a lock</h3>
+          <p data-mode="plain">
+            800 questions were set aside as the test (200 answerable, 200 impossible, 200
+            borderline, 200 with something wrong in the question itself) and locked before a
+            single training run started. Every version of the model afterwards sat the
+            identical exam. Without this, you're grading a student on questions they already
+            studied.
+          </p>
+          <p data-mode="expert">
+            800 items, stratified 200/200/200/200 across answerable, unknown, borderline and
+            defective, frozen ahead of training and enforced by a lock file so no later
+            session can leak into the reported numbers.
+          </p>
+        </li>
+        <li>
+          <h3 data-mode="plain">Agree on one way to say "I don't know"</h3>
+          <h3 data-mode="expert">One structured refusal contract</h3>
+          <p data-mode="plain">
+            A refusal isn't useful if it's just an apology. The model was taught to answer in
+            a fixed form that also names <em>why</em> it's declining: the question is
+            unanswerable, or it's about events after its cutoff, or it contains a false claim,
+            or it's too vague. Now software downstream can act on the refusal, and I can grade
+            whether it refused for the <em>right</em> reason.
+          </p>
+          <p data-mode="expert">
+            Every arm emits <code>{"answer": …, "reason": …}</code>, reason drawn from a
+            closed set: <code>unknown</code>, <code>after_cutoff</code>,
+            <code>false_premise</code>, <code>missing_context</code>, <code>ambiguous</code>.
+            Structured so a planner can branch on it, and so abstention <em>quality</em> is
+            mechanically gradeable. The parser also accepts plain-English refusals, so
+            baselines aren't scored as hallucinating when they politely decline.
+          </p>
+        </li>
+        <li>
+          <h3 data-mode="plain">Train 15 versions, changing one thing at a time</h3>
+          <h3 data-mode="expert">15 LoRA fine-tunes, one axis per run</h3>
+          <p data-mode="plain">
+            Retraining a whole model is expensive, so each version got a small bolt-on
+            adjustment instead, about 1% the size of the model. Then: five versions varying
+            how much refusal practice they got (from 10% up to 90% of the examples), two
+            identical repeats to check for randomness, and the rest changing exactly one
+            setting each, including a bigger model run twice. Changing one thing per run is
+            the only way to know what caused what.
+          </p>
+          <p data-mode="expert">
+            LoRA adapters (18.5M trainable params, 1.2% of the 1.5B base). Five mix ratios
+            spanning 10&ndash;90% abstain, two seed replicates of the reference, dosage
+            (epochs), capacity (rank, LR), a reason-ablation, and a 3B scale check with its
+            own seed replicate. All 17 configs generated from one <code>RUNS</code> table, so
+            "exactly one thing changed" is structural, not manual.
+          </p>
+        </li>
+        <li>
+          <h3 data-mode="plain">Grade every version on both mistakes</h3>
+          <h3 data-mode="expert">Score both directions, paired, with intervals</h3>
+          <p data-mode="plain">
+            Each version sat the sealed exam, and every result was reported with a margin of
+            error, the same idea as a poll saying "42%, plus or minus 3." Without that, a
+            difference of three points and a difference of thirty look identical on a slide.
+          </p>
+          <p data-mode="expert">
+            Paired bootstrap CIs on the difference between each arm and its matched base, so
+            a 3-point gap and an 18-point gap are never conflated. 3B arms are scored only
+            against 3B baselines.
+          </p>
+        </li>
+      </ol>
+    </div>
+  </div>
+</div>
+</section>
 
-  <!-- ================= 2. method ================= -->
-  <section id="method">
-    <p class="eyebrow">How it was built</p>
-    <h2 data-mode="plain">Five steps, run on a free graphics card</h2>
-    <h2 data-mode="expert">Teach the model its own boundary; don't guess it</h2>
-
-    <ol class="flow">
-      <li>
-        <h3 data-mode="plain">Find out what it actually knows</h3>
-        <h3 data-mode="expert">Self-knowledge labeling (k=16)</h3>
-        <p data-mode="plain">
-          You can&rsquo;t teach a model its limits until you know where they are.
-          So every one of 8,000 trivia questions was put to the model
-          <strong>16 separate times</strong>, and its answers checked against the
-          real ones. Gets it right nearly every time? That&rsquo;s something it
-          knows. Never gets it right? That&rsquo;s beyond it. This matters: the
-          boundary is the model&rsquo;s own, not one I assumed for it.
-        </p>
-        <p data-mode="expert">
-          Sample the base model k=16 per question over 8,000 TriviaQA items
-          (128,000 generations), scoring against gold alias sets. Consistently
-          correct &rarr; <strong>answerable</strong>; near-zero &rarr;
-          <strong>unknown</strong>; deliberately broken questions &rarr;
-          <strong>defective</strong>. Labels are empirical, not assumed.
-        </p>
-      </li>
-      <li>
-        <h3 data-mode="plain">Seal an exam before any studying happens</h3>
-        <h3 data-mode="expert">Freeze the eval, enforce it with a lock</h3>
-        <p data-mode="plain">
-          800 questions were set aside as the test &mdash; 200 answerable, 200
-          impossible, 200 borderline, 200 with something wrong in the question
-          itself &mdash; and locked before a single training run started. Every
-          version of the model afterwards sat the identical exam. Without this,
-          you&rsquo;re grading a student on questions they already studied.
-        </p>
-        <p data-mode="expert">
-          800 items, stratified 200/200/200/200 across answerable, unknown,
-          borderline and defective, frozen ahead of training and enforced by a
-          lock file so no later session can leak into the reported numbers.
-        </p>
-      </li>
-      <li>
-        <h3 data-mode="plain">Agree on one way to say &ldquo;I don&rsquo;t know&rdquo;</h3>
-        <h3 data-mode="expert">One structured refusal contract</h3>
-        <p data-mode="plain">
-          A refusal isn&rsquo;t useful if it&rsquo;s just an apology. The model was
-          taught to answer in a fixed form that also names <em>why</em> it&rsquo;s
-          declining &mdash; the question is unanswerable, or it&rsquo;s about events
-          after its cutoff, or the question contains a false claim, or it&rsquo;s
-          too vague. Now software downstream can act on the refusal, and I can grade
-          whether it refused for the <em>right</em> reason.
-        </p>
-        <p data-mode="expert">
-          Every arm emits <code>{"answer": …, "reason": …}</code>, reason drawn from
-          a closed set: <code>unknown</code>, <code>after_cutoff</code>,
-          <code>false_premise</code>, <code>missing_context</code>,
-          <code>ambiguous</code>. Structured so a planner can branch on it, and so
-          abstention <em>quality</em> is mechanically gradeable. The parser also
-          accepts plain-English refusals, so baselines aren't scored as
-          hallucinating when they politely decline.
-        </p>
-      </li>
-      <li>
-        <h3 data-mode="plain">Train 14 versions, changing one thing at a time</h3>
-        <h3 data-mode="expert">14 LoRA fine-tunes, one axis per run</h3>
-        <p data-mode="plain">
-          Retraining a whole model is expensive, so each version got a small
-          bolt-on adjustment instead &mdash; about 1% the size of the model. Then:
-          five versions varying how much refusal practice they got (from 10% up to
-          90% of the examples), two identical repeats to check for randomness, and
-          the rest changing exactly one setting each. Changing one thing per run is
-          the only way to know what caused what.
-        </p>
-        <p data-mode="expert">
-          LoRA adapters (18.5M trainable params, 1.2% of the 1.5B base). Five mix
-          ratios spanning 10&ndash;90% abstain, two seed replicates of the
-          reference, dosage (epochs), capacity (rank, LR), a reason-ablation, and a
-          3B scale check. All 17 configs generated from one <code>RUNS</code> table,
-          so &ldquo;exactly one thing changed&rdquo; is structural, not manual.
-        </p>
-      </li>
-      <li>
-        <h3 data-mode="plain">Grade every version on both mistakes</h3>
-        <h3 data-mode="expert">Score both directions, paired, with intervals</h3>
-        <p data-mode="plain">
-          Each version sat the sealed exam, and every result was reported with a
-          margin of error &mdash; the same idea as a poll saying &ldquo;42%, plus or
-          minus 3.&rdquo; Without that, a difference of three points and a
-          difference of thirty look identical on a slide.
-        </p>
-        <p data-mode="expert">
-          Paired bootstrap CIs on the difference between each arm and its matched
-          base, so a 3-point gap and an 18-point gap are never conflated. 3B arms
-          are scored only against 3B baselines.
-        </p>
-      </li>
-    </ol>
-  </section>
-
-  <!-- ================= 3. headline ================= -->
-  <section id="headline">
-    <p class="eyebrow">Result · the reference model</p>
-    <h2 data-mode="plain">It worked. Look what it cost.</h2>
-    <h2 data-mode="expert">The four numbers, always together</h2>
-
-    <div class="stats four" id="head-stats"></div>
-
-    <div class="flag">
-      <p class="fh" data-mode="plain">The number I could have led with, and why I didn&rsquo;t</p>
-      <p class="fh" data-mode="expert">Why the single number is dishonest</p>
+<section class="panel-sec" id="curve">
+<div class="console">
+  <div class="console-head"><span class="step-no">04</span><span class="caps">The tradeoff</span></div>
+  <div class="console-body">
+    <div class="console-side">
+      <h2 data-mode="plain">More refusal practice, fewer inventions, more stonewalling</h2>
+      <h2 data-mode="expert">The tradeoff curve across the training mix</h2>
+    </div>
+    <div class="console-main">
       <p data-mode="plain">
-        &ldquo;Made-up answers cut by 92%&rdquo; is completely true, and it would
-        have been the impressive headline. It&rsquo;s also close to meaningless on
-        its own: the same model now refuses <strong>61.5%</strong> of the questions
-        it used to get right, and its score on questions it <em>can</em> answer fell
-        from 100% to 29%. That&rsquo;s not a model that got better. It&rsquo;s a
-        model that got quieter.
+        Five models, identical except for how much refusal practice they got. Read left to
+        right: as the training diet gets heavier on "I don't know," invented answers fall and
+        wrongful refusals climb. The vertical ticks are margins of error. The shaded strips
+        are the important part. Hold that thought.
       </p>
       <p data-mode="expert">
-        &ldquo;Hallucinations &minus;92.5% [&minus;95.0, &minus;90.0]&rdquo; is true
-        and publishable. It is also nearly worthless alone: the same checkpoint
-        now over-refuses 61.5% [54.9, 68.4] of base-correct items, with accuracy
-        down 71.0 pp. Reporting one axis without the other describes a model that
-        got quieter, not better.
+        v1&ndash;v5, same reference recipe (r=16, 2 epochs, lr 2e-4); only the abstain:answer
+        ratio of the training mix changes. Whiskers are 95% bootstrap CIs; shaded bands are
+        the seed-replicate spread from the next section.
       </p>
-    </div>
-
-    <p class="note">
-      <span data-mode="plain"><strong>One thing worth explaining:</strong> the untrained
-      model scores 100% on &ldquo;answerable&rdquo; questions because that category
-      was <em>defined</em> as the questions it already got right. That&rsquo;s
-      deliberate &mdash; it&rsquo;s what makes &ldquo;it refused something it
-      knew&rdquo; a measurable thing at all.</span>
-      <span data-mode="expert">Base accuracy is 100% by construction: the answerable
-      class is defined as base-correct under k=16 sampling, which is precisely what
-      makes over-refusal measurable against it.</span>
-    </p>
-  </section>
-
-  <!-- ================= 4. curve ================= -->
-  <section id="curve">
-    <p class="eyebrow">Result · the tradeoff</p>
-    <h2 data-mode="plain">More refusal practice, fewer inventions, more stonewalling</h2>
-    <h2 data-mode="expert">The tradeoff curve across the training mix</h2>
-
-    <p data-mode="plain">
-      Five models, identical except for how much refusal practice they got. Read
-      left to right: as the training diet gets heavier on &ldquo;I don&rsquo;t
-      know,&rdquo; invented answers fall and wrongful refusals climb. The vertical
-      ticks are margins of error. The shaded strips are the important part &mdash;
-      hold that thought.
-    </p>
-    <p data-mode="expert">
-      v1&ndash;v5, same reference recipe (r=16, 2 epochs, lr 2e-4); only the
-      abstain:answer ratio of the training mix changes. Whiskers are 95% bootstrap
-      CIs; shaded bands are the seed-replicate spread from the next section.
-    </p>
-
-    <div class="card">
-      <p class="card-h">Both error rates vs. share of refusal examples in training</p>
-      <p class="card-s">Five arms · same recipe · 800-item frozen eval</p>
-      <svg id="c-curve" viewBox="0 0 740 330" role="img" aria-label="Line chart. As the abstain share of training rises from 10 to 90 percent, hallucination falls from 9.5 to 1.2 percent while over-refusal rises from 31.5 to 64 percent. Shaded horizontal bands showing the seed noise floor cover most of the vertical range of both lines."></svg>
-      <div class="key">
-        <span><i style="background:var(--coral)"></i>Made-up answers</span>
-        <span><i style="background:var(--teal)"></i>Refused things it knew</span>
-        <span><i style="background:var(--track)"></i>Seed noise floor</span>
+      <div class="card">
+        <p class="card-h">Both error rates vs. share of refusal examples in training</p>
+        <p class="card-s">Five arms &middot; same recipe &middot; 800-item frozen eval</p>
+        <svg id="c-curve" viewBox="0 0 740 330" role="img" aria-label="Line chart. As the abstain share of training rises from 10 to 90 percent, hallucination falls from 9.5 to 1.2 percent while over-refusal rises from 31.5 to 64 percent. Shaded horizontal bands showing the seed noise floor cover most of the vertical range of both lines."></svg>
+        <div class="legend">
+          <span><i style="background:var(--cobalt)"></i>Made-up answers</span>
+          <span><i style="background:var(--tide)"></i>Refused things it knew</span>
+          <span><i style="background:var(--track);border:1px solid var(--rule-2)"></i>Seed noise floor</span>
+        </div>
+        <p class="cap">
+          The two ends behave exactly as predicted. The middle does not: the 75% arm is the
+          <em>worst</em> hallucinator of the five, which is the first clue that something is
+          wrong with reading this chart too closely.
+        </p>
       </div>
-      <p class="note">
-        The two ends behave exactly as predicted. The middle does not &mdash; the
-        75% arm is the <em>worst</em> hallucinator of the five, which is the first
-        clue that something is wrong with reading this chart too closely.
-      </p>
     </div>
-  </section>
+  </div>
+</div>
+</section>
 
-  <!-- ================= 5. noise floor ================= -->
-  <section id="noise">
-    <p class="eyebrow">The finding that mattered most</p>
-    <h2 data-mode="plain">I trained the exact same thing three times and got three different answers</h2>
-    <h2 data-mode="expert">The seed noise floor swamps the curve</h2>
-
-    <div data-mode="plain">
-      <p class="lead">
-        Training has a random element &mdash; the order examples are shuffled into.
-        Three runs, the same recipe, the same data, the same settings; only that
-        shuffle differed. If the method were stable, all three should land in
-        roughly the same place.
-      </p>
+<section class="panel-sec" id="noise">
+<div class="console">
+  <div class="console-head"><span class="step-no">05</span><span class="caps">The noise floor</span></div>
+  <div class="console-body">
+    <div class="console-side">
+      <h2 data-mode="plain">I trained the exact same thing three times and got three different answers</h2>
+      <h2 data-mode="expert">The seed noise floor swamps the curve</h2>
     </div>
-    <div data-mode="expert">
-      <p class="lead">
-        v3, v12 and v13 are the identical reference recipe under seeds 0, 1 and 2.
-        Every other variable is held.
+    <div class="console-main">
+      <p data-mode="plain">
+        Training has a random element: the order examples are shuffled into. Three runs, the
+        same recipe, the same data, the same settings; only that shuffle differed. If the
+        method were stable, all three should land in roughly the same place.
       </p>
-    </div>
-
-    <div class="card">
-      <div class="scroll"><table>
+      <p data-mode="expert">
+        v3, v12 and v13 are the identical reference recipe under seeds 0, 1 and 2. Every other
+        variable is held.
+      </p>
+      <div class="tw"><table>
         <thead><tr>
           <th>Measure</th><th class="num">Run A</th><th class="num">Run B</th>
-          <th class="num">Run C</th><th class="num">Gap A→C</th>
+          <th class="num">Run C</th><th class="num">Gap A&rarr;C</th>
         </tr></thead>
         <tbody>
-          <tr><td>Made-up answers</td><td class="num">3.0%</td><td class="num">13.8%</td><td class="num">12.8%</td><td class="num big c-coral">10.8 pp</td></tr>
-          <tr><td>Refused things it knew</td><td class="num">61.5%</td><td class="num">43.0%</td><td class="num">58.0%</td><td class="num big c-coral">18.5 pp</td></tr>
-          <tr><td>Score on answerable</td><td class="num">29.0%</td><td class="num">41.0%</td><td class="num">32.5%</td><td class="num big c-coral">12.0 pp</td></tr>
+          <tr><td>Made-up answers</td><td class="num">3.0%</td><td class="num">13.8%</td><td class="num">12.8%</td><td class="num"><b>10.8 pp</b></td></tr>
+          <tr><td>Refused things it knew</td><td class="num">61.5%</td><td class="num">43.0%</td><td class="num">58.0%</td><td class="num"><b>18.5 pp</b></td></tr>
+          <tr><td>Score on answerable</td><td class="num">29.0%</td><td class="num">41.0%</td><td class="num">32.5%</td><td class="num"><b>12.0 pp</b></td></tr>
           <tr><td>Refused for the right reason</td><td class="num">51.0%</td><td class="num">59.7%</td><td class="num">59.3%</td><td class="num">8.7 pp</td></tr>
-          <tr><td>Confidence error</td><td class="num">17.4%</td><td class="num">10.0%</td><td class="num">22.7%</td><td class="num big c-coral">12.6 pp</td></tr>
+          <tr><td>Confidence error</td><td class="num">17.4%</td><td class="num">10.0%</td><td class="num">22.7%</td><td class="num"><b>12.6 pp</b></td></tr>
         </tbody>
       </table></div>
-      <p class="note">Nothing differed between these three runs except the random shuffle.</p>
-    </div>
+      <p class="cap">Nothing differed between these three runs except the random shuffle.</p>
 
-    <div class="flag">
-      <p class="fh" data-mode="plain">These two extra runs demolished my own headline chart</p>
-      <p class="fh" data-mode="expert">The replicates invalidated the curve they were built to support</p>
+      <div class="note">
+        <p class="kicker" data-mode="plain">These two extra runs demolished my own headline chart</p>
+        <p class="kicker" data-mode="expert">The replicates invalidated the curve they were built to support</p>
+        <p data-mode="plain">
+          Pure luck moves the refusal rate by <strong>18.5 points</strong>. Most of the
+          differences between the five models in the chart above are <em>smaller than
+          that</em>. So "50% refusal practice beats 25%" is not something this experiment can
+          claim. That gap is indistinguishable from the dice. Only the two extreme ends
+          separate for real.
+        </p>
+        <p data-mode="expert">
+          Seed alone moves over-refusal 18.5 pp and hallucination 10.8 pp. Most between-arm
+          gaps in v1&ndash;v5 are smaller. The ranking of 25 vs. 50 vs. 75% abstain is
+          therefore unresolvable at this scale; only the endpoints separate cleanly.
+        </p>
+      </div>
+
       <p data-mode="plain">
-        Pure luck moves the refusal rate by <strong>18.5 points</strong>. Most of
-        the differences between the five models in the chart above are
-        <em>smaller than that</em>. So &ldquo;50% refusal practice beats 25%&rdquo;
-        is not something this experiment can claim &mdash; that gap is
-        indistinguishable from the dice. Only the two extreme ends separate for
-        real.
+        Those two repeat runs were in the plan before any result existed, precisely because
+        they could do this. They produced no exciting number of their own. They are the
+        reason the other runs can be trusted at all. Cost: <strong>2.4 hours of GPU
+        time</strong>, about 13% of the training budget. That is the cheapest insurance in
+        this entire project.
       </p>
       <p data-mode="expert">
-        Seed alone moves over-refusal 18.5 pp and hallucination 10.8 pp. Most
-        between-arm gaps in v1&ndash;v5 are smaller. The ranking of 25 vs. 50 vs.
-        75% abstain is therefore unresolvable at this scale; only the endpoints
-        separate cleanly.
+        v12 and v13 were scheduled ahead of any result for exactly this purpose. Without a
+        noise floor, "mix A beats mix B by 4 points" is unfalsifiable and the whole curve
+        rests on gaps of that size. Cost: 2.4 GPU-hours, ~13% of the training budget.
       </p>
     </div>
+  </div>
+</div>
+</section>
 
-    <p data-mode="plain">
-      Those two repeat runs were in the plan before any result existed, precisely
-      because they could do this. They produced no exciting number of their own
-      &mdash; they are the reason the other twelve can be trusted at all. Cost:
-      <strong>2.4 hours of GPU time</strong>, about 13% of the training budget.
-      That is the cheapest insurance in this entire project.
-    </p>
-    <p data-mode="expert">
-      v12 and v13 were scheduled ahead of any result for exactly this purpose.
-      Without a noise floor, &ldquo;mix A beats mix B by 4 points&rdquo; is
-      unfalsifiable and the whole curve rests on gaps of that size. Cost: 2.4
-      GPU-hours, ~13% of the training budget.
-    </p>
-  </section>
-
-  <!-- ================= 6. scale ================= -->
-  <section id="scale">
-    <p class="eyebrow">Result · scale</p>
-    <h2 data-mode="plain">On a model twice the size, the trade almost disappears</h2>
-    <h2 data-mode="expert">The recipe holds at 3B — and only at 3B</h2>
-
-    <p data-mode="plain">
-      Same recipe, same training data, one bigger model (3 billion parameters
-      instead of 1.5). Each pair below is before and after training.
-    </p>
-    <p data-mode="expert">
-      Identical recipe and mix on Qwen2.5-3B, scored against its own 3B baselines.
-    </p>
-
-    <div class="stats two">
-      <div class="card" style="margin:0">
-        <p class="card-h">Small model (1.5B)</p>
-        <p class="card-s">The trade is brutal</p>
-        <svg id="c-15b" viewBox="0 0 350 240" role="img" aria-label="Small model: hallucination 95.5 to 3 percent, over-refusal 0 to 61.5 percent, accuracy 100 to 29 percent."></svg>
-      </div>
-      <div class="card" style="margin:0">
-        <p class="card-h">Bigger model (3B)</p>
-        <p class="card-s">The trade nearly vanishes</p>
-        <svg id="c-3b" viewBox="0 0 350 240" role="img" aria-label="Bigger model: hallucination 12.2 to 6.8 percent, over-refusal 0 to 9.6 percent, accuracy 41.5 to 45.5 percent."></svg>
-      </div>
+<section class="panel-sec" id="scale">
+<div class="console">
+  <div class="console-head"><span class="step-no">06</span><span class="caps">Scale</span></div>
+  <div class="console-body">
+    <div class="console-side">
+      <h2 data-mode="plain">On a model twice the size, the trade almost disappears</h2>
+      <h2 data-mode="expert">The recipe holds at 3B, and only at 3B</h2>
     </div>
-    <div class="key" style="margin-top:14px">
-      <span><i style="background:var(--ink-3)"></i>Before training</span>
-      <span><i style="background:var(--iris)"></i>After training</span>
-    </div>
-
-    <div class="flag win">
-      <p class="fh" data-mode="plain">This is the one that actually worked</p>
-      <p class="fh" data-mode="expert">At 3B, abstention stops being a trade</p>
+    <div class="console-main">
       <p data-mode="plain">
-        The bigger model cut its made-up answers roughly in half, refused wrongly
-        only <strong>9.6%</strong> of the time instead of 61.5%, and got
-        <em>better</em> at the questions it could answer rather than worse. It also
-        named the right reason for refusing 65% of the time, up from 11%. So the
-        small model&rsquo;s dismal result isn&rsquo;t &ldquo;this technique
-        doesn&rsquo;t work&rdquo; &mdash; it&rsquo;s that the small model
-        didn&rsquo;t have the room.
+        Same recipe, same training data, one bigger model (3 billion parameters instead of
+        1.5). Each pair below is before and after training.
       </p>
       <p data-mode="expert">
-        &minus;5.5 pp hallucination [&minus;8.5, &minus;2.5] while <em>gaining</em>
-        4.0 pp accuracy [&minus;4.4, +12.4], at 9.6 pp over-refusal versus 61.5 pp
-        at 1.5B. Abstention quality 11.1% &rarr; 64.6%, and calibration held at
-        base level (ECE 8.4% &rarr; 7.3%) &mdash; the only fine-tuned arm to
-        manage that. The 1.5B result is a capacity floor, not a refutation of the
-        method. Both claims are re-tested against a second seed below, and one of
-        them does not fully survive.
+        Identical recipe and mix on Qwen2.5-3B, scored against its own 3B baselines.
       </p>
-    </div>
+      <div class="two">
+        <div class="card">
+          <p class="card-h">Small model (1.5B)</p>
+          <p class="card-s">The trade is brutal</p>
+          <svg id="c-15b" viewBox="0 0 350 240" role="img" aria-label="Small model: hallucination 95.5 to 3 percent, over-refusal 0 to 61.5 percent, accuracy 100 to 29 percent."></svg>
+        </div>
+        <div class="card">
+          <p class="card-h">Bigger model (3B)</p>
+          <p class="card-s">The trade nearly vanishes</p>
+          <svg id="c-3b" viewBox="0 0 350 240" role="img" aria-label="Bigger model: hallucination 12.2 to 6.8 percent, over-refusal 0 to 9.6 percent, accuracy 41.5 to 45.5 percent."></svg>
+        </div>
+      </div>
+      <div class="legend">
+        <span><i style="background:var(--tide)"></i>Before training</span>
+        <span><i style="background:var(--cobalt)"></i>After training</span>
+      </div>
 
-    <h3 data-mode="plain">Then I ran it a second time, to be sure</h3>
-    <h3 data-mode="expert">Replication: seed 1 of the same 3B recipe</h3>
+      <div class="note win">
+        <p class="kicker" data-mode="plain">This is the one that actually worked</p>
+        <p class="kicker" data-mode="expert">At 3B, abstention stops being a trade</p>
+        <p data-mode="plain">
+          The bigger model cut its made-up answers roughly in half, refused wrongly only
+          <strong>9.6%</strong> of the time instead of 61.5%, and got <em>better</em> at the
+          questions it could answer rather than worse. It also named the right reason for
+          refusing 65% of the time, up from 11%. So the small model's dismal result isn't
+          "this technique doesn't work." It's that the small model didn't have the room.
+        </p>
+        <p data-mode="expert">
+          &minus;5.5 pp hallucination [&minus;8.5, &minus;2.5] while <em>gaining</em> 4.0 pp
+          accuracy [&minus;4.4, +12.4], at 9.6 pp over-refusal versus 61.5 pp at 1.5B.
+          Abstention quality 11.1% &rarr; 64.6%, and calibration held at base level (ECE 8.4%
+          &rarr; 7.3%), the only fine-tuned arm to manage that. The 1.5B result is a capacity
+          floor, not a refutation of the method. Both claims are re-tested against a second
+          seed below, and one of them does not fully survive.
+        </p>
+      </div>
 
-    <p data-mode="plain">
-      The section above says a single run can&rsquo;t be trusted &mdash; so this
-      result doesn&rsquo;t get to be an exception. Same recipe, same data, a
-      different random shuffle:
-    </p>
-    <p data-mode="expert">
-      <code>v14_seed1</code>: identical recipe under seed 1, scored against the
-      same 3B baselines.
-    </p>
-
-    <div class="card">
-      <div class="scroll"><table>
+      <h3 data-mode="plain">Then I ran it a second time, to be sure</h3>
+      <h3 data-mode="expert">Replication: seed 1 of the same 3B recipe</h3>
+      <p data-mode="plain">
+        The section above says a single run can't be trusted, so this result doesn't get to
+        be an exception. Same recipe, same data, a different random shuffle:
+      </p>
+      <p data-mode="expert">
+        <code>v14_seed1</code>: identical recipe under seed 1, scored against the same 3B
+        baselines.
+      </p>
+      <div class="tw"><table>
         <thead><tr>
           <th>Measure</th><th class="num">3B seed 0</th><th class="num">3B seed 1</th>
-          <th class="num">gap</th><th class="num">same gap at 1.5B</th>
+          <th class="num">Gap</th><th class="num">Same gap at 1.5B</th>
         </tr></thead>
         <tbody>
-          <tr><td>Made-up answers</td><td class="num">6.8%</td><td class="num">9.5%</td><td class="num big">2.7 pp</td><td class="num c-mute">10.8 pp</td></tr>
-          <tr><td>Refused things it knew</td><td class="num">9.6%</td><td class="num">7.2%</td><td class="num big">2.4 pp</td><td class="num c-mute">18.5 pp</td></tr>
-          <tr><td>Score on answerable</td><td class="num">45.5%</td><td class="num">49.5%</td><td class="num big">4.0 pp</td><td class="num c-mute">12.0 pp</td></tr>
-          <tr><td>Refused for the right reason</td><td class="num">64.6%</td><td class="num">64.9%</td><td class="num big">0.3 pp</td><td class="num c-mute">8.7 pp</td></tr>
-          <tr><td>Confidence error</td><td class="num">7.3%</td><td class="num">11.8%</td><td class="num lose-cell">4.5 pp</td><td class="num c-mute">12.6 pp</td></tr>
+          <tr><td>Made-up answers</td><td class="num">6.8%</td><td class="num">9.5%</td><td class="num"><b>2.7 pp</b></td><td class="num muted">10.8 pp</td></tr>
+          <tr><td>Refused things it knew</td><td class="num">9.6%</td><td class="num">7.2%</td><td class="num"><b>2.4 pp</b></td><td class="num muted">18.5 pp</td></tr>
+          <tr><td>Score on answerable</td><td class="num">45.5%</td><td class="num">49.5%</td><td class="num"><b>4.0 pp</b></td><td class="num muted">12.0 pp</td></tr>
+          <tr><td>Refused for the right reason</td><td class="num">64.6%</td><td class="num">64.9%</td><td class="num"><b>0.3 pp</b></td><td class="num muted">8.7 pp</td></tr>
+          <tr><td>Confidence error</td><td class="num">7.3%</td><td class="num">11.8%</td><td class="num">4.5 pp</td><td class="num muted">12.6 pp</td></tr>
         </tbody>
       </table></div>
-      <p class="note">Both 3B runs vs. the two 1.5B seed replicates of the reference recipe.</p>
-    </div>
+      <p class="cap">Both 3B runs vs. the two 1.5B seed replicates of the reference recipe.</p>
 
-    <div class="flag win">
-      <p class="fh" data-mode="plain">It held &mdash; and the stability is itself the finding</p>
-      <p class="fh" data-mode="expert">Replicated, with the 3B seed spread 4&ndash;7&times; tighter</p>
+      <div class="note win">
+        <p class="kicker" data-mode="plain">It held, and the stability is itself the finding</p>
+        <p class="kicker" data-mode="expert">Replicated, with the 3B seed spread 4&ndash;7&times; tighter</p>
+        <p data-mode="plain">
+          The second run lands in the same place. Where the small model swung
+          <strong>18.5 points</strong> on wrongful refusals between seeds, the bigger model
+          moves <strong>2.4</strong>. Seed 1 independently beat its own untrained baseline on
+          accuracy too (49.5% against 41.5%), by a wider margin than the first run managed.
+          So the wild instability at 1.5B isn't a property of this training recipe. It's a
+          property of being too small.
+        </p>
+        <p data-mode="expert">
+          Seed spread at 3B is 2.4&ndash;4.0 pp on the headline axes versus 10.8&ndash;18.5 pp
+          at 1.5B. Both seeds hold over-refusal in single digits and both gain accuracy over
+          <code>base_3b</code>. The instability is a capacity artifact, not a recipe artifact,
+          which strengthens the capacity-floor reading rather than merely failing to refute it.
+        </p>
+      </div>
+
+      <p class="small muted" data-mode="plain">
+        <strong>Two honest caveats.</strong> The drop in made-up answers was clear-cut on the
+        first run but not on the second: seed 1's margin of error just includes "no change,"
+        so that specific claim rests on one of the two runs. And the confidence-error result
+        <em>did</em> move: 7.3% on one seed, 11.8% on the other, so "calibration survived" is
+        weaker than it first looked. Both are exactly what a replicate is for.
+      </p>
+      <p class="small muted" data-mode="expert">
+        <strong>Two qualifications.</strong> Seed 1's hallucination delta is &minus;2.7 pp
+        [&minus;5.8, +0.3], the same direction as seed 0's &minus;5.5 pp [&minus;8.5,
+        &minus;2.5] but the CI crosses zero, so the hallucination reduction is significant in
+        one of two runs. ECE is the least stable axis (7.3% vs 11.8% against a base of 8.4%),
+        so "calibration did not degrade" is downgraded to "did not degrade on one seed, mildly
+        on the other." Over-refusal, abstention quality and accuracy all replicate cleanly.
+      </p>
+    </div>
+  </div>
+</div>
+</section>
+
+<section class="panel-sec" id="baseline">
+<div class="console">
+  <div class="console-head"><span class="step-no">07</span><span class="caps">The cheap control</span></div>
+  <div class="console-body">
+    <div class="console-side">
+      <h2 data-mode="plain">Could you skip all this and just ask it nicely?</h2>
+      <h2 data-mode="expert">Prompt-only control</h2>
+    </div>
+    <div class="console-main">
       <p data-mode="plain">
-        The second run lands in the same place. Where the small model swung
-        <strong>18.5 points</strong> on wrongful refusals between seeds, the
-        bigger model moves <strong>2.4</strong>. Seed 1 independently beat its
-        own untrained baseline on accuracy too &mdash; 49.5% against 41.5% &mdash;
-        by a wider margin than the first run managed. So the wild instability at
-        1.5B isn&rsquo;t a property of this training recipe. It&rsquo;s a
-        property of being too small.
+        Worth checking before spending 30 hours of computing: what if you simply
+        <em>instruct</em> the model to admit uncertainty, with no training at all?
       </p>
       <p data-mode="expert">
-        Seed spread at 3B is 2.4&ndash;4.0 pp on the headline axes versus
-        10.8&ndash;18.5 pp at 1.5B. Both seeds hold over-refusal in single digits
-        and both gain accuracy over <code>base_3b</code>. The instability is a
-        capacity artifact, not a recipe artifact &mdash; which strengthens the
-        capacity-floor reading rather than merely failing to refute it.
+        The zero-cost control: an abstention instruction in the system prompt, untrained weights.
       </p>
-    </div>
-
-    <p class="note">
-      <span data-mode="plain"><strong>Two honest caveats.</strong> The drop in
-      made-up answers was clear-cut on the first run but not on the second &mdash;
-      seed 1&rsquo;s margin of error just includes &ldquo;no change,&rdquo; so
-      that specific claim rests on one of the two runs. And the confidence-error
-      result <em>did</em> move: 7.3% on one seed, 11.8% on the other, so
-      &ldquo;calibration survived&rdquo; is weaker than it first looked. Both are
-      exactly what a replicate is for.</span>
-      <span data-mode="expert"><strong>Two qualifications.</strong> Seed 1&rsquo;s
-      hallucination delta is &minus;2.7 pp [&minus;5.8, +0.3] &mdash; same
-      direction as seed 0&rsquo;s &minus;5.5 pp [&minus;8.5, &minus;2.5] but the
-      CI crosses zero, so the hallucination reduction is significant in one of two
-      runs. ECE is the least stable axis (7.3% vs 11.8% against a base of 8.4%),
-      so &ldquo;calibration did not degrade&rdquo; is downgraded to &ldquo;did not
-      degrade on one seed, mildly on the other.&rdquo; Over-refusal, abstention
-      quality and accuracy all replicate cleanly.</span>
-    </p>
-  </section>
-
-  <!-- ================= 7. cheap baseline ================= -->
-  <section id="baseline">
-    <p class="eyebrow">Control</p>
-    <h2 data-mode="plain">Could you skip all this and just ask it nicely?</h2>
-    <h2 data-mode="expert">Prompt-only control</h2>
-
-    <p data-mode="plain">
-      Worth checking before spending 30 hours of computing: what if you simply
-      <em>instruct</em> the model to admit uncertainty, with no training at all?
-    </p>
-    <p data-mode="expert">
-      The zero-cost control: an abstention instruction in the system prompt,
-      untrained weights.
-    </p>
-
-    <div class="card">
-      <div class="scroll"><table id="t-base">
+      <div class="tw"><table id="t-base">
         <thead><tr>
           <th>Version</th><th class="num">Made-up</th><th class="num">Wrong refusals</th>
           <th class="num">Score</th><th class="num">Right reason</th><th class="num">Confidence error</th>
         </tr></thead>
         <tbody></tbody>
       </table></div>
-      <p class="note" data-mode="plain">
-        Asking nicely does help a bit &mdash; made-up answers fell about 16 points.
-        But it also cost 19 points of accuracy, and made the model&rsquo;s stated
-        confidence far less trustworthy. On the bigger model it made things
-        <em>worse</em>. And notice the &ldquo;right reason&rdquo; column: 0%. Prompted
-        models decline in vague prose without ever naming a usable reason.
+      <p data-mode="plain">
+        Asking nicely does help a bit: made-up answers fell about 16 points. But it also cost
+        19 points of accuracy, and made the model's stated confidence far less trustworthy.
+        On the bigger model it made things <em>worse</em>. And notice the "right reason"
+        column: 0%. Prompted models decline in vague prose without ever naming a usable reason.
       </p>
-      <p class="note" data-mode="expert">
-        Prompting buys a real &minus;16.5 pp [&minus;21.4, &minus;11.8] on
-        hallucination at 1.5B, at a cost of 19 pp accuracy and a near-tripled ECE.
-        At 3B it <em>raises</em> hallucination and blows ECE out to 47.0%.
-        Abstention quality is 0.0% for both prompt arms &mdash; prose declines that
-        never emit a valid reason code.
+      <p data-mode="expert">
+        Prompting buys a real &minus;16.5 pp [&minus;21.4, &minus;11.8] on hallucination at
+        1.5B, at a cost of 19 pp accuracy and a near-tripled ECE. At 3B it <em>raises</em>
+        hallucination and blows ECE out to 47.0%. Abstention quality is 0.0% for both prompt
+        arms: prose declines that never emit a valid reason code.
       </p>
     </div>
-  </section>
+  </div>
+</div>
+</section>
 
-  <!-- ================= 8. scatter ================= -->
-  <section id="map">
-    <p class="eyebrow">Every arm at once</p>
-    <h2 data-mode="plain">All 18 models on one map</h2>
-    <h2 data-mode="expert">The deliverable plot: both error axes</h2>
-
-    <p data-mode="plain">
-      Left-to-right is how often a model invents answers. Bottom-to-top is how
-      often it refuses things it knew. <strong>The bottom-left corner is where you
-      want to be</strong> &mdash; rarely wrong, rarely unhelpful. A single-number
-      report picks one dot out of this cloud and shows you only that.
-    </p>
-    <p data-mode="expert">
-      Hallucination (x) against over-refusal (y), every arm. The knee of this cloud
-      is the actual deliverable.
-    </p>
-
-    <div class="card">
-      <svg id="c-map" viewBox="0 0 740 430" role="img" aria-label="Scatter of all 18 arms. Untrained baselines sit at bottom right with high hallucination and no over-refusal. The 1.5B fine-tunes cluster at top left with low hallucination and high over-refusal. The 3B fine-tune sits alone near the bottom left corner, the desirable region."></svg>
-      <div class="key">
-        <span><i style="background:var(--ink-3)"></i>Untrained &amp; prompt-only</span>
-        <span><i style="background:var(--coral)"></i>Small-model fine-tunes</span>
-        <span><i style="background:var(--iris)"></i>Bigger model (3B)</span>
+<section class="panel-sec" id="map">
+<div class="console">
+  <div class="console-head"><span class="step-no">08</span><span class="caps">Every version at once</span></div>
+  <div class="console-body">
+    <div class="console-side">
+      <h2 data-mode="plain">All 19 versions on one map</h2>
+      <h2 data-mode="expert">The deliverable plot: both error axes, all 19 arms</h2>
+    </div>
+    <div class="console-main">
+      <p data-mode="plain">
+        Left-to-right is how often a version invents answers. Bottom-to-top is how often it
+        refuses things it knew. <strong>The bottom-left corner is where you want to
+        be</strong>: rarely wrong, rarely unhelpful. A single-number report picks one dot out
+        of this cloud and shows you only that.
+      </p>
+      <p data-mode="expert">
+        Hallucination (x) against over-refusal (y), every arm. The knee of this cloud is the
+        actual deliverable.
+      </p>
+      <div class="card">
+        <svg id="c-map" viewBox="0 0 740 430" role="img" aria-label="Scatter of all 19 arms. Untrained baselines sit at bottom right with high hallucination and no over-refusal. The 1.5B fine-tunes cluster at top left with low hallucination and high over-refusal. The two 3B fine-tunes sit near the bottom left corner, the desirable region."></svg>
+        <div class="legend">
+          <span><i style="background:var(--tide)"></i>Untrained &amp; prompt-only</span>
+          <span><i style="background:var(--ink)"></i>Small-model fine-tunes</span>
+          <span><i style="background:var(--cobalt)"></i>Bigger model (3B)</span>
+        </div>
+        <p class="cap">
+          Hover any dot for its name and exact rates.
+          <span data-mode="plain">The bottom-left corner is empty for every small model. That
+          emptiness <em>is</em> the finding. Only the bigger model gets near it.</span>
+          <span data-mode="expert">The empty bottom-left quadrant at 1.5B is the finding: no
+          1.5B recipe reached low hallucination <em>and</em> low over-refusal. Only the v14
+          arms approach it.</span>
+        </p>
       </div>
-      <p class="note">
-        Hover any dot for its name and exact rates.
-        <span data-mode="plain">The bottom-left corner is empty for every small
-        model &mdash; that emptiness <em>is</em> the finding. Only the bigger model
-        gets near it.</span>
-        <span data-mode="expert">The empty bottom-left quadrant at 1.5B is the
-        finding: no 1.5B recipe reached low hallucination <em>and</em> low
-        over-refusal. Only v14 approaches it.</span>
+      <div data-mode="expert" style="max-width:none">
+        <h3>All 19 arms</h3>
+        <p class="small muted">
+          Point estimate with 95% bootstrap CI, n=800 per arm. Shaded rows are the reference
+          recipe and its two seed replicates. Compare their spread before believing any gap
+          elsewhere in this table.
+        </p>
+        <div class="tw"><table id="t-all">
+          <thead><tr>
+            <th>Arm</th><th>Isolates</th><th class="num">Halluc.</th>
+            <th class="num">Over-ref.</th><th class="num">Acc.</th>
+            <th class="num">Abst. qual.</th><th class="num">ECE</th>
+          </tr></thead>
+          <tbody></tbody>
+        </table></div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<section class="panel-sec" id="ece">
+<div class="console">
+  <div class="console-head"><span class="step-no">09</span><span class="caps">Confidence</span></div>
+  <div class="console-body">
+    <div class="console-side">
+      <h2 data-mode="plain">When it says it's 90% sure, is it right 90% of the time?</h2>
+      <h2 data-mode="expert">Expected calibration error by arm</h2>
+    </div>
+    <div class="console-main">
+      <p data-mode="plain">
+        A model that says "90% confident" and is right 90% of the time is trustworthy even
+        when wrong, because you can plan around it. This chart shows how far each version's
+        stated confidence drifts from reality. Shorter is better. The dashed line is the
+        untrained model.
       </p>
-    </div>
-  </section>
-
-  <!-- ================= 9. full table (expert) ================= -->
-  <section id="all" data-mode="expert">
-    <p class="eyebrow">Appendix</p>
-    <h2>All 18 arms</h2>
-    <p>Point estimate with 95% bootstrap CI, n=800 per arm. Shaded rows are the reference recipe and its two seed replicates &mdash; compare their spread before believing any gap elsewhere in this table.</p>
-    <div class="card">
-      <div class="scroll"><table id="t-all">
-        <thead><tr>
-          <th>Arm</th><th>Isolates</th><th class="num">Halluc.</th>
-          <th class="num">Over-ref.</th><th class="num">Acc.</th>
-          <th class="num">Abst. qual.</th><th class="num">ECE</th>
-        </tr></thead>
-        <tbody></tbody>
-      </table></div>
-    </div>
-  </section>
-
-  <!-- ================= 10. calibration ================= -->
-  <section id="ece">
-    <p class="eyebrow">Confidence</p>
-    <h2 data-mode="plain">When it says it&rsquo;s 90% sure, is it right 90% of the time?</h2>
-    <h2 data-mode="expert">Expected calibration error by arm</h2>
-
-    <p data-mode="plain">
-      A model that says &ldquo;90% confident&rdquo; and is right 90% of the time is
-      trustworthy even when wrong, because you can plan around it. This bar shows
-      how far each version&rsquo;s stated confidence drifts from reality &mdash;
-      shorter is better. The dashed line is the untrained model.
-    </p>
-    <p data-mode="expert">
-      ECE per arm; the dashed line is the untrained 1.5B base at 7.3%.
-    </p>
-
-    <div class="card">
-      <svg id="c-ece" viewBox="0 0 740 330" role="img" aria-label="Bar chart of confidence error by arm. The untrained base is lowest among small models at 7.3 percent, most fine-tunes land between 10 and 32 percent, the prompt-only 3B arm is worst at 47 percent, and the 3B fine-tune matches the base at 7.3 percent."></svg>
-      <p class="note" data-mode="plain">
-        Almost every trained small model came out <em>less</em> trustworthy about
-        its own confidence than the model it started from &mdash; an easy cost to
-        miss if you only track wrong answers. The one exception is the bigger model,
-        which held its ground. The two worst bars are the prompt-only versions: told
+      <p data-mode="expert">ECE per arm; the dashed line is the untrained 1.5B base at 7.3%.</p>
+      <div class="card">
+        <svg id="c-ece" viewBox="0 0 740 330" role="img" aria-label="Bar chart of confidence error by arm. The untrained base is lowest among small models at 7.3 percent, most fine-tunes land between 10 and 32 percent, the prompt-only 3B arm is worst at 47 percent, and the first 3B fine-tune matches the base at 7.3 percent."></svg>
+        <div class="legend">
+          <span><i style="background:var(--tide)"></i>Untrained &amp; prompt-only</span>
+          <span><i style="background:var(--ink)"></i>Small-model fine-tunes</span>
+          <span><i style="background:var(--cobalt)"></i>Bigger model (3B)</span>
+        </div>
+      </div>
+      <p data-mode="plain">
+        Almost every trained small model came out <em>less</em> trustworthy about its own
+        confidence than the model it started from, an easy cost to miss if you only track
+        wrong answers. The bigger model held its ground on its first run (7.3%) and slipped a
+        little on its second (11.8%). The two worst bars are the prompt-only versions: told
         to express uncertainty, they express it almost at random.
       </p>
-      <p class="note" data-mode="expert">
-        Every 1.5B fine-tune degraded calibration relative to base (+7 to +9 pp,
-        CIs excluding zero). Only v14 at 3B matched base-level ECE while also
-        abstaining well. Prompt-only arms are worst by a wide margin &mdash; 47.0%
-        at 3B, i.e. stated confidence that actively misleads.
+      <p data-mode="expert">
+        Every 1.5B fine-tune degraded calibration relative to base (+7 to +9 pp, CIs excluding
+        zero). Only v14 at 3B matched base-level ECE while also abstaining well; its seed-1
+        replicate landed at 11.8%. Prompt-only arms are worst by a wide margin, 47.0% at 3B,
+        i.e. stated confidence that actively misleads.
       </p>
     </div>
-  </section>
+  </div>
+</div>
+</section>
 
-  <!-- ================= 11. compute ================= -->
-  <section id="compute">
-    <p class="eyebrow">Cost</p>
-    <h2 data-mode="plain">What it took to run, and what it would have cost to rent</h2>
-    <h2 data-mode="expert">Compute budget</h2>
-
-    <p data-mode="plain">
-      All of this ran on free graphics cards from Kaggle, which cuts you off every
-      9 hours &mdash; so the whole pipeline had to survive being killed and resumed.
-    </p>
-    <p data-mode="expert">
-      Free-tier Kaggle T4s, 9-hour session cap, three sessions. Every stage is
-      resumable by design.
-    </p>
-
-    <div class="stats four">
-      <div class="stat">
-        <div class="lab">GPU time</div><div class="n">31.2 h</div>
-        <div class="foot">Tesla T4, free tier</div>
-      </div>
-      <div class="stat">
-        <div class="lab">Cash spent</div><div class="n c-good">$0.00</div>
-        <div class="foot">~$16 to rent</div>
-      </div>
-      <div class="stat">
-        <div class="lab">Answers generated</div><div class="n">143,200</div>
-        <div class="foot">128k probe + 15.2k exam</div>
-      </div>
-      <div class="stat">
-        <div class="lab">Weights trained</div><div class="n">18.5 M</div>
-        <div class="foot">1.2% of the model</div>
-      </div>
+<section class="panel-sec" id="data">
+<div class="console">
+  <div class="console-head"><span class="step-no">10</span><span class="caps">The exam</span></div>
+  <div class="console-body">
+    <div class="console-side">
+      <h2 data-mode="plain">What the 800 questions actually look like</h2>
+      <h2 data-mode="expert">Eval composition and training mixes</h2>
     </div>
-
-    <h3>Where the time went</h3>
-    <div class="card">
-      <svg id="c-stage" viewBox="0 0 740 200" role="img" aria-label="Bars of GPU hours by stage: training 18.7, probe 7.5, generation 4, scoring 0.4 on CPU, previews 0.2."></svg>
-      <div class="scroll"><table>
-        <thead><tr><th>Stage</th><th data-mode="expert">Session</th><th>Hardware</th><th class="num">Time</th><th class="num">Share</th></tr></thead>
-        <tbody>
-          <tr><td><span data-mode="plain">Finding out what it knows</span><span data-mode="expert">Probe (k=16 labeling)</span></td><td data-mode="expert">1</td><td>T4 GPU</td><td class="num">~7.5 h</td><td class="num">24.0%</td></tr>
-          <tr><td><span data-mode="plain">Training 15 versions</span><span data-mode="expert">Training — 15 LoRA adapters</span></td><td data-mode="expert">1 + 2 + 4</td><td>T4 GPU</td><td class="num">~19.3 h</td><td class="num">61.9%</td></tr>
-          <tr><td><span data-mode="plain">Sitting the exam, 19 times</span><span data-mode="expert">Generation — 19 arms × 800</span></td><td data-mode="expert">3 + 4</td><td>T4 GPU</td><td class="num">~4.2 h</td><td class="num">13.5%</td></tr>
-          <tr><td><span data-mode="plain">Marking the exam</span><span data-mode="expert">Scoring — metrics, CIs, curve</span></td><td data-mode="expert">3 + local</td><td>CPU only</td><td class="num">~0.4 h</td><td class="num">—</td></tr>
-          <tr><td><span data-mode="plain">Cheap preview runs</span><span data-mode="expert">Budget previews (v15–v17)</span></td><td data-mode="expert">extra</td><td>T4 GPU</td><td class="num">~0.2 h</td><td class="num">0.7%</td></tr>
-        </tbody>
-      </table></div>
-      <p class="note">
-        <span data-mode="plain">Marking needs no graphics card at all &mdash; which
-        is what saved this write-up when the session log came back unreadable. Every
-        number on this page was recomputed on a laptop from the saved answers.</span>
-        <span data-mode="expert">Scoring is CPU-only by design and reruns identically
-        from saved generations &mdash; which is exactly how these numbers were
-        produced after the final session's log came back unreadable.</span>
-      </p>
-    </div>
-
-    <h3>Training time per version</h3>
-    <div class="card">
-      <svg id="c-run" viewBox="0 0 740 380" role="img" aria-label="Bars of training minutes per run, from 36 minutes for the shortest to 157 minutes for the 3B run."></svg>
-      <div class="scroll"><table id="t-run">
-        <thead><tr>
-          <th>Run</th><th data-mode="expert">Training data</th><th class="num">Examples</th>
-          <th class="num" data-mode="expert">Epochs</th><th class="num" data-mode="expert">Steps</th>
-          <th class="num">GPU time</th>
-        </tr></thead>
-        <tbody></tbody>
-      </table></div>
-      <p class="note">
-        Derived, not stopwatch-measured: the final session's log was unrecoverable
-        at write-up time, so per-run times are reconstructed from step counts &times; the
-        measured 3.3 s/step rate &mdash; validated against the reference run, whose
-        1,298 steps took the ~1 h its config predicts. The two 3B rows are
-        <strong>measured, not derived</strong>: the seed-1 replicate was timed at
-        97.1 min for 1,298 steps (4.49 s/step, a 1.36&times; slowdown over 1.5B).
-        An earlier version of this page assumed 2.2&times; and overstated those
-        rows by ~60 min each.
-      </p>
-    </div>
-
-    <h3>What the honesty cost</h3>
-    <div class="card">
-      <div class="scroll"><table>
-        <thead><tr><th>Approach</th><th class="num">Compute</th><th class="num">Cost</th><th>What you get</th></tr></thead>
-        <tbody>
-          <tr class="mark"><td>This project, free tier</td><td class="num">31.2 h</td><td class="num big c-good">$0.00</td><td class="wrap-c">19 arms, both error directions, intervals, two noise floors</td></tr>
-          <tr><td>Same work, rented T4</td><td class="num">31.2 h</td><td class="num">~$17</td><td class="wrap-c">Identical, minus the 9-hour session juggling</td></tr>
-          <tr><td>Same work, rented A100</td><td class="num">~7 h</td><td class="num">~$14</td><td class="wrap-c">Identical, about 4&times; faster</td></tr>
-          <tr><td>Shortest path to the headline</td><td class="num">~9.2 h</td><td class="num">$0.00</td><td class="wrap-c">One model, two exam arms &mdash; &ldquo;&minus;92% hallucinations&rdquo;, with no way to know it&rsquo;s noise</td></tr>
-        </tbody>
-      </table></div>
-      <p class="note">
-        Rental figures use on-demand list prices (~$0.53/h T4, ~$2/h A100) for scale
-        only. The real comparison is the last row: the full study cost about
-        <strong>3.3&times;</strong> the shortest path to a publishable number &mdash;
-        and those extra 21 GPU-hours are the only reason it&rsquo;s knowable that the
-        headline&rsquo;s between-arm gaps sit inside the noise.
-      </p>
-    </div>
-  </section>
-
-  <!-- ================= 12. data ================= -->
-  <section id="data">
-    <p class="eyebrow">The exam</p>
-    <h2 data-mode="plain">What the 800 questions actually look like</h2>
-    <h2 data-mode="expert">Eval composition</h2>
-
-    <div class="stats two">
-      <div class="card" style="margin:0">
-        <p class="card-h">Four kinds of question, 200 each</p>
-        <p class="card-s" data-mode="plain">Balanced on purpose, so no single category can dominate a score</p>
-        <p class="card-s" data-mode="expert">Stratified 200/200/200/200</p>
-        <svg id="c-eval" viewBox="0 0 350 220" role="img" aria-label="Bar chart: 200 items each of answerable, unknown, borderline and defective."></svg>
+    <div class="console-main">
+      <div class="two">
+        <div class="card">
+          <p class="card-h">Four kinds of question, 200 each</p>
+          <p class="card-s" data-mode="plain">Balanced on purpose, so no single category can dominate a score</p>
+          <p class="card-s" data-mode="expert">Stratified 200/200/200/200</p>
+          <svg id="c-eval" viewBox="0 0 350 220" role="img" aria-label="Bar chart: 200 items each of answerable, unknown, borderline and defective."></svg>
+        </div>
+        <div class="card">
+          <p class="card-h">Why a question is unanswerable</p>
+          <p class="card-s" data-mode="plain">The refusal has to name which of these it is</p>
+          <p class="card-s" data-mode="expert">Reason distribution across abstain items</p>
+          <svg id="c-why" viewBox="0 0 350 220" role="img" aria-label="Bar chart of reasons: unknown 200, false premise 56, missing context 51, after cutoff 50, ambiguous 43."></svg>
+        </div>
       </div>
-      <div class="card" style="margin:0">
-        <p class="card-h">Why a question is unanswerable</p>
-        <p class="card-s" data-mode="plain">The refusal has to name which of these it is</p>
-        <p class="card-s" data-mode="expert">Reason distribution across abstain items</p>
-        <svg id="c-why" viewBox="0 0 350 220" role="img" aria-label="Bar chart of reasons: unknown 200, false premise 56, missing context 51, after cutoff 50, ambiguous 43."></svg>
+
+      <div class="note" data-mode="plain">
+        <p class="kicker">What the four categories mean</p>
+        <p>
+          <strong>Answerable</strong>: the model demonstrably knows this.
+          <strong>Unknown</strong>: it doesn't, and no amount of thinking will help.
+          <strong>Borderline</strong>: it gets this right sometimes, the hardest case to handle
+          well. <strong>Defective</strong>: the question itself is broken. It assumes something
+          false, leaves out what you'd need, or is too vague to have one answer. A good model
+          spots the difference and says which.
+        </p>
       </div>
-    </div>
 
-    <div class="plainbox" data-mode="plain">
-      <p class="ph">What the four categories mean</p>
-      <p>
-        <strong>Answerable</strong> &mdash; the model demonstrably knows this.
-        <strong>Unknown</strong> &mdash; it doesn&rsquo;t, and no amount of thinking
-        will help. <strong>Borderline</strong> &mdash; it gets this right sometimes,
-        the hardest case to handle well. <strong>Defective</strong> &mdash; the
-        question itself is broken: it assumes something false, leaves out what you&rsquo;d
-        need, or is too vague to have one answer. A good model spots the difference
-        and says which.
-      </p>
-    </div>
-
-    <div class="card">
-      <p class="card-h">Training mixes</p>
-      <p class="card-s">Same labeled pool resampled at five ratios of refusal to answer</p>
-      <div class="scroll"><table>
+      <h3>Training mixes</h3>
+      <p class="small muted">The same labeled pool resampled at five ratios of refusal to answer.</p>
+      <div class="tw"><table>
         <thead><tr>
           <th>Mix</th><th class="num">Refusal share</th><th class="num">Rows</th>
           <th class="num" data-mode="expert">After 5% val split</th><th class="num" data-mode="expert">Steps @ 2 ep</th>
@@ -1092,136 +1087,270 @@
         <tbody>
           <tr><td>mix_10_90</td><td class="num">10%</td><td class="num">6,066</td><td class="num" data-mode="expert">5,762</td><td class="num" data-mode="expert">722</td></tr>
           <tr><td>mix_25_75</td><td class="num">25%</td><td class="num">7,280</td><td class="num" data-mode="expert">6,916</td><td class="num" data-mode="expert">866</td></tr>
-          <tr class="mark"><td>mix_50_50 <span class="c-mute">(reference)</span></td><td class="num">50%</td><td class="num">10,920</td><td class="num" data-mode="expert">10,374</td><td class="num" data-mode="expert">1,298</td></tr>
+          <tr class="hl"><td>mix_50_50 <span class="muted">(reference)</span></td><td class="num">50%</td><td class="num">10,920</td><td class="num" data-mode="expert">10,374</td><td class="num" data-mode="expert">1,298</td></tr>
           <tr><td>mix_75_25</td><td class="num">75%</td><td class="num">19,574</td><td class="num" data-mode="expert">18,595</td><td class="num" data-mode="expert">2,326</td></tr>
           <tr><td>mix_90_10</td><td class="num">90%</td><td class="num">16,312</td><td class="num" data-mode="expert">15,496</td><td class="num" data-mode="expert">1,938</td></tr>
           <tr><td>mix_50_50_bare</td><td class="num">50%</td><td class="num">10,920</td><td class="num" data-mode="expert">10,374</td><td class="num" data-mode="expert">1,298</td></tr>
         </tbody>
       </table></div>
-      <p class="note">
-        Source pool: 8,000 TriviaQA questions with gold alias sets.
-        <code>mix_50_50_bare</code> is the ablation twin of the reference &mdash;
-        identical items, refusals stripped of their named reason.
+      <p class="cap">
+        Source pool: 8,000 TriviaQA questions with gold alias sets. <code>mix_50_50_bare</code>
+        is the ablation twin of the reference: identical items, refusals stripped of their
+        named reason.
       </p>
     </div>
-  </section>
+  </div>
+</div>
+</section>
 
-  <!-- ================= 13. engineering ================= -->
-  <section id="eng">
-    <p class="eyebrow">Engineering</p>
-    <h2 data-mode="plain">The hard part wasn&rsquo;t the AI</h2>
-    <h2 data-mode="expert">The parts that weren't the model</h2>
+<section class="panel-sec" id="compute">
+<div class="console">
+  <div class="console-head"><span class="step-no">11</span><span class="caps">Cost</span></div>
+  <div class="console-body">
+    <div class="console-side">
+      <h2 data-mode="plain">What it took to run, and what it would have cost to rent</h2>
+      <h2 data-mode="expert">Compute budget</h2>
+    </div>
+    <div class="console-main">
+      <p data-mode="plain">
+        All of this ran on free graphics cards from Kaggle, which cuts you off every 9 hours,
+        so the whole pipeline had to survive being killed and resumed.
+      </p>
+      <p data-mode="expert">
+        Free-tier Kaggle T4s, 9-hour session cap, four sessions. Every stage is resumable by design.
+      </p>
+      <div class="stats">
+        <div class="stat"><div class="lab">GPU time</div><div class="n">31.2 h</div><div class="foot">Tesla T4, free tier</div></div>
+        <div class="stat"><div class="lab">Cash spent</div><div class="n">$0.00</div><div class="foot">~$17 to rent</div></div>
+        <div class="stat"><div class="lab">Answers generated</div><div class="n">143,200</div><div class="foot">128k probe + 15.2k exam</div></div>
+        <div class="stat"><div class="lab">Weights trained</div><div class="n">18.5 M</div><div class="foot">1.2% of the model</div></div>
+      </div>
 
-    <p data-mode="plain">
-      Most of the work went into making a 30-hour experiment survive a free service
-      that shuts the machine off every 9 hours.
-    </p>
-    <p data-mode="expert">
-      Most of the effort was making a 30-GPU-hour experiment survive a 9-hour
-      session cap.
-    </p>
+      <h3>Where the time went</h3>
+      <div class="card">
+        <svg id="c-stage" viewBox="0 0 740 200" role="img" aria-label="Bars of hours by stage: training 19.3, probe 7.5, exam runs 4.2, marking 0.4 on CPU, previews 0.2."></svg>
+        <div class="tw"><table>
+          <thead><tr><th>Stage</th><th data-mode="expert">Session</th><th>Hardware</th><th class="num">Time</th><th class="num">Share</th></tr></thead>
+          <tbody>
+            <tr><td><span data-mode="plain">Finding out what it knows</span><span data-mode="expert">Probe (k=16 labeling)</span></td><td data-mode="expert">1</td><td>T4 GPU</td><td class="num">~7.5 h</td><td class="num">24.0%</td></tr>
+            <tr><td><span data-mode="plain">Training 15 versions</span><span data-mode="expert">Training: 15 LoRA adapters</span></td><td data-mode="expert">1 + 2 + 4</td><td>T4 GPU</td><td class="num">~19.3 h</td><td class="num">61.9%</td></tr>
+            <tr><td><span data-mode="plain">Sitting the exam, 19 times</span><span data-mode="expert">Generation: 19 arms &times; 800</span></td><td data-mode="expert">3 + 4</td><td>T4 GPU</td><td class="num">~4.2 h</td><td class="num">13.5%</td></tr>
+            <tr><td><span data-mode="plain">Marking the exam</span><span data-mode="expert">Scoring: metrics, CIs, curve</span></td><td data-mode="expert">3 + local</td><td>CPU only</td><td class="num">~0.4 h</td><td class="num">n/a</td></tr>
+            <tr><td><span data-mode="plain">Cheap preview runs</span><span data-mode="expert">Budget previews (v15&ndash;v17)</span></td><td data-mode="expert">extra</td><td>T4 GPU</td><td class="num">~0.2 h</td><td class="num">0.7%</td></tr>
+          </tbody>
+        </table></div>
+        <p class="cap">
+          <span data-mode="plain">Marking needs no graphics card at all, which is what saved
+          this write-up when the session log came back unreadable. Every number on this page
+          was recomputed on a laptop from the saved answers.</span>
+          <span data-mode="expert">Scoring is CPU-only by design and reruns identically from
+          saved generations, which is exactly how these numbers were produced after the final
+          session's log came back unreadable.</span>
+        </p>
+      </div>
 
-    <ul class="body">
-      <li>
-        <strong>Nothing finished is ever lost.</strong>
-        <span data-mode="plain">Every stage saves as it goes and picks up where it
-        died &mdash; mid-question, mid-run. A half-written result is renamed into
-        place only once it&rsquo;s complete, so a partial run can never be marked as
-        a real one.</span>
-        <span data-mode="expert">Every stage writes as it runs and resumes from the
-        exact item it died on; partial output lands in <code>responses.partial</code>
-        and is atomically renamed only when complete, so a truncated arm can never be
-        scored as whole.</span>
-      </li>
-      <li>
-        <strong>A crash can&rsquo;t take the session with it.</strong>
-        <span data-mode="plain">One failed run doesn&rsquo;t destroy the eleven that
-        already worked &mdash; &ldquo;run everything again&rdquo; is always the right
-        button, however many attempts it takes.</span>
-        <span data-mode="expert">Failures are contained per stage; the rest of the
-        notebook, including the save cell, still runs. Finished work is skipped on
-        rerun.</span>
-      </li>
-      <li>
-        <strong>The exam is sealed with a lock file</strong>, so no later run can
-        quietly contaminate the numbers being reported.
-      </li>
-      <li>
-        <strong>One table generates every configuration</strong>
-        <span data-mode="plain">&mdash; so &ldquo;only one thing changed between
-        these two runs&rdquo; is guaranteed by the code, not by my memory.</span>
-        <span data-mode="expert">&mdash; 17 YAMLs from one <code>RUNS</code> list, making
-        single-variable isolation structural rather than manual.</span>
-      </li>
-      <li>
-        <strong>Marking runs on any laptop</strong>
-        <span data-mode="plain">from the saved answers, with no graphics card. That
-        is what rescued this page when the final session returned an empty
-        log.</span>
-        <span data-mode="expert">&mdash; CPU-only scoring, reproducible from saved
-        generations, which recovered all 18 arms when the kernel log was unreadable.</span>
-      </li>
-      <li>
-        <strong>Cheap preview runs.</strong>
-        <span data-mode="plain">A step limit gives a 3-minute look at where a run is
-        heading before committing an hour of a 9-hour window to it.</span>
-        <span data-mode="expert">A <code>max_steps</code> cap yields ~3-minute
-        directional previews before spending a full hour of session budget.</span>
-      </li>
-    </ul>
-  </section>
+      <h3>Training time per version</h3>
+      <div class="card">
+        <svg id="c-run" viewBox="0 0 740 380" role="img" aria-label="Bars of training minutes per run, from 36 minutes for the shortest to 128 minutes for the longest."></svg>
+        <div class="tw"><table id="t-run">
+          <thead><tr>
+            <th>Run</th><th data-mode="expert">Training data</th><th class="num">Examples</th>
+            <th class="num" data-mode="expert">Epochs</th><th class="num" data-mode="expert">Steps</th>
+            <th class="num">GPU time</th>
+          </tr></thead>
+          <tbody></tbody>
+        </table></div>
+        <p class="cap">
+          <span data-mode="plain">These times are worked out, not stopwatch-measured: the last
+          session's log was lost, so each 1.5B run's time is its step count times the measured
+          speed of 3.3 seconds per step. That speed was checked against the reference run.
+          The two 3B rows <strong>were measured</strong>: 97.1 minutes for 1,298 steps. An
+          earlier version of this page guessed the 3B model was 2.2&times; slower and
+          overstated those rows by about an hour each.</span>
+          <span data-mode="expert">Derived, not stopwatch-measured: the final session's log
+          was unrecoverable at write-up time, so per-run times are reconstructed from step
+          counts &times; the measured 3.3 s/step rate, validated against the reference run,
+          whose 1,298 steps took the ~1 h its config predicts. The two 3B rows are
+          <strong>measured, not derived</strong>: the seed-1 replicate was timed at 97.1 min
+          for 1,298 steps (4.49 s/step, a 1.36&times; slowdown over 1.5B). An earlier version
+          of this page assumed 2.2&times; and overstated those rows by ~60 min each.</span>
+        </p>
+      </div>
 
-  <!-- ================= 14. takeaways ================= -->
-  <section id="end">
-    <p class="eyebrow">What I&rsquo;d tell someone starting this</p>
-    <h2 data-mode="plain">Four things I&rsquo;d do again</h2>
-    <h2 data-mode="expert">Takeaways</h2>
-    <ul class="body">
-      <li>
-        <strong>Budget for repeat runs before extra experiments.</strong>
-        <span data-mode="plain">Two runs that produced no new headline &mdash; 13% of
-        the training budget &mdash; were the difference between a real finding and a
-        convincing-looking artifact.</span>
-        <span data-mode="expert">Seed replicates at 13% of the training budget were
-        the difference between a curve and a plausible artifact.</span>
-      </li>
-      <li>
-        <strong>Report the axis that makes the result look bad.</strong>
-        <span data-mode="plain">The 92% improvement and the 61.5% wrongful-refusal
-        rate are the same model.</span>
-        <span data-mode="expert">&minus;92.5 pp hallucination and +61.5 pp
-        over-refusal are the same checkpoint.</span>
-      </li>
-      <li>
-        <strong>Try the free version first.</strong>
-        <span data-mode="plain">Just asking the model nicely got a real chunk of the
-        improvement for zero compute &mdash; and cost 19 points of accuracy, which
-        only a two-sided test would ever reveal.</span>
-        <span data-mode="expert">The prompt-only control captured 16.5 pp of the
-        hallucination win at zero GPU cost, at &minus;19 pp accuracy &mdash; visible
-        only on a two-axis eval.</span>
-      </li>
-      <li>
-        <strong>Model size can be the whole story.</strong>
-        <span data-mode="plain">The small-model conclusion (&ldquo;this trade
-        isn&rsquo;t worth it&rdquo;) flips on the bigger one. Testing a single size
-        would have published the wrong general claim.</span>
-        <span data-mode="expert">The 1.5B conclusion reverses at 3B; a single-size
-        study would have generalised the wrong finding.</span>
-      </li>
-    </ul>
-  </section>
+      <h3>What the honesty cost</h3>
+      <div class="tw"><table>
+        <thead><tr><th>Approach</th><th class="num">Compute</th><th class="num">Cost</th><th>What you get</th></tr></thead>
+        <tbody>
+          <tr class="hl"><td>This project, free tier</td><td class="num">31.2 h</td><td class="num"><b>$0.00</b></td><td class="why">19 arms, both error directions, intervals, two noise floors</td></tr>
+          <tr><td>Same work, rented T4</td><td class="num">31.2 h</td><td class="num">~$17</td><td class="why">Identical, minus the 9-hour session juggling</td></tr>
+          <tr><td>Same work, rented A100</td><td class="num">~7 h</td><td class="num">~$14</td><td class="why">Identical, about 4&times; faster</td></tr>
+          <tr><td>Shortest path to the headline</td><td class="num">~9.2 h</td><td class="num">$0.00</td><td class="why">One model, two exam arms: "&minus;92% hallucinations", with no way to know it's noise</td></tr>
+        </tbody>
+      </table></div>
+      <p class="cap">
+        Rental figures use on-demand list prices (~$0.53/h T4, ~$2/h A100) for scale only. The
+        real comparison is the last row: the full study cost about <strong>3.3&times;</strong>
+        the shortest path to a publishable number, and those extra 21 GPU-hours are the only
+        reason it's knowable that the headline's between-arm gaps sit inside the noise.
+      </p>
+    </div>
+  </div>
+</div>
+</section>
 
+<section class="panel-sec" id="eng">
+<div class="console">
+  <div class="console-head"><span class="step-no">12</span><span class="caps">Engineering</span></div>
+  <div class="console-body">
+    <div class="console-side">
+      <h2 data-mode="plain">The hard part wasn't the AI</h2>
+      <h2 data-mode="expert">The parts that weren't the model</h2>
+    </div>
+    <div class="console-main">
+      <p data-mode="plain">
+        Most of the work went into making a 30-hour experiment survive a free service that
+        shuts the machine off every 9 hours.
+      </p>
+      <p data-mode="expert">
+        Most of the effort was making a 30-GPU-hour experiment survive a 9-hour session cap.
+      </p>
+      <ul>
+        <li>
+          <strong>Nothing finished is ever lost.</strong>
+          <span data-mode="plain">Every stage saves as it goes and picks up where it died,
+          mid-question or mid-run. A half-written result is renamed into place only once it's
+          complete, so a partial run can never be marked as a real one.</span>
+          <span data-mode="expert">Every stage writes as it runs and resumes from the exact
+          item it died on; partial output lands in <code>responses.partial</code> and is
+          atomically renamed only when complete, so a truncated arm can never be scored as
+          whole.</span>
+        </li>
+        <li>
+          <strong>A crash can't take the session with it.</strong>
+          <span data-mode="plain">One failed run doesn't destroy the ones that already
+          worked. "Run everything again" is always the right button, however many attempts it
+          takes.</span>
+          <span data-mode="expert">Failures are contained per stage; the rest of the
+          notebook, including the save cell, still runs. Finished work is skipped on
+          rerun.</span>
+        </li>
+        <li>
+          <strong>The exam is sealed with a lock file</strong>, so no later run can quietly
+          contaminate the numbers being reported.
+        </li>
+        <li>
+          <strong>One table generates every configuration</strong>,
+          <span data-mode="plain">so "only one thing changed between these two runs" is
+          guaranteed by the code, not by my memory.</span>
+          <span data-mode="expert">17 YAMLs from one <code>RUNS</code> list, making
+          single-variable isolation structural rather than manual.</span>
+        </li>
+        <li>
+          <strong>Marking runs on any laptop</strong>
+          <span data-mode="plain">from the saved answers, with no graphics card. That is what
+          rescued this page when the final session returned an empty log.</span>
+          <span data-mode="expert">with CPU-only scoring, reproducible from saved generations,
+          which recovered all 19 arms when the kernel log was unreadable.</span>
+        </li>
+        <li>
+          <strong>Cheap preview runs.</strong>
+          <span data-mode="plain">A step limit gives a 3-minute look at where a run is heading
+          before committing an hour of a 9-hour window to it.</span>
+          <span data-mode="expert">A <code>max_steps</code> cap yields ~3-minute directional
+          previews before spending a full hour of session budget.</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+</section>
+
+<section class="panel-sec" id="end">
+<div class="console">
+  <div class="console-head"><span class="step-no">13</span><span class="caps">Takeaways</span></div>
+  <div class="console-body">
+    <div class="console-side">
+      <h2 data-mode="plain">Four things I'd do again</h2>
+      <h2 data-mode="expert">Takeaways</h2>
+    </div>
+    <div class="console-main">
+      <ul>
+        <li>
+          <strong>Budget for repeat runs before extra experiments.</strong>
+          <span data-mode="plain">Two runs that produced no new headline, 13% of the training
+          budget, were the difference between a real finding and a convincing-looking
+          artifact.</span>
+          <span data-mode="expert">Seed replicates at 13% of the training budget were the
+          difference between a curve and a plausible artifact.</span>
+        </li>
+        <li>
+          <strong>Report the axis that makes the result look bad.</strong>
+          <span data-mode="plain">The 92% improvement and the 61.5% wrongful-refusal rate are
+          the same model.</span>
+          <span data-mode="expert">&minus;92.5 pp hallucination and +61.5 pp over-refusal are
+          the same checkpoint.</span>
+        </li>
+        <li>
+          <strong>Try the free version first.</strong>
+          <span data-mode="plain">Just asking the model nicely got a real chunk of the
+          improvement for zero compute, and cost 19 points of accuracy, which only a two-sided
+          test would ever reveal.</span>
+          <span data-mode="expert">The prompt-only control captured 16.5 pp of the
+          hallucination win at zero GPU cost, at &minus;19 pp accuracy, visible only on a
+          two-axis eval.</span>
+        </li>
+        <li>
+          <strong>Model size can be the whole story.</strong>
+          <span data-mode="plain">The small-model conclusion ("this trade isn't worth it")
+          flips on the bigger one. Testing a single size would have published the wrong
+          general claim.</span>
+          <span data-mode="expert">The 1.5B conclusion reverses at 3B; a single-size study
+          would have generalised the wrong finding.</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+</section>
+
+</main>
 </div>
 
-<footer>
-  <div class="wrap" style="padding:0">
-    <p style="margin:0">
-      Refusal Calibration &mdash; a from-scratch fine-tuning and two-sided
-      evaluation pipeline built on free hardware. Every number here comes from one
-      sealed 800-question exam, scored on CPU from saved model answers across 18
-      versions.
-    </p>
+<section class="closing">
+  <p class="display closing-line">Two ways to be wrong. <span class="it">Measured both.</span></p>
+</section>
+
+<footer class="site-foot">
+  <div class="foot-grid">
+    <div>
+      <div class="author">
+        <img src="img/john.jpg" alt="" width="56" height="56">
+        <div>
+          <p class="author-name">John Andrei Martinez</p>
+          <p class="author-role">Builds and measures small language models. This page is one of his case studies.</p>
+          <a class="author-link" href="https://johnandrei.vercel.app">Visit my portfolio</a>
+        </div>
+      </div>
+    </div>
+    <nav aria-label="This project">
+      <p class="foot-h">This project</p>
+      <a href="https://github.com/Zeref538/refusal-calibration-LLM-Fine-Tuning">Source code</a>
+      <a href="https://github.com/Zeref538/refusal-calibration-LLM-Fine-Tuning/tree/master/runs">Every saved answer</a>
+      <a href="https://github.com/Zeref538/refusal-calibration-LLM-Fine-Tuning/blob/master/data/eval.jsonl">The sealed exam</a>
+    </nav>
+    <nav aria-label="More work">
+      <p class="foot-h">More work</p>
+      <a href="https://johnandrei.vercel.app">Portfolio</a>
+      <a href="https://zeref538.github.io/liitllm/">LiitLLM, a Taglish model</a>
+      <a href="https://github.com/Zeref538">GitHub</a>
+    </nav>
+  </div>
+  <div class="foot-strip caps">
+    <span>Refusal Calibration case study</span><span>Qwen2.5 1.5B + 3B &middot; LoRA &middot; free Kaggle T4</span><span>19 arms &middot; 800-question exam</span>
+  </div>
+  <div class="foot-base small">
+    Questions: TriviaQA. Base models: Qwen2.5-1.5B-Instruct and Qwen2.5-3B-Instruct.
+    Fonts: Schibsted Grotesk, Newsreader and Sora, SIL OFL.
   </div>
 </footer>
 
@@ -1229,37 +1358,38 @@
 (function () {
   const NS = 'http://www.w3.org/2000/svg';
   const root = document.documentElement;
-  const cs = () => getComputedStyle(root);
-  const col = (n) => cs().getPropertyValue(n).trim();
+  const col = (n) => getComputedStyle(root).getPropertyValue(n).trim();
   const el = (t, a) => { const e = document.createElementNS(NS, t);
     for (const k in a) e.setAttribute(k, a[k]); return e; };
   const pct = (v) => v.toFixed(1) + '%';
 
+  // [point, CI low, CI high] per metric: h made-up, o over-refusal, a accuracy, q right reason, e ECE
   const ARMS = {
     base:             {h:[95.5,93.6,97.3],o:[0.0,0.0,0.0],a:[100.0,100.0,100.0],q:[5.6,0.0,18.8],e:[7.3,5.3,11.8], fam:'base', label:'base (1.5B)', why:'Untuned reference'},
     prompt:           {h:[79.0,74.7,82.9],o:[4.5,1.9,7.3],a:[81.0,75.8,86.4],q:[0.0,0.0,0.0],e:[24.4,20.2,29.4], fam:'base', label:'prompt (1.5B)', why:'Abstain instruction only, no training'},
-    v1_mix10:         {h:[9.5,6.6,12.4],o:[31.5,25.2,38.2],a:[51.5,44.3,58.2],q:[37.3,32.6,42.1],e:[14.8,10.4,22.3], fam:'ft', label:'v1_mix10', why:'Curve anchor — minimum abstain dose'},
+    v1_mix10:         {h:[9.5,6.6,12.4],o:[31.5,25.2,38.2],a:[51.5,44.3,58.2],q:[37.3,32.6,42.1],e:[14.8,10.4,22.3], fam:'ft', label:'v1_mix10', why:'Curve anchor: minimum abstain dose'},
     v2_mix25:         {h:[3.0,1.5,4.9],o:[58.0,51.2,64.8],a:[31.5,25.1,37.8],q:[60.6,55.6,65.7],e:[15.2,8.9,23.5], fam:'ft', label:'v2_mix25', why:'Curve point'},
-    v3_mix50:         {h:[3.0,1.5,4.9],o:[61.5,54.9,68.4],a:[29.0,22.7,35.5],q:[51.0,46.1,56.1],e:[17.4,11.3,27.1], fam:'ft', label:'v3_mix50 (ref)', why:'Reference recipe — r=16, 2 ep, lr 2e-4'},
-    v12_seed1:        {h:[13.8,10.7,17.2],o:[43.0,36.1,49.5],a:[41.0,34.5,48.0],q:[59.7,54.5,64.9],e:[10.0,6.7,18.5], fam:'ft', label:'v12_seed1', why:'Reference recipe, seed 1 — noise floor'},
-    v13_seed2:        {h:[12.8,9.5,16.3],o:[58.0,51.2,64.5],a:[32.5,26.1,38.9],q:[59.3,54.1,64.6],e:[22.7,15.4,30.9], fam:'ft', label:'v13_seed2', why:'Reference recipe, seed 2 — noise floor'},
+    v3_mix50:         {h:[3.0,1.5,4.9],o:[61.5,54.9,68.4],a:[29.0,22.7,35.5],q:[51.0,46.1,56.1],e:[17.4,11.3,27.1], fam:'ft', label:'v3_mix50 (ref)', why:'Reference recipe: r=16, 2 ep, lr 2e-4'},
+    v12_seed1:        {h:[13.8,10.7,17.2],o:[43.0,36.1,49.5],a:[41.0,34.5,48.0],q:[59.7,54.5,64.9],e:[10.0,6.7,18.5], fam:'ft', label:'v12_seed1', why:'Reference recipe, seed 1: noise floor'},
+    v13_seed2:        {h:[12.8,9.5,16.3],o:[58.0,51.2,64.5],a:[32.5,26.1,38.9],q:[59.3,54.1,64.6],e:[22.7,15.4,30.9], fam:'ft', label:'v13_seed2', why:'Reference recipe, seed 2: noise floor'},
     v4_mix75:         {h:[16.0,12.5,19.9],o:[51.5,44.4,58.7],a:[32.5,25.8,38.9],q:[64.0,59.1,69.4],e:[16.1,11.5,24.8], fam:'ft', label:'v4_mix75', why:'Curve point'},
-    v5_mix90:         {h:[1.2,0.3,2.4],o:[64.0,57.3,71.0],a:[26.5,20.8,33.0],q:[59.2,54.5,64.3],e:[21.9,15.3,32.4], fam:'ft', label:'v5_mix90', why:'Curve anchor — near-total abstain'},
-    v6_1epoch:        {h:[3.2,1.5,5.2],o:[60.0,53.2,66.8],a:[33.0,26.6,39.8],q:[55.8,50.8,60.9],e:[32.2,23.7,40.4], fam:'ft', label:'v6_1epoch', why:'Dosage — fewer epochs'},
-    v7_3epoch:        {h:[5.2,3.3,7.4],o:[50.5,43.8,57.4],a:[40.0,33.2,47.1],q:[63.3,58.5,68.3],e:[11.5,8.0,19.7], fam:'ft', label:'v7_3epoch', why:'Dosage — more epochs'},
-    v8_rank8:         {h:[2.2,1.0,3.8],o:[66.0,59.6,72.4],a:[24.5,18.7,30.4],q:[60.6,55.7,65.8],e:[16.6,11.7,28.5], fam:'ft', label:'v8_rank8', why:'LoRA capacity — smaller'},
-    v9_rank32:        {h:[5.2,3.1,7.6],o:[42.5,35.6,49.5],a:[43.0,36.0,50.2],q:[52.8,47.6,57.8],e:[18.4,14.7,27.0], fam:'ft', label:'v9_rank32', why:'LoRA capacity — larger'},
-    v10_lr1e4:        {h:[1.8,0.5,3.2],o:[69.5,62.9,75.9],a:[22.0,16.3,27.8],q:[49.6,44.5,54.7],e:[18.7,12.5,29.8], fam:'ft', label:'v10_lr1e4', why:'Lower LR — is over-refusal just overfit?'},
-    v11_bare_reason:  {h:[3.0,1.4,4.8],o:[63.5,56.9,70.4],a:[25.5,19.4,31.9],q:[47.7,42.7,52.7],e:[18.1,12.5,27.6], fam:'ft', label:'v11_bare_reason', why:'Ablation — refusal without a named reason'},
+    v5_mix90:         {h:[1.2,0.3,2.4],o:[64.0,57.3,71.0],a:[26.5,20.8,33.0],q:[59.2,54.5,64.3],e:[21.9,15.3,32.4], fam:'ft', label:'v5_mix90', why:'Curve anchor: near-total abstain'},
+    v6_1epoch:        {h:[3.2,1.5,5.2],o:[60.0,53.2,66.8],a:[33.0,26.6,39.8],q:[55.8,50.8,60.9],e:[32.2,23.7,40.4], fam:'ft', label:'v6_1epoch', why:'Dosage: fewer epochs'},
+    v7_3epoch:        {h:[5.2,3.3,7.4],o:[50.5,43.8,57.4],a:[40.0,33.2,47.1],q:[63.3,58.5,68.3],e:[11.5,8.0,19.7], fam:'ft', label:'v7_3epoch', why:'Dosage: more epochs'},
+    v8_rank8:         {h:[2.2,1.0,3.8],o:[66.0,59.6,72.4],a:[24.5,18.7,30.4],q:[60.6,55.7,65.8],e:[16.6,11.7,28.5], fam:'ft', label:'v8_rank8', why:'LoRA capacity: smaller'},
+    v9_rank32:        {h:[5.2,3.1,7.6],o:[42.5,35.6,49.5],a:[43.0,36.0,50.2],q:[52.8,47.6,57.8],e:[18.4,14.7,27.0], fam:'ft', label:'v9_rank32', why:'LoRA capacity: larger'},
+    v10_lr1e4:        {h:[1.8,0.5,3.2],o:[69.5,62.9,75.9],a:[22.0,16.3,27.8],q:[49.6,44.5,54.7],e:[18.7,12.5,29.8], fam:'ft', label:'v10_lr1e4', why:'Lower LR: is over-refusal just overfit?'},
+    v11_bare_reason:  {h:[3.0,1.4,4.8],o:[63.5,56.9,70.4],a:[25.5,19.4,31.9],q:[47.7,42.7,52.7],e:[18.1,12.5,27.6], fam:'ft', label:'v11_bare_reason', why:'Ablation: refusal without a named reason'},
     base_3b:          {h:[12.2,9.2,15.4],o:[0.0,0.0,0.0],a:[41.5,34.8,48.0],q:[11.1,8.0,14.3],e:[8.4,6.6,16.4], fam:'b3', label:'base_3b', why:'Untuned 3B reference'},
     prompt_3b:        {h:[16.0,12.6,19.5],o:[19.3,11.4,28.1],a:[38.0,31.5,44.3],q:[0.0,0.0,0.0],e:[47.0,39.8,54.3], fam:'b3', label:'prompt_3b', why:'Abstain instruction only, 3B'},
     v14_qwen3b:       {h:[6.8,4.5,9.3],o:[9.6,3.9,17.0],a:[45.5,38.7,52.7],q:[64.6,59.7,69.7],e:[7.3,5.9,15.7], fam:'f3', label:'v14_qwen3b', why:'Does the recipe hold at 3B?'},
-    v14_seed1:        {h:[9.5,6.7,12.4],o:[7.2,2.4,13.0],a:[49.5,42.6,56.7],q:[64.9,59.9,70.1],e:[11.8,7.9,19.5], fam:'f3', label:'v14_seed1', why:'3B recipe, seed 1 — replicate of v14'}
+    v14_seed1:        {h:[9.5,6.7,12.4],o:[7.2,2.4,13.0],a:[49.5,42.6,56.7],q:[64.9,59.9,70.1],e:[11.8,7.9,19.5], fam:'f3', label:'v14_seed1', why:'3B recipe, seed 1: replicate of v14'}
   };
 
   const ORDER = ['base','prompt','v1_mix10','v2_mix25','v3_mix50','v12_seed1','v13_seed2',
                  'v4_mix75','v5_mix90','v6_1epoch','v7_3epoch','v8_rank8','v9_rank32',
                  'v10_lr1e4','v11_bare_reason','base_3b','prompt_3b','v14_qwen3b','v14_seed1'];
+  const FAM = {base: '--tide', b3: '--tide', ft: '--ink', f3: '--cobalt'};
 
   const RUNTIME = [
     ['v1_mix10','mix_10_90',5762,2,722,39.7],   ['v2_mix25','mix_25_75',6916,2,866,47.6],
@@ -1272,45 +1402,44 @@
     ['v14_seed1 (3B)','mix_50_50',10374,2,1298,97.1]
   ];
 
-  // ---------------- mode + theme switches ----------------
-  const bp = document.getElementById('m-plain'), be = document.getElementById('m-expert');
-  function setView(v) {
-    root.setAttribute('data-view', v);
-    bp.setAttribute('aria-pressed', v === 'plain');
-    be.setAttribute('aria-pressed', v === 'expert');
-    try { localStorage.setItem('rc-view', v); } catch (e) {}
-  }
-  bp.onclick = () => setView('plain');
-  be.onclick = () => setView('expert');
-  try { const s = localStorage.getItem('rc-view'); if (s) setView(s); } catch (e) {}
+  const ivl = (v) => '<div class="ivl" style="--lo:' + v[1] + ';--pt:' + v[0] + ';--hi:' + v[2] + '">' +
+    '<div class="ivl-track"><div class="ivl-range"></div><div class="ivl-pt"></div></div></div>';
 
-  const tb = document.getElementById('theme');
-  tb.onclick = () => {
-    const dark = matchMedia('(prefers-color-scheme: dark)').matches;
-    const cur = root.getAttribute('data-theme') || (dark ? 'dark' : 'light');
-    const next = cur === 'dark' ? 'light' : 'dark';
-    root.setAttribute('data-theme', next);
-    try { localStorage.setItem('rc-theme', next); } catch (e) {}
-    redraw();
-  };
-  try { const t = localStorage.getItem('rc-theme'); if (t) root.setAttribute('data-theme', t); } catch (e) {}
+  // ---------------- hero: arm explorer ----------------
+  (function () {
+    const rows = [['h', 'Made-up answers'], ['o', 'Refused what it knew'],
+                  ['a', 'Score on answerable'], ['q', 'Right reason given']];
+    const SAY = {
+      base: 'Out of the box: answers everything, and invents an answer to almost every question it cannot know.',
+      prompt: 'Told to admit uncertainty, no training: a little less inventing, a lot less accuracy, and never a usable reason.',
+      v3_mix50: 'Trained to refuse: inventing nearly stops, but it now refuses most of what it used to get right.',
+      v14_qwen3b: 'Same training on a model twice the size: fewer inventions, few wrong refusals, and accuracy went up.'
+    };
+    const box = document.getElementById('ex-rows'), say = document.getElementById('ex-say');
+    const chips = document.querySelectorAll('.chip[data-arm]');
+    function show(k) {
+      const a = ARMS[k];
+      box.innerHTML = rows.map(([m, lab]) => '<div class="ex-row"><span>' + lab + '</span><b>' +
+        pct(a[m][0]) + '</b>' + ivl(a[m]) + '</div>').join('');
+      say.textContent = SAY[k];
+      chips.forEach(c => c.setAttribute('aria-pressed', c.dataset.arm === k));
+    }
+    chips.forEach(c => c.addEventListener('click', () => show(c.dataset.arm)));
+    show('v3_mix50');
+  })();
 
   // ---------------- headline stat tiles ----------------
   (function () {
     const rows = [
-      ['Made-up answers', 'base', 'v3_mix50', 'h', 'c-coral', '−92.5 pp [−95.0, −90.0]'],
-      ['Refused things it knew', 'base', 'v3_mix50', 'o', 'c-teal', '+61.5 pp [+54.9, +68.4]'],
-      ['Score on answerable', 'base', 'v3_mix50', 'a', 'c-teal', '−71.0 pp [−77.3, −64.5]'],
-      ['Refused for right reason', 'base', 'v3_mix50', 'q', 'c-iris', '+45.5 pp [+32.2, +54.7]']
+      ['Made-up answers', 'h', '−92.5 pp [−95.0, −90.0]'],
+      ['Refused things it knew', 'o', '+61.5 pp [+54.9, +68.4]'],
+      ['Score on answerable', 'a', '−71.0 pp [−77.3, −64.5]'],
+      ['Refused for right reason', 'q', '+45.5 pp [+32.2, +54.7]']
     ];
-    document.getElementById('head-stats').innerHTML = rows.map(([lab, b, a, k, c, d]) => {
-      const from = ARMS[b][k][0], to = ARMS[a][k];
-      return '<div class="stat ' + c + '"><div class="lab">' + lab + '</div>' +
-        '<div class="n"><span class="from">' + pct(from) + '</span> → ' + pct(to[0]) + '</div>' +
-        '<div class="ivl anim" style="--lo:' + to[1] + ';--pt:' + to[0] + ';--hi:' + to[2] + '">' +
-        '<div class="ivl-track"><div class="ivl-range"></div><div class="ivl-pt"></div></div></div>' +
-        '<div class="foot">' + d + '</div></div>';
-    }).join('');
+    document.getElementById('head-stats').innerHTML = rows.map(([lab, k, d]) =>
+      '<div class="stat"><div class="lab">' + lab + '</div>' +
+      '<div class="n"><span class="from">' + pct(ARMS.base[k][0]) + '</span> → ' + pct(ARMS.v3_mix50[k][0]) + '</div>' +
+      ivl(ARMS.v3_mix50[k]) + '<div class="foot">' + d + '</div></div>').join('');
   })();
 
   // ---------------- tables ----------------
@@ -1319,8 +1448,8 @@
       (v[1] === v[2] ? '' : '<span class="ci">' + v[1].toFixed(1) + '–' + v[2].toFixed(1) + '</span>') + '</td>';
     document.querySelector('#t-all tbody').innerHTML = ORDER.map(k => {
       const a = ARMS[k];
-      const m = ['v3_mix50','v12_seed1','v13_seed2'].includes(k) ? ' class="mark"' : '';
-      return '<tr' + m + '><td>' + a.label + '</td><td class="wrap-c">' + a.why + '</td>' +
+      const m = ['v3_mix50','v12_seed1','v13_seed2'].includes(k) ? ' class="hl"' : '';
+      return '<tr' + m + '><td>' + a.label + '</td><td class="why">' + a.why + '</td>' +
         c(a.h) + c(a.o) + c(a.a) + c(a.q) + c(a.e) + '</tr>';
     }).join('');
 
@@ -1328,19 +1457,19 @@
                    base_3b:'Untrained, bigger', prompt_3b:'Asked nicely, bigger', v14_qwen3b:'Trained, bigger'};
     document.querySelector('#t-base tbody').innerHTML =
       ['base','prompt','v3_mix50','base_3b','prompt_3b','v14_qwen3b'].map(k => {
-        const a = ARMS[k], m = (k === 'v3_mix50' || k === 'v14_qwen3b') ? ' class="mark"' : '';
+        const a = ARMS[k], m = (k === 'v3_mix50' || k === 'v14_qwen3b') ? ' class="hl"' : '';
         return '<tr' + m + '><td>' + names[k] + '</td>' +
           c(a.h) + c(a.o) + c(a.a) + c(a.q) + c(a.e) + '</tr>';
       }).join('');
 
     document.querySelector('#t-run tbody').innerHTML = RUNTIME.map(r =>
-      '<tr' + (r[0].includes('ref') ? ' class="mark"' : '') + '><td>' + r[0] +
+      '<tr' + (r[0].includes('ref') ? ' class="hl"' : '') + '><td>' + r[0] +
       '</td><td data-mode="expert">' + r[1] + '</td><td class="num">' + r[2].toLocaleString() +
       '</td><td class="num" data-mode="expert">' + r[3] + '</td><td class="num" data-mode="expert">' +
       r[4].toLocaleString() + '</td><td class="num">' + r[5].toFixed(0) + ' min</td></tr>'
-    ).join('') + '<tr><td class="big">Total — 15 versions</td>' +
+    ).join('') + '<tr><td><b>Total, 15 versions</b></td>' +
       '<td data-mode="expert"></td><td></td><td data-mode="expert"></td><td data-mode="expert"></td>' +
-      '<td class="num big">19.3 h</td></tr>';
+      '<td class="num"><b>19.3 h</b></td></tr>';
   })();
 
   // ---------------- chart primitives ----------------
@@ -1377,7 +1506,7 @@
             [0, 20, 40, 60, 80], yMax, v => v + '%');
       const t = el('text', {x: (m.l + W - m.r) / 2, y: H - 8, 'text-anchor': 'middle'});
       t.textContent = 'share of refusal examples in training'; svg.appendChild(t);
-      [['h', '--coral'], ['o', '--teal']].forEach(([k, cv]) => {
+      [['h', '--cobalt'], ['o', '--tide']].forEach(([k, cv]) => {
         const c = col(cv), pts = keys.map(x => ARMS[x][k]);
         pts.forEach((p, i) => svg.appendChild(el('line', {x1: X(i), x2: X(i), y1: Y(p[1]),
                                                           y2: Y(p[2]), stroke: c, class: 'whisk'})));
@@ -1401,10 +1530,9 @@
       const slot = (W - m.l - m.r) / rows.length, bw = slot * .28;
       rows.forEach((r, i) => {
         const cx = m.l + (i + .5) * slot;
-        [[r.before, '--ink-3', 'before'], [r.after, '--iris', 'after']].forEach(([v, cv, tag], j) => {
+        [[r.before, '--tide', 'before'], [r.after, '--cobalt', 'after']].forEach(([v, cv, tag], j) => {
           const x = cx + (j ? 3 : -bw - 3);
-          const rect = el('rect', {x, y: Y(v), width: bw, height: (H - m.b) - Y(v),
-                                   fill: col(cv), rx: 2});
+          const rect = el('rect', {x, y: Y(v), width: bw, height: (H - m.b) - Y(v), fill: col(cv), rx: 2});
           const ti = el('title', {}); ti.textContent = tag + ': ' + pct(v);
           rect.appendChild(ti); svg.appendChild(rect);
           const l = el('text', {x: x + bw / 2, y: Y(v) - 6, 'text-anchor': 'middle'});
@@ -1425,9 +1553,8 @@
       const W = 740, H = 430, m = {l: 50, r: 22, t: 18, b: 52};
       const X = v => m.l + (v / 100) * (W - m.l - m.r);
       const Y = v => H - m.b - (v / 80) * (H - m.t - m.b);
-      // desirable region
       svg.appendChild(el('rect', {x: X(0), y: Y(20), width: X(20) - X(0), height: Y(0) - Y(20),
-                                  fill: col('--iris'), opacity: .07}));
+                                  fill: col('--cobalt'), opacity: .08}));
       frame(svg, W, H, m, [0, 20, 40, 60, 80, 100].map(v => ({x: X(v), label: v + '%'})),
             [0, 20, 40, 60, 80], 80, v => v + '%');
       let t = el('text', {x: (m.l + W - m.r) / 2, y: H - 8, 'text-anchor': 'middle'});
@@ -1435,15 +1562,14 @@
       t = el('text', {x: 13, y: (m.t + H - m.b) / 2, 'text-anchor': 'middle',
                       transform: 'rotate(-90 13 ' + ((m.t + H - m.b) / 2) + ')'});
       t.textContent = 'refuses what it knows  →'; svg.appendChild(t);
-      t = el('text', {x: X(2), y: Y(18)}); t.setAttribute('fill', col('--iris'));
+      t = el('text', {x: X(1), y: Y(20) - 6}); t.setAttribute('fill', col('--ink-2'));
       t.textContent = 'want to be here'; svg.appendChild(t);
-      const cmap = {base: '--ink-3', b3: '--ink-3', ft: '--coral', f3: '--iris'};
       ORDER.forEach(k => {
         const a = ARMS[k];
         const d = el('circle', {cx: X(a.h[0]), cy: Y(a.o[0]), r: a.fam === 'f3' ? 8 : 5.5,
-                                fill: col(cmap[a.fam]), class: 'dt'});
+                                fill: col(FAM[a.fam]), class: 'dt'});
         const ti = el('title', {});
-        ti.textContent = a.label + ' — invents ' + pct(a.h[0]) + ', wrongly refuses ' + pct(a.o[0]);
+        ti.textContent = a.label + ': invents ' + pct(a.h[0]) + ', wrongly refuses ' + pct(a.o[0]);
         d.appendChild(ti); svg.appendChild(d);
       });
       [['v14_qwen3b', 13, -13, 'start'], ['base', -9, -12, 'end']].forEach(([k, dx, dy, anc]) => {
@@ -1461,8 +1587,7 @@
       const bh = (H - m.t - m.b) / rows.length;
       rows.forEach((r, i) => {
         const y = m.t + i * bh, w = (r[1] / max) * (W - m.l - m.r);
-        const rect = el('rect', {x: m.l, y: y + bh * .17, width: w, height: bh * .66,
-                                 fill: col(cf(r)), rx: 2});
+        const rect = el('rect', {x: m.l, y: y + bh * .17, width: w, height: bh * .66, fill: col(cf(r)), rx: 2});
         const ti = el('title', {}); ti.textContent = r[0] + ': ' + r[1] + unit;
         rect.appendChild(ti); svg.appendChild(rect);
         const l = el('text', {x: m.l - 9, y: y + bh * .62, 'text-anchor': 'end'});
@@ -1473,9 +1598,9 @@
     }
     hbar('c-stage', [['training', 19.3], ['probe', 7.5], ['exam runs', 4.2],
                      ['marking (CPU)', 0.4], ['previews', 0.2]],
-         740, 200, ' h', r => r[0].startsWith('marking') ? '--ink-3' : '--teal', 110);
+         740, 200, ' h', r => r[0].startsWith('marking') ? '--tide' : '--cobalt', 110);
     hbar('c-run', RUNTIME.map(r => [r[0], r[5]]), 740, 380, ' min',
-         r => r[0].includes('3B') ? '--iris' : '--teal', 132);
+         r => r[0].includes('3B') ? '--cobalt' : '--tide', 132);
 
     // --- vertical bars ---
     function vbar(id, rows, yMax) {
@@ -1487,19 +1612,18 @@
             [0, yMax / 2, yMax], yMax, v => v);
       rows.forEach((r, i) => {
         const x = m.l + (i + .5) * slot - bw / 2;
-        const rect = el('rect', {x, y: Y(r[1]), width: bw, height: (H - m.b) - Y(r[1]),
-                                 fill: col(r[2]), rx: 2});
+        const rect = el('rect', {x, y: Y(r[1]), width: bw, height: (H - m.b) - Y(r[1]), fill: col(r[2]), rx: 2});
         const ti = el('title', {}); ti.textContent = r[0] + ': ' + r[1] + ' items';
         rect.appendChild(ti); svg.appendChild(rect);
         const l = el('text', {x: x + bw / 2, y: Y(r[1]) - 6, 'text-anchor': 'middle'});
         l.textContent = r[1]; svg.appendChild(l);
       });
     }
-    vbar('c-eval', [['answerable', 200, '--teal'], ['unknown', 200, '--coral'],
-                    ['borderline', 200, '--iris'], ['defective', 200, '--ink-3']], 240);
-    vbar('c-why', [['unknown', 200, '--coral'], ['false prem.', 56, '--ink-3'],
-                   ['no context', 51, '--ink-3'], ['cutoff', 50, '--ink-3'],
-                   ['vague', 43, '--ink-3']], 240);
+    vbar('c-eval', [['answerable', 200, '--cobalt'], ['unknown', 200, '--cobalt'],
+                    ['borderline', 200, '--cobalt'], ['defective', 200, '--cobalt']], 240);
+    vbar('c-why', [['unknown', 200, '--cobalt'], ['false prem.', 56, '--tide'],
+                   ['no context', 51, '--tide'], ['cutoff', 50, '--tide'],
+                   ['vague', 43, '--tide']], 240);
 
     // --- ECE ---
     (function () {
@@ -1510,10 +1634,9 @@
       frame(svg, W, H, m, [], [0, 25, 50], yMax, v => v + '%');
       ORDER.forEach((k, i) => {
         const a = ARMS[k], x = m.l + (i + .5) * slot - bw / 2;
-        const c = a.fam === 'f3' ? '--iris' : (a.fam === 'ft' ? '--coral' : '--ink-3');
         const rect = el('rect', {x, y: Y(a.e[0]), width: bw, height: (H - m.b) - Y(a.e[0]),
-                                 fill: col(c), rx: 2});
-        const ti = el('title', {}); ti.textContent = a.label + ' — confidence error ' + pct(a.e[0]);
+                                 fill: col(FAM[a.fam]), rx: 2});
+        const ti = el('title', {}); ti.textContent = a.label + ': confidence error ' + pct(a.e[0]);
         rect.appendChild(ti); svg.appendChild(rect);
         const l = el('text', {x: x + bw / 2, y: H - m.b + 7, 'text-anchor': 'end',
                               transform: 'rotate(-52 ' + (x + bw / 2) + ' ' + (H - m.b + 7) + ')'});
@@ -1526,21 +1649,117 @@
     })();
   }
 
+  // charts read colours once, so a theme switch redraws them
   function redraw() {
     document.querySelectorAll('svg[id^="c-"]').forEach(s => { s.innerHTML = ''; });
     draw();
   }
-  draw();
 
-  // reveal interval bars on scroll
-  if ('IntersectionObserver' in window) {
-    const io = new IntersectionObserver((es) => es.forEach(e => {
-      if (e.isIntersecting) { e.target.classList.add('anim'); io.unobserve(e.target); }
-    }), {threshold: .4});
-    document.querySelectorAll('.ivl').forEach(n => { n.classList.remove('anim'); io.observe(n); });
+  // ---------------- controls ----------------
+  function setView(v) {
+    root.dataset.view = v;
+    document.getElementById('m-plain').setAttribute('aria-pressed', v === 'plain');
+    document.getElementById('m-expert').setAttribute('aria-pressed', v === 'expert');
+    try { localStorage.setItem('rc-view', v); } catch (e) {}
   }
+  document.getElementById('m-plain').addEventListener('click', () => setView('plain'));
+  document.getElementById('m-expert').addEventListener('click', () => setView('expert'));
+  document.getElementById('theme').addEventListener('click', () => {
+    const dark = matchMedia('(prefers-color-scheme: dark)').matches;
+    const cur = root.dataset.theme || (dark ? 'dark' : 'light');
+    root.dataset.theme = cur === 'dark' ? 'light' : 'dark';
+    try { localStorage.setItem('rc-theme', root.dataset.theme); } catch (e) {}
+    redraw();
+  });
+  try {
+    const v = localStorage.getItem('rc-view'); if (v) setView(v);
+    const t = localStorage.getItem('rc-theme'); if (t) root.dataset.theme = t;
+  } catch (e) {}
+  draw();
+  matchMedia('(prefers-color-scheme: dark)').addEventListener('change', redraw);
+
+  // Chapter rail: built from each section's label, current one highlighted.
+  (() => {
+    const rail = document.querySelector('.rail');
+    const links = [...document.querySelectorAll('main section[id]')].map(sec => {
+      const no = sec.querySelector('.console-head .step-no');
+      const title = sec.querySelector('.console-head .caps');
+      if (!no || !title) return null;
+      const a = document.createElement('a');
+      a.href = '#' + sec.id;
+      a.innerHTML = `<span>${no.textContent.trim()}</span>${title.textContent.trim()}`;
+      rail.appendChild(a);
+      return [sec, a];
+    }).filter(Boolean);
+    const io = new IntersectionObserver(es => es.forEach(e => {
+      if (!e.isIntersecting) return;
+      links.forEach(([sec, a]) => a.setAttribute('aria-current', sec === e.target));
+    }), { rootMargin: '-45% 0px -50% 0px' });
+    links.forEach(([sec]) => io.observe(sec));
+  })();
+
+  // Border glow: same maths as the portfolio's BorderGlow.jsx, one listener per card.
+  document.querySelectorAll('.console').forEach(card => {
+    card.prepend(Object.assign(document.createElement('span'), { className: 'edge-light' }));
+    card.addEventListener('pointermove', e => {
+      const r = card.getBoundingClientRect();
+      const dx = e.clientX - r.left - r.width / 2, dy = e.clientY - r.top - r.height / 2;
+      // 0 at the centre, 1 on the edge, whichever edge is nearer in proportion
+      const edge = Math.min(Math.max(Math.abs(dx) / (r.width / 2), Math.abs(dy) / (r.height / 2)), 1);
+      let angle = Math.atan2(dy, dx) * 180 / Math.PI + 90;
+      if (angle < 0) angle += 360;
+      card.style.setProperty('--edge', (edge * 100).toFixed(1));
+      card.style.setProperty('--angle', angle.toFixed(1) + 'deg');
+    });
+  });
+
+  // Dot field: a grid of dots that grow, turn cobalt and lean toward the pointer.
+  // Same approach as the portfolio's ParticleField.jsx; sleeps when the pointer is still.
+  (() => {
+    const canvas = document.querySelector('.dot-field');
+    const ctx = canvas.getContext('2d');
+    const dpr = Math.min(devicePixelRatio || 1, 2), GAP = 22, RADIUS = 140;
+    let dots = [], mouse = { x: -9999, y: -9999 }, raf = null, idle = 0, colours;
+    const readColours = () => {
+      colours = { dot: col('--dot') || 'rgba(28,25,23,.13)', hot: col('--cobalt') || '#2556d8' };
+    };
+    const build = () => {
+      canvas.width = innerWidth * dpr; canvas.height = innerHeight * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      dots = [];
+      for (let x = GAP / 2; x < innerWidth; x += GAP)
+        for (let y = GAP / 2; y < innerHeight; y += GAP) dots.push({ ox: x, oy: y, x, y });
+    };
+    const draw = () => {
+      ctx.clearRect(0, 0, innerWidth, innerHeight);
+      let moving = false;
+      for (const d of dots) {
+        const dx = mouse.x - d.ox, dy = mouse.y - d.oy, dist = Math.hypot(dx, dy);
+        const t = dist < RADIUS ? 1 - dist / RADIUS : 0;           // 0 far away, 1 under the pointer
+        const tx = d.ox + dx * 0.08 * t, ty = d.oy + dy * 0.08 * t;
+        d.x += (tx - d.x) * 0.2; d.y += (ty - d.y) * 0.2;
+        if (Math.abs(tx - d.x) > 0.05 || Math.abs(ty - d.y) > 0.05) moving = true;
+        const size = 2 + t * 2;
+        ctx.globalAlpha = t ? 0.35 + t * 0.65 : 1;
+        ctx.fillStyle = t ? colours.hot : colours.dot;
+        ctx.beginPath(); ctx.arc(d.x, d.y, size / 2, 0, 7); ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+      idle = mouse.x === -9999 && !moving ? idle + 1 : 0;
+      raf = idle > 30 ? null : requestAnimationFrame(draw);
+    };
+    const wake = () => { if (raf === null) raf = requestAnimationFrame(draw); };
+    readColours(); build(); draw();
+    addEventListener('resize', () => { build(); wake(); });
+    // theme switch changes the colours: re-read them
+    new MutationObserver(() => { readColours(); wake(); })
+      .observe(root, { attributes: true, attributeFilter: ['data-theme'] });
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;   // static dots only
+    addEventListener('pointermove', e => { mouse.x = e.clientX; mouse.y = e.clientY; wake(); }, { passive: true });
+    document.addEventListener('pointerleave', () => { mouse.x = mouse.y = -9999; });
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) wake(); });
+  })();
 })();
 </script>
-
 </body>
 </html>
